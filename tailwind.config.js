@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -14,6 +17,17 @@ module.exports = {
         'Tablet': '768px',
         'Laptop': '1024px',
         'Monitor': '1440px',
+      },
+      fontFamily: {
+        heading: ['"Fredoka"', ...defaultTheme.fontFamily.sans]
+      },
+      fontSize: {
+        'navLinkInactiveSize' : '2rem',
+        'navLinkActiveSize' : '2.25rem',
+      },
+      colors: {
+        'navLinkInactiveColor' : 'white',
+        'navLinkActiveColor' : 'black',
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
