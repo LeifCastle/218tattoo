@@ -5,31 +5,14 @@ import { useRef, useEffect } from "react";
 
 export default function Navbar() {
 
-    // Determines if component is mounted (DOM is loaded) before using query selectors
-    let DOMloaded = false
+    let DOMloaded = false; // Determines if component is mounted (DOM is loaded) before using query selectors
     useEffect(() => {
         DOMloaded = true;
-    })
 
-    // Reduces the size of the Navbar when the user is not scrolled to the top of the page 
-    window.addEventListener('scroll', () => {
-        if (DOMloaded) {
-            if (window.scrollY > 0) {
-                document.querySelector('#Navbar').classList.remove('Tablet:min-h-[90px]')
-                document.querySelector('#Navbar').classList.remove('Tablet:h-[10vh]')
-                document.querySelector('#Navbar').classList.remove('bg-NavbarBackground')
-                document.querySelector('#Navbar').classList.add('bg-NavbarBackgroundScrolled')
-                document.querySelector('#Navbar').classList.add('Tablet:min-h-[60px]')
-                document.querySelector('#Navbar').classList.add('Tablet:h-[7vh]')
-            } else {
-                document.querySelector('#Navbar').classList.add('bg-NavbarBackground')
-                document.querySelector('#Navbar').classList.add('Tablet:min-h-[90px]')
-                document.querySelector('#Navbar').classList.add('Tablet:h-[10vh]')
-                document.querySelector('#Navbar').classList.remove('bg-NavbarBackgroundScrolled')
-                document.querySelector('#Navbar').classList.remove('Tablet:h-[7vh]')
-                document.querySelector('#Navbar').classList.remove('Tablet:min-h-[60px]')
-            }
-        }
+        // Sets navbar style dependent on if the user is scrolled to the top of the page
+        window.addEventListener('scroll', () => {
+            window.scrollY > 0 ? document.querySelector('#Navbar').setAttribute('data-navbartheme', 'scrolled') : document.querySelector('#Navbar').setAttribute('data-navbartheme', 'default');
+        })
     })
 
     // Sets page tab style concurrent to which page the user is on
@@ -55,7 +38,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav id='Navbar' className="w-full h-[20vh] Tablet:min-h-[90px] Tablet:h-[10vh] bg-NavbarBackground sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[300ms] delay-100 ease-linear">
+        <nav id='Navbar' data-navbartheme="default" className="z-[2] w-full h-[20vh] Tablet:min-h-[60px] Tablet:h-[10vh] bg-NavbarBackground sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out">
             <div className="grow flex justify-center Tablet:justify-start Tablet:pl-10">
                 <h1>218 Tattoo</h1>
             </div>

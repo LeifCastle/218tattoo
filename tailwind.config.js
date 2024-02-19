@@ -22,20 +22,19 @@ module.exports = {
         heading: ['"Fredoka"', ...defaultTheme.fontFamily.sans]
       },
       fontSize: {
-        'navLinkInactiveSize' : '1.5rem',
-        'navLinkActiveSize' : '1.7rem',
+        'navLinkInactiveSize': '1.5rem',
+        'navLinkActiveSize': '1.7rem',
       },
       colors: {
-        'navLinkInactiveColor' : '#4F4118',
-        'navLinkActiveColor' : '#000000',
-        'navLinkHoverColor' : '#A2852D', 
-        'NavbarBackground': '#D6D6D6',
-        'NavbarBackgroundScrolled': '#BFBFBF',
+        NavbarBackground: 'var(--NavbarBackground)',
+        navLinkInactiveColor: 'var(--navLinkInactiveColor)',
+        navLinkActiveColor: 'var(--navLinkActiveColor)',
+        navLinkHoverColor: 'var(--navLinkHoverColor)',
       },
       backgroundImage: {
         'homePage': "url('https://marineagency.com/wp-content/uploads/2020/10/Screen-Shot-2020-10-16-at-9.28.25-AM-1024x679.png')",
       },
     },
   },
-  plugins: [],
+  plugins: []
 };

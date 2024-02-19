@@ -3,9 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --NavbarBackground: transparent;
+  --navLinkInactiveColor: #919191;
+  --navLinkActiveColor: #FFFFFF;
+  --navLinkHoverColor:#bdbdbd;
+}
+
+/* Navbar Scrolled Theme */
+[data-navbartheme="scrolled"] {
+  --NavbarBackground: #FFFFFF;
+  --navLinkInactiveColor: #000000;
+  --navLinkActiveColor: #4F4118;
+  --navLinkHoverColor: #998c7e;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,4 +39,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+body::-webkit-scrollbar {
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  display: none;
 }
