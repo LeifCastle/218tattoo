@@ -12,7 +12,7 @@ export default function About() {
                 />
                 <div className="flex flex-col justify-evenly items-center">
                     <p>Hours</p>
-                    <p>We're open Saturday and Sunday 9 AM - 8 PM</p>
+                    <p>We&apos;re open Saturday and Sunday 9 AM - 8 PM</p>
                     <p>Location</p>
                     <p>Located inside of the Lynden Beauty Lounge: 1905 Front St, Lynden, WA 98264, United States</p>
                     <p>Pricing</p>
