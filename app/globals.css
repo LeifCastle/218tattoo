@@ -13,7 +13,7 @@
 [data-navbartheme="scrolled"] {
   --NavbarBackground: #FFFFFF;
   --navLinkInactiveColor: #000000;
-  --navLinkActiveColor: #4F4118;
+  --navLinkActiveColor: #184d54; 
   --navLinkHoverColor: #998c7e;
 }
 

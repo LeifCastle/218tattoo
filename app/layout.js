@@ -8,14 +8,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <head>
-      <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet"></link>
-      </head>
-      <body>
-        <Navbar />
-        {children}
-      </body>
-    </html>
+    <>
+      <html lang="en">
+        <head>
+        </head>
+        <body className="bg-white">
+          <Navbar />
+          {children}
+        </body>
+      </html>
+    </>
   );
 }

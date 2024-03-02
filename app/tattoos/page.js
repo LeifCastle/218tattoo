@@ -1,6 +1,6 @@
 export default function Tattoos() {
     return (
-        <main className="">
+        <main className="h-[100vh]">
             <p>Tattoos</p>
         </main>
     )
