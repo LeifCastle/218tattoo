@@ -1,7 +1,9 @@
-import Image from 'next/image'
-//import Tattoo1 from '../public/Tattoo1'
+import Carousel from '../components/carousel.js'
 
 export default function Home() {
+
+  let favoriteImages = ['/Tattoo1.png', '/Tattoo2.png', '/Tattoo3.png', '/Tattoo4.png', '/Tattoo5.png', '/Tattoo6.png', '/Tattoo7.png']
+
   return (
     <>
       <main className="bg-white">
@@ -17,27 +19,14 @@ export default function Home() {
           <div className="flex items-center justify-center absolute top-[-30px] left-0 h-[60px] w-full Tablet:w-[40vw] bg-[#184d54] rounded-tr-md rounded-br-md">
             <p className="text-[1.8rem] text-white">Customer Favorites</p>
           </div>
-          <div className="pt-[90px] flex justify-evenly">
-            <Image className="rounded-lg"
-              src="/Tattoo1.png"
-              width={350}
-              height={400}
-              alt="Tattoo"
-            />
-            <Image className="rounded-lg"
-              src="/Tattoo2.png"
-              width={350}
-              height={400}
-              alt="Tattoo"
-            />
-            <Image className="rounded-lg"
-              src="/Tattoo3.png"
-              width={350}
-              height={400}
-              alt="Tattoo"
-            />
-
-          </div>
+          <Carousel images={favoriteImages}/>
+          <div>
+          <p>Weekend bookings available, reserve your spot now</p>
+          <button>Book Now</button>
+        </div>
+        <div className="bg-blackB">
+          218 Tattoo
+        </div>
         </div>
       </main>
     </>
