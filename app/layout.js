@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "../components/footer"
 
 export const metadata = {
   title: "218 Tattoo",
@@ -15,6 +16,7 @@ export default function RootLayout({ children }) {
         <body className="bg-white">
           <Navbar />
           {children}
+          <Footer />
         </body>
       </html>
     </>
