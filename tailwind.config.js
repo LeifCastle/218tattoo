@@ -33,6 +33,7 @@ module.exports = {
         navLinkHoverColor: 'var(--navLinkHoverColor)',
         greyB: '#C1C1C1',
         footerBackground: '#1B1D1F',
+        brownA: '#998c7e',
       },
       backgroundImage: {
         'homePage': "url('https://marineagency.com/wp-content/uploads/2020/10/Screen-Shot-2020-10-16-at-9.28.25-AM-1024x679.png')",

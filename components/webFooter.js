@@ -1,4 +1,4 @@
-export default function Footer() {
+export default function WebFooter() {
     return(
         <div className="bg-footerBackground flex flex-col items-center justify-center py-10 gap-10">
             <div className="flex gap-20">

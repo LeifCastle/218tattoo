@@ -26,7 +26,7 @@ export default function Navbar() {
             document.querySelector('#Navbar').setAttribute('data-navbartheme', 'default')
             window.addEventListener('scroll', handleScroll);
         }
-        else {
+        else if(pathname !== '/admin'){
             window.removeEventListener('scroll', handleScroll);
             document.querySelector('#Navbar').setAttribute('data-navbartheme', 'scrolled')
         }
@@ -34,7 +34,7 @@ export default function Navbar() {
 
     // Sets page tab style concurrent to which page the user is on
     function setActivePage(page) {
-        if (DOMloaded) {
+        if (DOMloaded && pathname !== "/admin") {
             document.querySelectorAll('.navLink').forEach(navLink => {
                 navLink.classList.remove("underline");
                 navLink.classList.remove("text-navLinkActiveSize")

@@ -15,7 +15,7 @@ export default function Home() {
         </p>
         <p className="mt-10 text-[2rem] text-center">Tattoo Shop</p>
       </div>
-      <div className="relative bg-[#998c7e] text-black py-10">
+      <div className="relative bg-brownA text-black py-10">
         <div className="flex items-center justify-center absolute top-[-30px] left-0 h-[60px] w-full Tablet:w-[40vw] bg-[#184d54] rounded-tr-md rounded-br-md mr-10">
           <p className="text-[1.8rem] text-white">What We Offer</p>
         </div>
@@ -55,7 +55,7 @@ export default function Home() {
         </div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center bg-[#998c7e] text-black pb-10">
+      <div className="flex flex-col items-center justify-center bg-brownA text-black pb-10">
         <div className="self-start flex items-center justify-center h-[60px] w-full Tablet:w-[40vw] bg-[#184d54] rounded-tr-md rounded-br-md">
           <p className="text-[1.8rem] text-white">Customer Favorites</p>
         </div>
