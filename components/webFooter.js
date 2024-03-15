@@ -1,6 +1,6 @@
 export default function WebFooter() {
     return(
-        <div className="bg-footerBackground flex flex-col items-center justify-center py-10 gap-10">
+        <div className="bg-blackA flex flex-col items-center justify-center py-10 gap-10">
             <div className="flex gap-20">
                 <div className="flex-col">
                     <p className="text-2xl text-center pb-2">Location</p>

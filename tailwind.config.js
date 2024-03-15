@@ -32,8 +32,12 @@ module.exports = {
         navLinkActiveColor: 'var(--navLinkActiveColor)',
         navLinkHoverColor: 'var(--navLinkHoverColor)',
         greyB: '#C1C1C1',
-        footerBackground: '#1B1D1F',
+        blackA: '#1B1D1F',
         brownA: '#998c7e',
+        blueA: '#184d54',
+      },
+      gridTemplateColumns: {
+        'dateTime': '200px repeat(5, minmax(20px, 50px))',
       },
       backgroundImage: {
         'homePage': "url('https://marineagency.com/wp-content/uploads/2020/10/Screen-Shot-2020-10-16-at-9.28.25-AM-1024x679.png')",

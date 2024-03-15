@@ -13,6 +13,7 @@ export default function Book() {
                 <button>Piercing</button>
                 <button>Tooth Gem</button>
             </div>
+            <div className="h-[40vh]"></div>
         </div>
     )
 }
