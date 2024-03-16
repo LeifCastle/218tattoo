@@ -2,19 +2,40 @@
 
 import Image from 'next/image';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function BookingDateTime() {
 
+    const [selectedTime, setSelectedTime] = useState("12:00 PM")
+    const [selectedDay, setSelectedDay] = useState({ day: moment().format('M-D'), which: moment().day() })
     const [selectedMonth, setSelectedMonth] = useState(moment())
     const [selectedWeekends, setSelectedWeekends] = useState([])
+    const [timeOptions, setTimeOptions] = useState()
 
-    //Set inital month/dates
+    let SaturdayTimes = ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM"]
+    let SundayTimes = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"]
+
+    //--Sets the appropriates times for each day **(need to check availability with backend eventually)
     useEffect(() => {
-        setSelectedMonth(moment())
+        if (selectedDay.which === 1 || selectedDay.which === 6) { //If the day is a saturday reassign saturday time values
+            SundayTimes = SaturdayTimes;
+        }
+        setTimeOptions(SundayTimes.map(time => {
+            console.log('st: ', selectedTime, 't: ', time)
+            return (
+                <div key={time + 1} onClick={() => setSelectedTime(time)}
+                    className={`${selectedTime === time ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} rounded-[12px] p-2 hover:scale-105`}>{time}</div>
+            )
+        }))
+
+    }, [selectedDay, selectedTime])
+
+    //--Set inital values
+    useEffect(() => {
         setSelectedWeekends(getWeekends(moment().format('M'), moment().format('YYYY')))
     }, [])
 
+    //--Returns all the weekeends in a given month
     function getWeekends(month, year) {
         const weekends = []
         let date = moment({ year, month: month - 1, day: 1 }); //Subtracting 1 to account for zero indexing of months (.format method is not zero indexed)
@@ -62,7 +83,7 @@ export default function BookingDateTime() {
                     <div className="mx-4 text-3xl">{selectedMonth.format('MMMM')}</div>
                 </div>
                 <div className="flex items-center">
-                    <Image className="rounded-lg"
+                    <Image className="rounded-lg  hover:scale-125"
                         src="/leftArrowWhite.png"
                         width={50}
                         height={50}
@@ -70,22 +91,29 @@ export default function BookingDateTime() {
                         onClick={() => prevMonth()}
                     />
                     <div className="grid grid-cols-dateTime grid-rows-2 gap-y-1 px-20 py-8 place-items-center">
-                        <div className="row-start-1">Saturday</div>
-                        <div className="row-start-2">Sunday</div>
+                        <div className="text-xl row-start-1">Saturday</div>
+                        <div className="text-xl row-start-2">Sunday</div>
                         {selectedWeekends.map((weekend) => {
                             return (
-                                <div key={weekend.day} className={`col-start-${weekend.weekendCount} row-start-${weekend.which} flex items-center justify-center 
-                            my-4 rounded-lg bg-white/15 Tablet:w-[70px] Tablet:h-[70px]`}>{weekend.day}</div>
+                                <div key={weekend.day} onClick={() => setSelectedDay(weekend)}
+                                    className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} 
+                                        col-start-${weekend.weekendCount} row-start-${weekend.which} flex items-center justify-center 
+                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110`}>
+                                    {weekend.day}</div>
                             )
                         })}
                     </div>
-                    <Image className="rounded-lg"
+                    <Image className="rounded-lg hover:scale-125"
                         src="/rightArrowWhite.png"
                         width={50}
                         height={50}
                         alt="NextPic"
                         onClick={() => nextMonth()}
                     />
+                </div>
+                <div className="bg-white w-full border-[1px]"></div>
+                <div className="flex gap-6 Tablet:gap-12 py-6">
+                    {timeOptions}
                 </div>
             </div>
         </>
