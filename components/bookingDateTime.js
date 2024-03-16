@@ -1,5 +1,6 @@
 "use client"
 
+import Image from 'next/image';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 
@@ -24,7 +25,7 @@ export default function BookingDateTime() {
                 weekendCount++
             } else if (date.day() === 0) {
                 if (weekendCount === 1) { //Accounts for weekends split over the month **need to add a greyed out value to object as well or turn into a placeholder value
-                    weekends.push({ day: date.clone().subtract(1, 'days').format('M-D'), which: 2, weekendCount })
+                    weekends.push({ day: date.clone().subtract(1, 'days').format('M-D'), which: 1, weekendCount })
                     weekendCount++
                 }
                 weekends.push({ day: date.format('M-D'), which: 2, weekendCount }) //Sunday (row 2)
@@ -56,20 +57,35 @@ export default function BookingDateTime() {
 
     return (
         <>
-            <div className="bg-blueA my-20 flex flex-col items-center">
-                <div className="flex justify-center bg-blackA w-full">
-                    <button className="" onClick={() => prevMonth()}>lastMonth</button>
-                    <div className="mx-4">{selectedMonth.format('MMMM')}</div>
-                    <button className="" onClick={() => nextMonth()}>nextMonth</button>
+            <div className="bg-blackA flex flex-col items-center justify-center">
+                <div className="flex justify-center bg-blueA py-2 w-full">
+                    <div className="mx-4 text-3xl">{selectedMonth.format('MMMM')}</div>
                 </div>
-                <div className="grid grid-cols-dateTime grid-rows-2 gap-y-1 px-20">
-                    <div className="row-start-1">Satdurday</div>
-                    <div className="row-start-2">Sunday</div>
-                    {selectedWeekends.map((weekend) => {
-                        return (
-                            <div className={`col-start-${weekend.weekendCount} row-start-${weekend.which} max-w-[50px] rounded-md`}>{weekend.day}</div>
-                        )
-                    })}
+                <div className="flex items-center">
+                    <Image className="rounded-lg"
+                        src="/leftArrowWhite.png"
+                        width={50}
+                        height={50}
+                        alt="NextPic"
+                        onClick={() => prevMonth()}
+                    />
+                    <div className="grid grid-cols-dateTime grid-rows-2 gap-y-1 px-20 py-8 place-items-center">
+                        <div className="row-start-1">Saturday</div>
+                        <div className="row-start-2">Sunday</div>
+                        {selectedWeekends.map((weekend) => {
+                            return (
+                                <div key={weekend.day} className={`col-start-${weekend.weekendCount} row-start-${weekend.which} flex items-center justify-center 
+                            my-4 rounded-lg bg-white/15 Tablet:w-[70px] Tablet:h-[70px]`}>{weekend.day}</div>
+                            )
+                        })}
+                    </div>
+                    <Image className="rounded-lg"
+                        src="/rightArrowWhite.png"
+                        width={50}
+                        height={50}
+                        alt="NextPic"
+                        onClick={() => nextMonth()}
+                    />
                 </div>
             </div>
         </>
