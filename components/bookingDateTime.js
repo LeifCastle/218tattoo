@@ -22,7 +22,6 @@ export default function BookingDateTime({hideBar}) {
             SundayTimes = SaturdayTimes;
         }
         setTimeOptions(SundayTimes.map(time => {
-            console.log('st: ', selectedTime, 't: ', time)
             return (
                 <div key={time + 1} onClick={() => setSelectedTime(time)}
                     className={`${selectedTime === time ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} rounded-[12px] p-2 hover:scale-105`}>{time}</div>
@@ -80,7 +79,7 @@ export default function BookingDateTime({hideBar}) {
     return (
         <>
             <div className="bg-blackA flex flex-col items-center justify-center">
-                <div className="flex justify-center bg-blueA py-2 w-full justify-between">
+                <div className="flex bg-blueA py-2 w-full justify-between items-center ">
                     <div className="w-[50px] ml-[5vw]"></div>
                     <div className="mx-4 text-3xl">{selectedMonth.format('MMMM')}</div>
                     <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500"
@@ -93,7 +92,7 @@ export default function BookingDateTime({hideBar}) {
                 </div>
                 <div ref={dateTimeBar} className="overflow-hidden transition-height ease-in-out duration-500">
                     <div className="flex items-center">
-                        <Image className="rounded-lg  hover:scale-125"
+                        <Image className="rounded-lg  hover:scale-125 transition-all ease-in-out duration-500"
                             src="/leftArrowWhite.png"
                             width={50}
                             height={50}
@@ -106,14 +105,14 @@ export default function BookingDateTime({hideBar}) {
                             {selectedWeekends.map((weekend) => {
                                 return (
                                     <div key={weekend.day} onClick={() => setSelectedDay(weekend)}
-                                        className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} 
+                                        className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} transition-all ease-in-out duration-250
                                         col-start-${weekend.weekendCount} row-start-${weekend.which} flex items-center justify-center 
-                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110`}>
+                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110 hover:font-bold`}>
                                         {weekend.day}</div>
                                 )
                             })}
                         </div>
-                        <Image className="rounded-lg hover:scale-125"
+                        <Image className="rounded-lg hover:scale-125 transition-all ease-in-out duration-500"
                             src="/rightArrowWhite.png"
                             width={50}
                             height={50}
@@ -121,8 +120,8 @@ export default function BookingDateTime({hideBar}) {
                             onClick={() => nextMonth()}
                         />
                     </div>
-                    <div className="bg-white w-full border-[1px]"></div>
-                    <div className="flex gap-6 Tablet:gap-12 py-6">
+                    <div className="bg-white w-full border-[1px] rounded-3xl"></div>
+                    <div className="flex justify-center gap-6 Tablet:gap-12 py-6">
                         {timeOptions}
                     </div>
                 </div>
