@@ -67,7 +67,11 @@ export default function Navbar() {
                 <Link id="shop" className="grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkInactiveSize text-navLinkInactiveColor hover:text-navLinkHoverColor" href="/shop" onClick={() => setActivePage("shop")}>Shop</Link>
             </div>
             <div className="grow flex justify-center Tablet:justify-end Tablet:pr-10">
-                <div className="Tablet:hidden">hamburger</div>
+                <div className="Tablet:hidden">
+                    <div className="w-[30px] h-[5px] rounded-full bg-white"></div>
+                    <div className="w-[30px] h-[5px] rounded-full bg-white my-1"></div>
+                    <div className="w-[30px] h-[5px] rounded-full bg-white"></div>
+                </div>
                 <div className="hidden Tablet:flex">social media</div>
             </div>
         </nav>
