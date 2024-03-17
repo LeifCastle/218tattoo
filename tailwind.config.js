@@ -26,6 +26,9 @@ module.exports = {
         'navLinkInactiveSize': '1.5rem',
         'navLinkActiveSize': '1.7rem',
       },
+      borderColor: {
+        inputBorder:  "#3882F6",
+      },
       colors: {
         NavbarBackground: 'var(--NavbarBackground)',
         navLinkInactiveColor: 'var(--navLinkInactiveColor)',
@@ -35,6 +38,8 @@ module.exports = {
         blackA: '#1B1D1F',
         brownA: '#998c7e',
         blueA: '#184d54',
+        inputBg: "rgba(255, 255, 255, .5)",
+        inputHoverBg: "rgba(255, 255, 255, .75)",
       },
       gridTemplateColumns: {
         'dateTime': '200px repeat(5, minmax(20px, 200px))',

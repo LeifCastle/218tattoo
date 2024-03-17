@@ -4,8 +4,9 @@ import Image from 'next/image';
 import moment from 'moment';
 import { useEffect, useState, useRef } from 'react';
 
-export default function BookingDateTime() {
+export default function BookingDateTime({hideBar}) {
 
+    const dateTimeBar = useRef(null)
     const [selectedTime, setSelectedTime] = useState("12:00 PM")
     const [selectedDay, setSelectedDay] = useState({ day: moment().format('M-D'), which: moment().day() })
     const [selectedMonth, setSelectedMonth] = useState(moment())
@@ -79,41 +80,51 @@ export default function BookingDateTime() {
     return (
         <>
             <div className="bg-blackA flex flex-col items-center justify-center">
-                <div className="flex justify-center bg-blueA py-2 w-full">
+                <div className="flex justify-center bg-blueA py-2 w-full justify-between">
+                    <div className="w-[50px] ml-[5vw]"></div>
                     <div className="mx-4 text-3xl">{selectedMonth.format('MMMM')}</div>
-                </div>
-                <div className="flex items-center">
-                    <Image className="rounded-lg  hover:scale-125"
-                        src="/leftArrowWhite.png"
-                        width={50}
-                        height={50}
-                        alt="NextPic"
-                        onClick={() => prevMonth()}
-                    />
-                    <div className="grid grid-cols-dateTime grid-rows-2 gap-y-1 px-20 py-8 place-items-center">
-                        <div className="text-xl row-start-1">Saturday</div>
-                        <div className="text-xl row-start-2">Sunday</div>
-                        {selectedWeekends.map((weekend) => {
-                            return (
-                                <div key={weekend.day} onClick={() => setSelectedDay(weekend)}
-                                    className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} 
-                                        col-start-${weekend.weekendCount} row-start-${weekend.which} flex items-center justify-center 
-                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110`}>
-                                    {weekend.day}</div>
-                            )
-                        })}
-                    </div>
-                    <Image className="rounded-lg hover:scale-125"
+                    <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500"
                         src="/rightArrowWhite.png"
                         width={50}
                         height={50}
                         alt="NextPic"
-                        onClick={() => nextMonth()}
+                        onClick={(e) => hideBar(e, dateTimeBar.current)}
                     />
                 </div>
-                <div className="bg-white w-full border-[1px]"></div>
-                <div className="flex gap-6 Tablet:gap-12 py-6">
-                    {timeOptions}
+                <div ref={dateTimeBar} className="overflow-hidden transition-height ease-in-out duration-500">
+                    <div className="flex items-center">
+                        <Image className="rounded-lg  hover:scale-125"
+                            src="/leftArrowWhite.png"
+                            width={50}
+                            height={50}
+                            alt="NextPic"
+                            onClick={() => prevMonth()}
+                        />
+                        <div className="grid grid-cols-dateTime grid-rows-2 gap-y-1 px-20 py-8 place-items-center">
+                            <div className="text-xl row-start-1">Saturday</div>
+                            <div className="text-xl row-start-2">Sunday</div>
+                            {selectedWeekends.map((weekend) => {
+                                return (
+                                    <div key={weekend.day} onClick={() => setSelectedDay(weekend)}
+                                        className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} 
+                                        col-start-${weekend.weekendCount} row-start-${weekend.which} flex items-center justify-center 
+                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110`}>
+                                        {weekend.day}</div>
+                                )
+                            })}
+                        </div>
+                        <Image className="rounded-lg hover:scale-125"
+                            src="/rightArrowWhite.png"
+                            width={50}
+                            height={50}
+                            alt="NextPic"
+                            onClick={() => nextMonth()}
+                        />
+                    </div>
+                    <div className="bg-white w-full border-[1px]"></div>
+                    <div className="flex gap-6 Tablet:gap-12 py-6">
+                        {timeOptions}
+                    </div>
                 </div>
             </div>
         </>
