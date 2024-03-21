@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="bg-homePage bg-cover h-[93vh] -translate-y-[10vh] pt-[10vh] mb-[-10vh] flex-col items-center">
+      <div className="bg-homePage bg-cover h-[93vh] -translate-y-[92px] pt-[10vh] mb-[-10vh] flex-col items-center">
         <p className="pt-[20vh] text-[1.3rem] text-center">Tattoo and piercing passionate since 2020, specializing in American Traditional and Script. <br></br>
           218 Tattoo Company is LGBTQIA+, BIPOC, disability and ally friendly. All bodies are welcome!
           Racism, homophobia, transphobia, ableism and hate in all forms will not be tolerated. <br></br>

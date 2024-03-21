@@ -7,6 +7,9 @@ import Script from 'next/script'
 
 export default function Navbar() {
 
+    //--CSS Variables
+    let navLinkDefault = "grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkActiveSize text-navLinkActiveColor"
+
     let vart
     let DOMloaded = false; // Determines if component is mounted (DOM is loaded) before using query selectors
 
@@ -55,16 +58,16 @@ export default function Navbar() {
     }
 
     return (<>
-        <nav id='Navbar' data-navbartheme={vart} className="z-[2] w-full h-[20vh] Tablet:min-h-[60px] Tablet:h-[10vh] bg-NavbarBackground sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out">
+        <nav id='Navbar' data-navbartheme={vart} className="z-[2] w-full min-h-[92px] bg-NavbarBackground sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out">
             <div className="grow flex justify-center Tablet:justify-start Tablet:pl-10">
                 <h1>218 Tattoo</h1>
             </div>
             <div className="hidden Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor">
-                <Link id="home" className="grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkActiveSize text-navLinkActiveColor" href="/" onClick={() => setActivePage("home")}>Home</Link>
-                <Link id="tattoos" className="grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkInactiveSize text-navLinkInactiveColor hover:text-navLinkHoverColor" href="/tattoos" onClick={() => setActivePage("tattoos")}>Tattoos</Link>
-                <Link id="book" className="grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkInactiveSize text-navLinkInactiveColor hover:text-navLinkHoverColor" href="/book" onClick={() => setActivePage("book")}>Book</Link>
-                <Link id="about" className="grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkInactiveSize text-navLinkInactiveColor hover:text-navLinkHoverColor" href="/about" onClick={() => setActivePage("about")}>About</Link>
-                <Link id="shop" className="grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkInactiveSize text-navLinkInactiveColor hover:text-navLinkHoverColor" href="/shop" onClick={() => setActivePage("shop")}>Shop</Link>
+                <Link id="home" className={navLinkDefault} href="/" onClick={() => setActivePage("home")}>Home</Link>
+                <Link id="tattoos" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/tattoos" onClick={() => setActivePage("tattoos")}>Tattoos</Link>
+                <Link id="book" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/book" onClick={() => setActivePage("book")}>Book</Link>
+                <Link id="about" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/about" onClick={() => setActivePage("about")}>About</Link>
+                <Link id="shop" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/shop" onClick={() => setActivePage("shop")}>Shop</Link>
             </div>
             <div className="grow flex justify-center Tablet:justify-end Tablet:pr-10">
                 <div className="Tablet:hidden">
