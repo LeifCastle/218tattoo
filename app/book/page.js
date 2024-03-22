@@ -1,10 +1,18 @@
 "use client"
 
+import axios from 'axios';
 import Image from "next/image"
 import BookingDateTime from "../../components/bookingDateTime"
-import { useRef } from "react"
+import moment from 'moment';
+import { useRef, useState } from "react"
 
 export default function Book() {
+    const client = axios.create({
+        baseURL: "http://localhost:5000"
+    });
+
+    const [selectedDay, setSelectedDay] = useState({ day: moment().format('M-D'), which: moment().day() })
+    const [selectedTime, setSelectedTime] = useState("12:00 PM")
 
     const personalInfoBar = useRef(null)
     const tattooOptionsBar = useRef(null)
@@ -24,9 +32,26 @@ export default function Book() {
         }
     }
 
+    //Submits booking request
+    function handleBooking(e) {
+        e.preventDefault();
+        let newBooking = {
+            date: selectedDay.day,
+            time: selectedTime,
+        }
+        console.log('Requesting: ', newBooking)
+        client.post('/book/new', { newBooking })
+            .then(response => {
+                console.log('Sucess', response)
+            })
+            .catch(error => {
+                console.log('Error: ', error)
+            })
+    }
+
     return (
-        <div className="bg-brownA bg-cover min-h-[50vh]">
-            <BookingDateTime hideBar={hideBar} />
+        <form onSubmit={handleBooking} className="bg-brownA bg-cover min-h-[50vh]">
+            <BookingDateTime hideBar={hideBar} selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
             {/* Personal Info Bar */}
             <div className="flex justify-between items-center bg-blueA py-2 w-full">
                 <div className="w-[50px] ml-[5vw]"></div>
@@ -88,14 +113,16 @@ export default function Book() {
                     </div>
                 </div>
             </div>
-            <p>Book</p>
-            <button>See Bookings</button>
-            <div className="flex">
+            {/* Finalize Booking (without payment for now) */}
+            <div className="w-full flex justify-center mb-10">
+                <button type="submit" className="bg-blueA rounded-md p-3">Book Your Appointment</button>
+            </div>
+            {/* <div className="flex">
                 <button>Tattoo</button>
                 <button>Piercing</button>
                 <button>Tooth Gem</button>
-            </div>
+            </div> */}
 
-        </div>
+        </form>
     )
 }

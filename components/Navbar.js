@@ -29,7 +29,7 @@ export default function Navbar() {
             document.querySelector('#Navbar').setAttribute('data-navbartheme', 'default')
             window.addEventListener('scroll', handleScroll);
         }
-        else if(pathname !== '/admin'){
+        else if (pathname !== '/admin') {
             window.removeEventListener('scroll', handleScroll);
             document.querySelector('#Navbar').setAttribute('data-navbartheme', 'scrolled')
         }
@@ -57,38 +57,40 @@ export default function Navbar() {
         }
     }
 
-    return (<>
-        <nav id='Navbar' data-navbartheme={vart} className="z-[2] w-full min-h-[92px] bg-NavbarBackground sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out">
-            <div className="grow flex justify-center Tablet:justify-start Tablet:pl-10">
-                <h1>218 Tattoo</h1>
-            </div>
-            <div className="hidden Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor">
-                <Link id="home" className={navLinkDefault} href="/" onClick={() => setActivePage("home")}>Home</Link>
-                <Link id="tattoos" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/tattoos" onClick={() => setActivePage("tattoos")}>Tattoos</Link>
-                <Link id="book" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/book" onClick={() => setActivePage("book")}>Book</Link>
-                <Link id="about" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/about" onClick={() => setActivePage("about")}>About</Link>
-                <Link id="shop" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/shop" onClick={() => setActivePage("shop")}>Shop</Link>
-            </div>
-            <div className="grow flex justify-center Tablet:justify-end Tablet:pr-10">
-                <div className="Tablet:hidden">
-                    <div className="w-[30px] h-[5px] rounded-full bg-white"></div>
-                    <div className="w-[30px] h-[5px] rounded-full bg-white my-1"></div>
-                    <div className="w-[30px] h-[5px] rounded-full bg-white"></div>
+    if (pathname !== '/admin') {
+        return (<>
+            <nav id='Navbar' data-navbartheme={vart} className="z-[2] w-full min-h-[92px] bg-NavbarBackground sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out">
+                <div className="grow flex justify-center Tablet:justify-start Tablet:pl-10">
+                    <h1>218 Tattoo</h1>
                 </div>
-                <div className="hidden Tablet:flex">social media</div>
-            </div>
-        </nav>
-        <Script
-            id="show-banner"
-            dangerouslySetInnerHTML={{
-                __html: `  
+                <div className="hidden Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor">
+                    <Link id="home" className={navLinkDefault} href="/" onClick={() => setActivePage("home")}>Home</Link>
+                    <Link id="tattoos" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/tattoos" onClick={() => setActivePage("tattoos")}>Tattoos</Link>
+                    <Link id="book" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/book" onClick={() => setActivePage("book")}>Book</Link>
+                    <Link id="about" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/about" onClick={() => setActivePage("about")}>About</Link>
+                    <Link id="shop" className={`${navLinkDefault} hover:text-navLinkHoverColor`} href="/shop" onClick={() => setActivePage("shop")}>Shop</Link>
+                </div>
+                <div className="grow flex justify-center Tablet:justify-end Tablet:pr-10">
+                    <div className="Tablet:hidden">
+                        <div className="w-[30px] h-[5px] rounded-full bg-white"></div>
+                        <div className="w-[30px] h-[5px] rounded-full bg-white my-1"></div>
+                        <div className="w-[30px] h-[5px] rounded-full bg-white"></div>
+                    </div>
+                    <div className="hidden Tablet:flex">social media</div>
+                </div>
+            </nav>
+            <Script
+                id="show-banner"
+                dangerouslySetInnerHTML={{
+                    __html: `  
                 let vart;
                 let pathname = window.location.pathname;
                 pathname === '/' ? vart = "default" : vart = "scrolled"
                 console.log(vart)
                 `
-            }}
-        />
-    </>
-    )
+                }}
+            />
+        </>
+        )
+    }
 }

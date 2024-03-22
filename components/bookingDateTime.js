@@ -4,11 +4,9 @@ import Image from 'next/image';
 import moment from 'moment';
 import { useEffect, useState, useRef } from 'react';
 
-export default function BookingDateTime({hideBar}) {
+export default function BookingDateTime({hideBar, selectedDay, setSelectedDay, selectedTime, setSelectedTime}) {
 
     const dateTimeBar = useRef(null)
-    const [selectedTime, setSelectedTime] = useState("12:00 PM")
-    const [selectedDay, setSelectedDay] = useState({ day: moment().format('M-D'), which: moment().day() })
     const [selectedMonth, setSelectedMonth] = useState(moment())
     const [selectedWeekends, setSelectedWeekends] = useState([])
     const [timeOptions, setTimeOptions] = useState()
