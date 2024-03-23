@@ -63,7 +63,7 @@ export default function Admin() {
 
     if (isAuthenticated) {
         return (
-            <main className="bg-brownA h-[100vh]">
+            <main className="bg-white h-[100vh]">
                 <div className="w-full min-h-[92px] bg-blueA sticky top-0 flex justify-between items-center text-white font-[425] text-nowrap">
                     <div className="flex items-center  basis-1/3">
                         <Link className="mx-10" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
