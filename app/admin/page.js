@@ -2,10 +2,15 @@
 
 import axios from 'axios';
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import setAuthToken from "../utils/setAuthToken";
+import ListView from "../../components/listView"
+import SetAvailability from "../../components/setAvailability"
 
 export default function Admin() {
+
+    const [panel, setPanel] = useState('listView')
+
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState('');
     const [bookings, setBookings] = useState([])
@@ -59,25 +64,22 @@ export default function Admin() {
     if (isAuthenticated) {
         return (
             <main className="bg-brownA h-[100vh]">
-                <div className="w-full min-h-[92px] bg-blueA sticky top-0 flex justify-left items-center text-white font-[425] text-nowrap">
-                    <div className="flex">
-                        <Link className="ml-10 basis-1/3" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
-                        <p className="text-4xl">Admin Panel - </p>
+                <div className="w-full min-h-[92px] bg-blueA sticky top-0 flex justify-between items-center text-white font-[425] text-nowrap">
+                    <div className="flex items-center  basis-1/3">
+                        <Link className="mx-10" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
                     </div>
-                    <div className="flex">
-                        <p className="text-4xl">Admin Panel - </p>
-                        <p className="text-3xl ">View Bookings</p>
+                    <div className="flex gap-10 justify-center  basis-1/3">
+                        <p onClick={() => { setPanel('listView') }} className={`${panel === 'listView' ? 'text-navLinkActiveSize text-navLinkActiveColor' : 'text-navLinkInactiveSize text-navLinkInactiveColor'} text-2xl ${panel != "listView" ? 'hover:text-navLinkHoverColor' : ''}`}>List View</p>
+                        <p onClick={() => { setPanel('setAvailability') }} className={`${panel === 'setAvailability' ? 'text-navLinkActiveSize text-navLinkActiveColor' : 'text-navLinkInactiveSize text-navLinkInactiveColor'} text-2xl ${panel != "setAvailability" ? 'hover:text-navLinkHoverColor' : ''}`}>Calendar View</p>
                     </div>
                     <div className="basis-1/3"></div>
                 </div>
-
-                <p className="text-2xl">List View:</p>
-                <ol>
-                    {bookings.map(booking => {
-                        return <li>{booking.date}</li>
-                    })}
-                </ol>
-                <button onClick={() => getBookings()}>See Bookings</button>
+                <div className={`${panel === "listView" ? 'visible' : 'invisible'}`}>
+                    <ListView bookings={bookings} />
+                </div>
+                <div className={`${panel === "setAvailability" ? 'visible' : 'invisible'}`}>
+                    <SetAvailability />
+                </div>
             </main>
         )
     } else {

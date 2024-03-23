@@ -43,6 +43,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         'dateTime': '200px repeat(5, minmax(20px, 200px))',
+        'listView': 'repeat(4, minmax(20px, 400px))',
       },
       backgroundImage: {
         'homePage': "url('https://marineagency.com/wp-content/uploads/2020/10/Screen-Shot-2020-10-16-at-9.28.25-AM-1024x679.png')",
