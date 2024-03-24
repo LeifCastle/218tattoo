@@ -28,6 +28,7 @@ module.exports = {
       },
       borderColor: {
         inputBorder:  "#3882F6",
+        inputError: "#8E0000",
       },
       colors: {
         NavbarBackground: 'var(--NavbarBackground)',
@@ -40,6 +41,7 @@ module.exports = {
         blueA: '#184d54',
         inputBg: "rgba(255, 255, 255, .5)",
         inputHoverBg: "rgba(255, 255, 255, .75)",
+        inputError: "#8E0000",
       },
       gridTemplateColumns: {
         'dateTime': '200px repeat(5, minmax(20px, 200px))',

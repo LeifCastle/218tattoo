@@ -4,21 +4,55 @@ import axios from 'axios';
 import Image from "next/image"
 import BookingDateTime from "../../components/bookingDateTime"
 import moment from 'moment';
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 
 export default function Book() {
     const client = axios.create({
         baseURL: "http://localhost:5000"
     });
 
-    const [selectedDay, setSelectedDay] = useState({ day: moment().format('M-D'), which: moment().day() })
-    const [selectedTime, setSelectedTime] = useState("12:00 PM")
-
+    const [dateTime, setDateTime] = useState('')
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+    const [age, setAge] = useState('')
+    const [errors, setErrors] = useState({ personalInfo: { name: false, email: false, phone: false, age: false } })
     const personalInfoBar = useRef(null)
     const tattooOptionsBar = useRef(null)
+    const hasErrors = useRef(false)
+
+    let newBooking = {
+        dateTime: dateTime,
+        name: name,
+        email: email,
+        phone: phone,
+    }
 
     let inputName = "text-xl"
-    let inputField = "rounded-[12px] pl-2 text-black bg-inputBg border-2 border-transparent focus:border-inputBorder focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg"
+    let inputField = `rounded-[12px] pl-2 text-black bg-inputBg border-2 border-transparent focus:border-inputBorder focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
+
+    //--Checks for any errors in booking information (missing, etc...)
+    function checkForErrors() {
+        hasErrors.current = false
+        const newErrors = { ...errors, personalInfo: { ...errors.personalInfo } };
+        for (const key in newBooking) {
+            if (!newBooking[key]) {
+                newErrors.personalInfo[key] = true;
+                hasErrors.current = true;
+            } else {
+                newErrors.personalInfo[key] = false;
+            }
+        }
+        setErrors(newErrors);
+    }
+
+    //--Updates error status on-the-fly
+    useEffect(() => {
+        if (hasErrors.current) {
+            checkForErrors()
+        }
+    }, [name, email, phone, age])
+
 
     function hideBar(arrow, bar) {
         if (bar.style.height === "3px") {
@@ -32,28 +66,26 @@ export default function Book() {
         }
     }
 
-    //Submits booking request
+    //--Submits booking
     function handleBooking(e) {
         e.preventDefault();
-        let newBooking = {
-            date: selectedDay.day,
-            time: selectedTime,
+        checkForErrors()
+        if (!hasErrors.current) {
+            client.post('/book/new', { newBooking })
+                .then(response => {
+                    console.log('Sucess', response)
+                })
+                .catch(error => {
+                    console.log('Error: ', error)
+                })
         }
-        console.log('Requesting: ', newBooking)
-        client.post('/book/new', { newBooking })
-            .then(response => {
-                console.log('Sucess', response)
-            })
-            .catch(error => {
-                console.log('Error: ', error)
-            })
     }
 
     return (
         <form onSubmit={handleBooking} className="bg-brownA bg-cover min-h-[50vh]">
-            <BookingDateTime hideBar={hideBar} selectedDay={selectedDay} setSelectedDay={setSelectedDay} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
+            <BookingDateTime hideBar={hideBar} dateTime={dateTime} setDateTime={setDateTime} />
             {/* Personal Info Bar */}
-            <div className="flex justify-between items-center bg-blueA py-2 w-full">
+            <div className={`${Object.values(errors.personalInfo).some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-centerpy-2 w-full`}>
                 <div className="w-[50px] ml-[5vw]"></div>
                 <div className="mx-4 text-3xl">Personal Info</div>
                 <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500"
@@ -69,21 +101,21 @@ export default function Book() {
                     <div className="flex flex-col">
                         <div className="flex gap-4 pt-6 items-center justify-center">
                             <p className={inputName}>Name</p>
-                            <input placeholder="Me" className={inputField}></input>
+                            <input id="name" placeholder="Me" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.personalInfo.name ? 'border-inputError' : 'transparent'}`}></input>
                         </div>
                         <div className="flex gap-4 py-6 items-center justify-center">
                             <p className={inputName}>Email</p>
-                            <input placeholder="me@gmail.com" className={inputField}></input>
+                            <input id="email" placeholder="me@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className={inputField}></input>
                         </div>
                     </div>
                     <div className="flex flex-col">
                         <div className="flex gap-4 pt-6 items-center justify-center">
-                            <p className={inputName}>Phone</p>
-                            <input placeholder="360-663-6036" className={inputField}></input>
+                            <p className={inputName} value={phone} onChange={(e) => setPhone(e.target.value)}>Phone</p>
+                            <input id="phone" placeholder="360-663-6036" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputField}></input>
                         </div>
                         <div className="flex gap-4 py-6 items-center justify-left">
                             <p className={inputName}>I am 18+</p>
-                            <input placeholder="360-663-6036" type="checkbox" className={inputField}></input>
+                            <input id="age" placeholder="360-663-6036" type="checkbox" className={inputField}></input>
                         </div>
                     </div>
                 </div>

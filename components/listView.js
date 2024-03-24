@@ -1,10 +1,15 @@
 import { useState, useEffect, useRef } from "react"
+import moment from 'moment';
 
 export default function ListView({ bookings }) {
 
     const bookingGrid = useRef(null)
     const [viewPort, setViewport] = useState('list')
     const [expanded, setExpanded] = useState(false)
+
+// const date = new Date();
+// const formattedDate = moment(date).format('YYYY-MM-DD');
+// console.log(formattedDate); // Example output: "2024-03-08"
 
     function expandBooking(id) {
         bookingGrid.current.disabled = true
@@ -24,10 +29,10 @@ export default function ListView({ bookings }) {
                 <div className="text-xl row-start-1 col-start-4">Session</div>
                 {bookings.map(booking => {
                     return (
-                        <div key={booking.date} onClick={() => expandBooking(booking.date)} className="col-span-4 grid grid-cols-listView gap-y-1 text-center hover:bg-blackA/50 rounded-md">
+                        <div key={booking.dateTime} onClick={() => expandBooking(booking.dateTime)} className="col-span-4 grid grid-cols-listView gap-y-1 text-center hover:bg-blackA/50 rounded-md">
                             <p className="bg-blackA/10">{booking.name}</p>
-                            <p className="bg-blackA/10">{booking.date}</p>
-                            <p className="bg-blackA/10">{booking.time}</p>
+                            <p className="bg-blackA/10">{moment(booking.dateTime).format('MM/DD')}</p>
+                            <p className="bg-blackA/10">{moment(booking.dateTime).format('h:mm A')}</p>
                             <p className="bg-blackA/10">{booking.session}</p>
                         </div>
                     )
