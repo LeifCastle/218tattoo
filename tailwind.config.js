@@ -31,7 +31,7 @@ module.exports = {
         inputError: "#8E0000",
       },
       colors: {
-        NavbarBackground: 'var(--NavbarBackground)',
+        NavbarBackground: '#FFFFFF',
         navLinkInactiveColor: 'var(--navLinkInactiveColor)',
         navLinkActiveColor: 'var(--navLinkActiveColor)',
         navLinkHoverColor: 'var(--navLinkHoverColor)',

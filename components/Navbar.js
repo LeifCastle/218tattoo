@@ -1,37 +1,39 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
-import { useRef, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePathname } from 'next/navigation'
 import Script from 'next/script'
 
 export default function Navbar() {
+    const [scrolled, setScrolled] = useState()
 
     //--CSS Variables
     let navLinkDefault = "grow-1 basis-0 overflow-hidden min-w-[105px] px-[1px] navLink px-5 text-navLinkActiveSize text-navLinkActiveColor"
 
-    let vart
     let DOMloaded = false; // Determines if component is mounted (DOM is loaded) before using query selectors
-
     let pathname = usePathname()
+
     const handleScroll = useCallback(() => {
-        window.scrollY > 0 ? document.querySelector('#Navbar').setAttribute('data-navbartheme', 'scrolled') : document.querySelector('#Navbar').setAttribute('data-navbartheme', 'default');
+        window.scrollY > 0 ? setScrolled(true) : setScrolled(false);
     }, [])
 
-    useEffect(() => {
+    useEffect(() => { //Eliminate this clunkiness
         DOMloaded = true;
         let page = "home"
         pathname === '/' ? page = ['/', 'h', 'o', 'm', 'e'] : page = pathname.split('')
         page.shift()
         setActivePage(page.join(''))
-
         if (pathname === '/') {
-            document.querySelector('#Navbar').setAttribute('data-navbartheme', 'default')
+            setScrolled(false)
+            document.querySelector('#Navbar').setAttribute('data-navbartheme', 'default') //remove and use scrolled state to apply these styles
             window.addEventListener('scroll', handleScroll);
         }
         else if (pathname !== '/admin') {
             window.removeEventListener('scroll', handleScroll);
-            document.querySelector('#Navbar').setAttribute('data-navbartheme', 'scrolled')
+            document.querySelector('#Navbar').setAttribute('data-navbartheme', "true")
+            setScrolled(true)
         }
     }, [pathname]);
 
@@ -59,9 +61,9 @@ export default function Navbar() {
 
     if (pathname !== '/admin') {
         return (<>
-            <nav id='Navbar' data-navbartheme={vart} className="z-[2] w-full min-h-[92px] bg-NavbarBackground sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out">
+            <nav id='Navbar' data-navbartheme={scrolled} className={`${scrolled || pathname !== '/' ? "bg-NavbarBackground" : "transparent"} z-[2] w-full min-h-[92px] sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out`}>
                 <div className="grow flex justify-center Tablet:justify-start Tablet:pl-10">
-                    <h1>218 Tattoo</h1>
+                    <Link href="/"><h1 className={`${scrolled || pathname !== '/' ? "text-black" : "text-white"} text-3xl`}>218 Tattoo</h1></Link>
                 </div>
                 <div className="hidden Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor">
                     <Link id="home" className={navLinkDefault} href="/" onClick={() => setActivePage("home")}>Home</Link>
@@ -76,20 +78,50 @@ export default function Navbar() {
                         <div className="w-[30px] h-[5px] rounded-full bg-white my-1"></div>
                         <div className="w-[30px] h-[5px] rounded-full bg-white"></div>
                     </div>
-                    <div className="hidden Tablet:flex">social media</div>
-                </div>
-            </nav>
-            <Script
-                id="show-banner"
-                dangerouslySetInnerHTML={{
-                    __html: `  
-                let vart;
-                let pathname = window.location.pathname;
-                pathname === '/' ? vart = "default" : vart = "scrolled"
-                console.log(vart)
-                `
-                }}
-            />
+                    <div className="hidden Tablet:flex items-center justify-center gap-5 Tablet:mr-10">
+                        <Link href="https://www.facebook.com/two.eighteen.tattoo.company" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "" : "hidden"} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/blackFacebookIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Facebook"
+                                />
+                            </a>
+                        </Link>
+                        <Link href="https://www.instagram.com/218_tattoo/" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "" : "hidden"} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/blackInstagramIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Instagram"
+                                />
+                            </a>
+                        </Link>
+                        <Link href="https://www.facebook.com/two.eighteen.tattoo.company" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "hidden" : ""} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/whiteFacebookIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Facebook"
+                                />
+                            </a>
+                        </Link>
+                        <Link href="https://www.instagram.com/218_tattoo/" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "hidden" : ""} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/whiteInstagramIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Instagram"
+                                />
+                            </a>
+                        </Link>
+                    </div>
+                </div >
+            </nav >
         </>
         )
     }
