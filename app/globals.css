@@ -2,19 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --navLinkInactiveColor: #919191;
-  --navLinkActiveColor: #FFFFFF;
-  --navLinkHoverColor:#bdbdbd;
-}
-
-/* Navbar Scrolled Theme */
-[data-navbartheme="true"] {
-  --navLinkInactiveColor: #000000;
-  --navLinkActiveColor: #184d54; 
-  --navLinkHoverColor: #998c7e;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

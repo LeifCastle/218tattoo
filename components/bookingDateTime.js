@@ -90,7 +90,7 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
 
     //--Advances the calendar to the previous month **need to add something to allow crossover into last year
     function prevMonth() {
-        if (selectedMonth.format('M') > moment().format('M')) {
+        if (parseInt(selectedMonth.format('M')) > parseInt(moment().format('M'))) {
             let prevMonth = selectedMonth.subtract(1, 'months')
             setSelectedMonth(moment(prevMonth))
             setSelectedWeekends(getWeekends(prevMonth.format('M'), prevMonth.format('YYYY')))
@@ -98,11 +98,10 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
     }
     //--Advances the calendar to the next month **need to add something to allow crossover into next year
     function nextMonth() {
-        if (selectedMonth.format('M') < moment().add(6, 'months').format('M')) {
-            let prevMonth = selectedMonth.add(1, 'months')
-            setSelectedMonth(moment(prevMonth))
-            let newWeekends = getWeekends(prevMonth.format('M'), prevMonth.format('YYYY'))
-            console.log('New Weekends: ', newWeekends)
+        if (parseInt(selectedMonth.format('M')) < parseInt(moment().add(6, 'months').format('M'))) {
+            let nextMonth = selectedMonth.add(1, 'months')
+            setSelectedMonth(moment(nextMonth))
+            let newWeekends = getWeekends(nextMonth.format('M'), nextMonth.format('YYYY'))
             setSelectedWeekends(newWeekends)
         }
     }
