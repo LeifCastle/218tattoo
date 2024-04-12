@@ -25,6 +25,8 @@ module.exports = {
       fontSize: {
         'navLinkInactiveSize': '1.5rem',
         'navLinkActiveSize': '1.7rem',
+        'mobileNavActiveSize': '3.5rem',
+        'mobileNavInactiveSize': '3rem',
       },
       borderColor: {
         inputBorder:  "#3882F6",
@@ -45,6 +47,7 @@ module.exports = {
         inputBg: "rgba(255, 255, 255, .5)",
         inputHoverBg: "rgba(255, 255, 255, .75)",
         inputError: "#8E0000",
+        mobileNavBg: "rgba(0, 0, 0, .875)",
       },
       gridTemplateColumns: {
         'dateTime': '200px repeat(5, minmax(20px, 200px))',

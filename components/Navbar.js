@@ -40,73 +40,90 @@ export default function Navbar() {
         setMobileNav(false);
     }, [pathname]);
 
+    useEffect(() => {
+        if (mobileNav) {
+            document.body.classList.add('no-scroll');
+            document.addEventListener('touchmove', () => setMobileNav(false));  // For touch scrolling
+        } else {
+            document.body.classList.remove('no-scroll');
+            document.removeEventListener('touchmove', () => setMobileNav(false));
+        }
+    }, [mobileNav])
+
     if (pathname !== '/admin') {
         return (<>
             <nav id='Navbar' className={`${scrolled || pathname !== '/' || mobileNav ? "bg-NavbarBackground" : "transparent"} z-[2] w-full min-h-[92px] sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out`}>
-                <div className={`flex w-full ${mobileNav ? 'flex-col' : ''}`}>
-                    <div className="flex grow justify-center items-center Tablet:grow-0 Tablet:justify-start Tablet:pl-10 min-h-[92px]">
-                        <Link href="/"><h1 className={`${scrolled || mobileNav || pathname !== '/' ? "text-black" : "text-white"} text-3xl`}>218 Tattoo</h1></Link>
+                <div className="flex grow justify-center items-center Tablet:grow-0 Tablet:justify-start Tablet:pl-10 min-h-[92px]">
+                    <Link href="/"><h1 className={`${scrolled || mobileNav || pathname !== '/' ? "text-black" : "text-white"} text-3xl`}>218 Tattoo</h1></Link>
+                </div>
+                <div className={`justify-center items-center grow hidden ${mobileNav ? "" : "Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor"}`}>
+                    {links.map(link => {
+                        return (
+                            <Link key={link} className={`${(scrolled || mobileNav) ? pathname === link.href ? activeNavLinkContrast : inactiveNavLinkContrast : pathname === link.href ? activeNavLinkDefault : inactiveNavLinkDefault} 
+                            grow-1 basis-0 min-w-[105px] px-[1px] navLink px-5`} href={link.href}>{link.name}</Link>
+                        )
+                    })}
+                </div>
+                <div className="h-[92px] self-start flex justify-center items-center pr-10 Tablet:justify-end Tablet:pr-10">
+                    <div className="Tablet:hidden " onClick={() => setMobileNav(!mobileNav)}>
+                        <div className={`${mobileNav ? "rotate-[-45deg] translate-y-[2.5px]" : ""} w-[30px] h-[5px] rounded-full ${scrolled || mobileNav ? 'bg-blackA' : 'bg-white'} transition-all duration-[400ms] ease-in-out`}></div>
+                        <div className={`${mobileNav ? "hidden" : "translate-x-[5px] w-[25px] h-[5px] rounded-full my-1"} ${scrolled || mobileNav ? 'bg-blackA' : 'bg-white'} transition-all duration-[400ms] ease-in-out`}></div>
+                        <div className={`${mobileNav ? "rotate-[45deg] translate-y-[-2.5px]" : ""} w-[30px] h-[5px] rounded-full  ${scrolled || mobileNav ? 'bg-blackA' : 'bg-white'} transition-all duration-[400ms] ease-in-out`}></div>
                     </div>
-                    <div className={`${mobileNav ? 'w-full h-[2px] bg-blackA' : 'hidden'}`}></div>
-                    <div className={`justify-center items-center grow ${mobileNav ? "flex flex-col" : "hidden Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor"}`}>
-                        {links.map(link => {
-                            return (
-                                <Link key={link} className={`${(scrolled || mobileNav) ? pathname === link.href ? activeNavLinkContrast : inactiveNavLinkContrast : pathname === link.href ? activeNavLinkDefault : inactiveNavLinkDefault} 
-                            grow-1 basis-0 min-w-[105px] px-[1px] navLink px-5 text-navLinkActiveSize`} href={link.href}>{link.name}</Link>
-                            )
-                        })}
+                    <div className="hidden Tablet:flex items-center justify-center gap-5 Tablet:mr-10">
+                        <Link href="https://www.facebook.com/two.eighteen.tattoo.company" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "" : "hidden"} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/blackFacebookIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Facebook"
+                                />
+                            </a>
+                        </Link>
+                        <Link href="https://www.instagram.com/218_tattoo/" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "" : "hidden"} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/blackInstagramIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Instagram"
+                                />
+                            </a>
+                        </Link>
+                        <Link href="https://www.facebook.com/two.eighteen.tattoo.company" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "hidden" : ""} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/whiteFacebookIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Facebook"
+                                />
+                            </a>
+                        </Link>
+                        <Link href="https://www.instagram.com/218_tattoo/" legacyBehavior>
+                            <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "hidden" : ""} hover:scale-[115%] duration-300 ease-in-out`}>
+                                <Image
+                                    src="/whiteInstagramIcon.png"
+                                    width={37}
+                                    height={37}
+                                    alt="Instagram"
+                                />
+                            </a>
+                        </Link>
                     </div>
                 </div>
-                    <div className="h-[92px] self-start flex justify-center items-center pr-10 Tablet:justify-end Tablet:pr-10">
-                        <div className="Tablet:hidden " onClick={() => setMobileNav(!mobileNav)}>
-                            <div className={`${mobileNav ? "rotate-[-45deg] translate-y-[2.5px]" : ""} w-[30px] h-[5px] rounded-full ${scrolled || mobileNav ? 'bg-blackA' : 'bg-white'} transition-translate duration-[400ms] ease-in-out`}></div>
-                            <div className={`${mobileNav ? "hidden" : "w-[30px] h-[5px] rounded-full my-1"} ${scrolled || mobileNav? 'bg-blackA' : 'bg-white'}`}></div>
-                            <div className={`${mobileNav ? "rotate-[45deg] translate-y-[-2.5px]" : ""} w-[30px] h-[5px] rounded-full  ${scrolled || mobileNav ? 'bg-blackA' : 'bg-white'} transition-translate duration-[400ms] ease-in-out`}></div>
-                        </div>
-                        <div className="hidden Tablet:flex items-center justify-center gap-5 Tablet:mr-10">
-                            <Link href="https://www.facebook.com/two.eighteen.tattoo.company" legacyBehavior>
-                                <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "" : "hidden"} hover:scale-[115%] duration-300 ease-in-out`}>
-                                    <Image
-                                        src="/blackFacebookIcon.png"
-                                        width={37}
-                                        height={37}
-                                        alt="Facebook"
-                                    />
-                                </a>
-                            </Link>
-                            <Link href="https://www.instagram.com/218_tattoo/" legacyBehavior>
-                                <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "" : "hidden"} hover:scale-[115%] duration-300 ease-in-out`}>
-                                    <Image
-                                        src="/blackInstagramIcon.png"
-                                        width={37}
-                                        height={37}
-                                        alt="Instagram"
-                                    />
-                                </a>
-                            </Link>
-                            <Link href="https://www.facebook.com/two.eighteen.tattoo.company" legacyBehavior>
-                                <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "hidden" : ""} hover:scale-[115%] duration-300 ease-in-out`}>
-                                    <Image
-                                        src="/whiteFacebookIcon.png"
-                                        width={37}
-                                        height={37}
-                                        alt="Facebook"
-                                    />
-                                </a>
-                            </Link>
-                            <Link href="https://www.instagram.com/218_tattoo/" legacyBehavior>
-                                <a target="_blank" rel="noopener noreferrer" className={`${scrolled || pathname !== '/' ? "hidden" : ""} hover:scale-[115%] duration-300 ease-in-out`}>
-                                    <Image
-                                        src="/whiteInstagramIcon.png"
-                                        width={37}
-                                        height={37}
-                                        alt="Instagram"
-                                    />
-                                </a>
-                            </Link>
-                        </div>
-                    </div >
             </nav >
+            <div className={`${mobileNav ? "fixed top-[90px] z-[2] flex flex-col h-[100vh] w-[100vw] bg-mobileNavBg" : "h-0 hidden"} transition-all duration-[400ms] ease-in-out`}>
+                <div className={`flex flex-col justify-center items-center grow`}>
+                    {links.map(link => {
+                        return (
+                            <Link key={link} className={`${pathname === link.href ? 'text-mobileNavActiveSize text-navLinkActiveColorDefault' : 'text-mobileNavInactiveSize text-navLinkInactiveColorDefault'} 
+                            min-w-[105px] py-[12px] text-center`} href={link.href}>{link.name}</Link>
+                        )
+                    })}
+                </div>
+            </div>
         </>
         )
     }

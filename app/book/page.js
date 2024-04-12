@@ -85,7 +85,7 @@ export default function Book() {
         <form onSubmit={handleBooking} className="bg-brownA bg-cover min-h-[50vh]">
             <BookingDateTime hideBar={hideBar} dateTime={dateTime} setDateTime={setDateTime} />
             {/* Personal Info Bar */}
-            <div className={`${Object.values(errors.personalInfo).some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-centerpy-2 w-full`}>
+            <div className={`${Object.values(errors.personalInfo).some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-center py-2 w-full`}>
                 <div className="w-[50px] ml-[5vw]"></div>
                 <div className="mx-4 text-3xl">Personal Info</div>
                 <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500"
@@ -146,7 +146,7 @@ export default function Book() {
                 </div>
             </div>
             {/* Finalize Booking (without payment for now) */}
-            <div className="w-full flex justify-center mb-10">
+            <div className="w-full flex justify-center pb-10">
                 <button type="submit" className="bg-blueA rounded-md p-3">Book Your Appointment</button>
             </div>
             {/* <div className="flex">

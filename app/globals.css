@@ -30,3 +30,7 @@ body::-webkit-scrollbar {
   overflow-y: hidden; /* Hide vertical scrollbar */
   display: none;
 }
+
+.no-scroll {
+  overflow: hidden;
+}
