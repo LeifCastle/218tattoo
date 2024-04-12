@@ -52,7 +52,7 @@ export default function Navbar() {
 
     if (pathname !== '/admin') {
         return (<>
-            <nav id='Navbar' className={`${scrolled || pathname !== '/' || mobileNav ? "bg-NavbarBackground" : "transparent"} z-[2] w-full min-h-[92px] sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out`}>
+            <nav id='Navbar' className={`${scrolled || pathname !== '/' || mobileNav ? "bg-NavbarBackground" : "transparent"} z-[3] w-full min-h-[92px] sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out`}>
                 <div className="flex grow justify-center items-center Tablet:grow-0 Tablet:justify-start Tablet:pl-10 min-h-[92px]">
                     <Link href="/"><h1 className={`${scrolled || mobileNav || pathname !== '/' ? "text-black" : "text-white"} text-3xl`}>218 Tattoo</h1></Link>
                 </div>
@@ -114,8 +114,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav >
-            <div className={`${mobileNav ? "fixed top-[90px] z-[2] flex flex-col h-[100vh] w-[100vw] bg-mobileNavBg" : "h-0 hidden"} transition-all duration-[400ms] ease-in-out`}>
-                <div className={`flex flex-col justify-center items-center grow`}>
+            <div className={`${mobileNav ? "fixed top-0 z-[2] pt-[92px] flex flex-col justify-center items-center h-[100vh] w-[100vw] bg-mobileNavBg" : "h-0 hidden"} transition-all duration-[400ms] ease-in-out`}>
                     {links.map(link => {
                         return (
                             <Link key={link} className={`${pathname === link.href ? 'text-mobileNavActiveSize text-navLinkActiveColorDefault' : 'text-mobileNavInactiveSize text-navLinkInactiveColorDefault'} 
@@ -123,7 +122,6 @@ export default function Navbar() {
                         )
                     })}
                 </div>
-            </div>
         </>
         )
     }
