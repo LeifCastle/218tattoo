@@ -53,9 +53,10 @@ export default function Navbar() {
     if (pathname !== '/admin') {
         return (<>
             <nav id='Navbar' className={`${scrolled || pathname !== '/' || mobileNav ? "bg-NavbarBackground" : "transparent"} z-[3] w-full min-h-[92px] sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out`}>
-                <div className="flex grow justify-center items-center Tablet:grow-0 Tablet:justify-start Tablet:pl-10 min-h-[92px]">
-                    <Link href="/"><h1 className={`${scrolled || mobileNav || pathname !== '/' ? "text-black" : "text-white"} text-3xl`}>218 Tattoo</h1></Link>
+                <div className="flex justify-center items-center Tablet:grow-0 Tablet:justify-start pl-10 min-h-[92px]">
+                    <Link href="/"><h1 className={`${scrolled || mobileNav || pathname !== '/' ? "text-black" : "text-white"} text-4xl font-[600] font-title`}>218 Tattoo</h1></Link>
                 </div>
+                <div className="Tablet:hidden grow"></div>
                 <div className={`justify-center items-center grow hidden ${mobileNav ? "" : "Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor"}`}>
                     {links.map(link => {
                         return (
@@ -114,14 +115,14 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav >
-            <div className={`${mobileNav ? "fixed top-0 z-[2] pt-[92px] flex flex-col justify-center items-center h-[100vh] w-[100vw] bg-mobileNavBg" : "h-0 hidden"} transition-all duration-[400ms] ease-in-out`}>
-                    {links.map(link => {
-                        return (
-                            <Link key={link} className={`${pathname === link.href ? 'text-mobileNavActiveSize text-navLinkActiveColorDefault' : 'text-mobileNavInactiveSize text-navLinkInactiveColorDefault'} 
-                            min-w-[105px] py-[12px] text-center`} href={link.href}>{link.name}</Link>
-                        )
-                    })}
-                </div>
+            <div className={`${mobileNav ? "fixed top-0 z-[2] pt-[92px] flex flex-col justify-center items-center h-[100vh] w-[100vw] bg-mobileNavBg" : "hidden delay-150"} transition-all duration-[400ms] ease-in-out`}>
+                {links.map(link => {
+                    return (
+                        <Link key={link} className={`${pathname === link.href ? 'text-mobileNavActiveSize text-navLinkActiveColorDefault' : 'text-mobileNavInactiveSize text-navLinkInactiveColorDefault'} 
+                            min-w-[105px] px-12 py-4 text-center`} href={link.href} onClick={() => setMobileNav(false)}>{link.name}</Link>
+                    )
+                })}
+            </div>
         </>
         )
     }

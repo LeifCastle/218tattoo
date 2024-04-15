@@ -21,6 +21,7 @@ module.exports = {
       fontFamily: {
         heading: ['"Fredoka"', ...defaultTheme.fontFamily.sans],
         underlineNav: 'var(--underline)',
+        'title': ['"Shadows Into Light"', 'cursive']
       },
       fontSize: {
         'navLinkInactiveSize': '1.5rem',

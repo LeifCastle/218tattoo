@@ -7,19 +7,23 @@ export default function Home() {
 
   return (
     <>
-      <div className="bg-homePage bg-cover h-[93vh] -translate-y-[92px] pt-[10vh] mb-[-10vh] flex-col items-center">
-        <p className="pt-[20vh] text-[1.3rem] text-center">Tattoo and piercing passionate since 2020, specializing in American Traditional and Script. <br></br>
-          218 Tattoo Company is LGBTQIA+, BIPOC, disability and ally friendly. All bodies are welcome!
-          Racism, homophobia, transphobia, ableism and hate in all forms will not be tolerated. <br></br>
-          Our goal is to create a safe and inclusive space for all art lovers.
-        </p>
-        <p className="mt-10 text-[2rem] text-center">Tattoo Shop</p>
+      <div className="bg-homePage bg-cover h-[50vh] Tablet:h-[93vh] -translate-y-[92px] mb-[-10vh] flex flex-col items-center justify-center relative 
+      px-10 Tablet:px-0
+      before:absolute before:inset-0 before:bg-[rgba(0,0,0,0.5)] before:z-[-1]">
+        <div className="pt-[23px] Tablet:pb-[92px] text-center text-white">
+          <p className="Tablet:hidden text-[1.75rem]">Lynden Tattoo Shop</p>
+          <p className="Tablet:hidden text-[1.3rem] mb-5">Weekend Bookings</p>
+          <p className="hidden Tablet:block text-[3rem] Tablet:text-[5rem] font-title font-[1000]">218 Tattoo Shop</p>
+          <p className="hidden Tablet:block text-[1.5rem]">Weekend Bookings - Lynden, WA</p>
+          <p className="hidden Tablet:block mt-10 text-[1.3rem] Tablet:text-[1.75rem]">218 Tattoo Company is a safe and inclusive space for all art lovers.</p>
+          <p className="mt-10 Tablet:mt-2 text-[1.3rem] Tablet:text-[1.75rem]">Clean and professional, our artist is looking forward to bringing your next design to life.</p>
+        </div>
       </div>
       <div className="relative bg-brownA text-black py-10">
-        <div className="flex items-center justify-center absolute top-[-30px] left-0 h-[60px] w-full Tablet:w-[40vw] bg-blueA rounded-tr-md rounded-br-md mr-10">
+        <div className="flex items-center justify-center absolute top-[-30px] left-0 h-[60px] w-full Tablet:w-[40vw] bg-blueA Tablet:rounded-tr-md Tablet:rounded-br-md mr-10">
           <p className="text-[1.8rem] text-white">What We Offer</p>
         </div>
-        <div className="flex items-center justify-center gap-10 mt-10">
+        <div className="flex items-center justify-center gap-10 Tablet:mt-10">
           <div className="relative flex flex-col bg-[#CCCCCC] rounded-lg text-center gap-4 text-xl pb-4 group">
             <Image className="rounded-tl-lg rounded-tr-lg group-hover:opacity-[30%]"
               src="/TattooSessionCover.jpg"
@@ -32,31 +36,31 @@ export default function Home() {
             <button className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] invisible group-hover:visible bg-blueA text-white p-5 rounded-lg">Book Now</button>
           </div>
           <div className="relative flex flex-col bg-[#CCCCCC] rounded-lg text-center gap-4 text-xl pb-4 group">
-          <Image className="rounded-tl-lg rounded-tr-lg group-hover:opacity-[30%]"
-            src="/EarPiercingCover.jpg"
-            width={350}
-            height={400}
-            alt="Tattoo"
-          />
-          <p className="font-bold group-hover:opacity-[30%]">Ear Piercing</p>
-          <p className="group-hover:opacity-[30%]">$15 Depoist</p>
-          <button className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] invisible group-hover:visible bg-blueA text-white p-5 rounded-lg">Book Now</button>
-        </div>
-        <div className="relative flex flex-col bg-[#CCCCCC] rounded-lg text-center gap-4 text-xl pb-4 group">
-          <Image className="rounded-tl-lg rounded-tr-lg group-hover:opacity-[30%]"
-            src="/ToothGemCover.jpg"
-            width={350}
-            height={400}
-            alt="Tattoo"
-          />
-          <p className="font-bold group-hover:opacity-[30%]">Tooth Gems</p>
-          <p className="group-hover:opacity-[30%]">$10 Depoist</p>
-          <button className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] invisible group-hover:visible bg-blueA text-white p-5 rounded-lg">Book Now</button>
-        </div>
+            <Image className="rounded-tl-lg rounded-tr-lg group-hover:opacity-[30%]"
+              src="/EarPiercingCover.jpg"
+              width={350}
+              height={400}
+              alt="Tattoo"
+            />
+            <p className="font-bold group-hover:opacity-[30%]">Ear Piercing</p>
+            <p className="group-hover:opacity-[30%]">$15 Depoist</p>
+            <button className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] invisible group-hover:visible bg-blueA text-white p-5 rounded-lg">Book Now</button>
+          </div>
+          <div className="relative flex flex-col bg-[#CCCCCC] rounded-lg text-center gap-4 text-xl pb-4 group">
+            <Image className="rounded-tl-lg rounded-tr-lg group-hover:opacity-[30%]"
+              src="/ToothGemCover.jpg"
+              width={350}
+              height={400}
+              alt="Tattoo"
+            />
+            <p className="font-bold group-hover:opacity-[30%]">Tooth Gems</p>
+            <p className="group-hover:opacity-[30%]">$10 Depoist</p>
+            <button className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] invisible group-hover:visible bg-blueA text-white p-5 rounded-lg">Book Now</button>
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center bg-brownA text-black pb-10">
-        <div className="self-start flex items-center justify-center h-[60px] w-full Tablet:w-[40vw] bg-blueA rounded-tr-md rounded-br-md">
+        <div className="self-start flex items-center justify-center h-[60px] w-full Tablet:w-[40vw] bg-blueA Tablet:rounded-tr-md Tablet:rounded-br-md">
           <p className="text-[1.8rem] text-white">Customer Favorites</p>
         </div>
         <div className="mt-10">
