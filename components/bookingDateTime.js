@@ -112,7 +112,7 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                 <div className="flex bg-blueA py-2 w-full justify-between items-center ">
                     <div className="w-[50px] ml-[5vw]"></div>
                     <div className="mx-4 text-3xl">{selectedMonth.format('MMMM')}</div>
-                    <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500"
+                    <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500 cursor-pointer"
                         src="/rightArrowWhite.png"
                         width={50}
                         height={50}
@@ -122,7 +122,7 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                 </div>
                 <div ref={dateTimeBar} className="overflow-hidden transition-height ease-in-out duration-500">
                     <div className="flex items-center">
-                        <Image className="rounded-lg  hover:scale-125 transition-all ease-in-out duration-500"
+                        <Image className="rounded-lg  hover:scale-125 transition-all ease-in-out duration-500 cursor-pointer"
                             src="/leftArrowWhite.png"
                             width={50}
                             height={50}
@@ -137,7 +137,7 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                                     <div key={weekend.day} onClick={() => setSelectedDay(weekend)}
                                         className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} transition-all ease-in-out duration-250
                                         row-start-${weekend.which} flex items-center justify-center 
-                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110 hover:font-bold`}>
+                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110 hover:font-bold  cursor-pointer`}>
                                         {weekend.day}</div>
                                 )
                             })}

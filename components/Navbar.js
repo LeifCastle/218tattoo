@@ -60,7 +60,7 @@ export default function Navbar() {
                 <div className={`justify-center items-center grow hidden ${mobileNav ? "" : "Tablet:flex font-heading text-center items-center justify-center underline-offset-[8px] decoration-navLinkHoverColor"}`}>
                     {links.map(link => {
                         return (
-                            <Link key={link} className={`${(scrolled || mobileNav) ? pathname === link.href ? activeNavLinkContrast : inactiveNavLinkContrast : pathname === link.href ? activeNavLinkDefault : inactiveNavLinkDefault} 
+                            <Link key={link.name} className={`${(scrolled || mobileNav) ? pathname === link.href ? activeNavLinkContrast : inactiveNavLinkContrast : pathname === link.href ? activeNavLinkDefault : inactiveNavLinkDefault} 
                             grow-1 basis-0 min-w-[105px] px-[1px] navLink px-5`} href={link.href}>{link.name}</Link>
                         )
                     })}
@@ -118,7 +118,7 @@ export default function Navbar() {
             <div className={`${mobileNav ? "fixed top-0 z-[2] pt-[92px] flex flex-col justify-center items-center h-[100vh] w-[100vw] bg-mobileNavBg" : "hidden delay-150"} transition-all duration-[400ms] ease-in-out`}>
                 {links.map(link => {
                     return (
-                        <Link key={link} className={`${pathname === link.href ? 'text-mobileNavActiveSize text-navLinkActiveColorDefault' : 'text-mobileNavInactiveSize text-navLinkInactiveColorDefault'} 
+                        <Link key={`${link.name}2`} className={`${pathname === link.href ? 'text-mobileNavActiveSize text-navLinkActiveColorDefault' : 'text-mobileNavInactiveSize text-navLinkInactiveColorDefault'} 
                             min-w-[105px] px-12 py-4 text-center`} href={link.href} onClick={() => setMobileNav(false)}>{link.name}</Link>
                     )
                 })}

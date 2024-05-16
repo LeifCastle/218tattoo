@@ -10,6 +10,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        arrowAnimate: {
+          '0%, 20%, 50%, 80%, 100%' : {transform: 'translateY(0)'},
+          '40%' : {transform: 'translateY(-30px)'},
+          '60%' : {transform: 'translateY(-15px)'},
+        },
+      },
+      animation: {
+        arrowAnimate: 'arrowAnimate 1.25s ease-in-out infinite',
+        barAnimate: 'barAnimate 1.25s ease-in-out infinite',
+      },
       screens: {
         'Mobile-S': '320px',
         //'Mobile-M': '375px',

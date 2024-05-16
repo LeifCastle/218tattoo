@@ -34,3 +34,7 @@ body::-webkit-scrollbar {
 .no-scroll {
   overflow: hidden;
 }
+
+p, div {
+  cursor: default;
+}

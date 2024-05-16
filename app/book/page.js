@@ -88,7 +88,7 @@ export default function Book() {
             <div className={`${Object.values(errors.personalInfo).some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-center py-2 w-full`}>
                 <div className="w-[50px] ml-[5vw]"></div>
                 <div className="mx-4 text-3xl">Personal Info</div>
-                <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500"
+                <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500 cursor-pointer"
                     src="/rightArrowWhite.png"
                     width={50}
                     height={50}
@@ -125,7 +125,7 @@ export default function Book() {
                 <div className="w-[50px] ml-[5vw]"></div>
                 <div className="mx-4 text-3xl">Flash Design</div>
                 <div className="mx-4 text-3xl">Custom Design</div>
-                <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500"
+                <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500 cursor-pointer"
                     src="/rightArrowWhite.png"
                     width={50}
                     height={50}
