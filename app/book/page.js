@@ -5,11 +5,15 @@ import Image from "next/image"
 import BookingDateTime from "../../components/bookingDateTime"
 import moment from 'moment';
 import { useRef, useState, useEffect } from "react"
+import { useContext } from 'react';
+import { GlobalStateContext } from '../utils/context.js';
 
 export default function Book() {
     const client = axios.create({
         baseURL: "http://localhost:5000"
     });
+
+    const { service, setService } = useContext(GlobalStateContext);
 
     const [dateTime, setDateTime] = useState('')
     const [name, setName] = useState('')
@@ -18,8 +22,6 @@ export default function Book() {
     const [placement, setPlacement] = useState('')
     const [size, setSize] = useState('')
     const [comments, setComments] = useState('')
-
-    const [service, setService] = useState('tattoo')
     const [tattooDesign, setTattooDesign] = useState('flash')
 
     const [errors, setErrors] = useState({ personalInfo: { name: false, email: false, phone: false } })
