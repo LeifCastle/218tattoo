@@ -12,9 +12,9 @@ module.exports = {
     extend: {
       keyframes: {
         arrowAnimate: {
-          '0%, 20%, 50%, 80%, 100%' : {transform: 'translateY(0)'},
-          '40%' : {transform: 'translateY(-30px)'},
-          '60%' : {transform: 'translateY(-15px)'},
+          '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+          '40%': { transform: 'translateY(-30px)' },
+          '60%': { transform: 'translateY(-15px)' },
         },
       },
       animation: {
@@ -41,7 +41,7 @@ module.exports = {
         'mobileNavInactiveSize': '3rem',
       },
       borderColor: {
-        inputBorder:  "#3882F6",
+        inputBorder: "#3882F6",
         inputError: "#8E0000",
       },
       colors: {

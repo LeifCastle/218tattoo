@@ -7,7 +7,7 @@ import {useRef} from 'react'
 export default function Home() {
 
   const scrollRef = useRef(null)
-  let favoriteImages = ['/Tattoo1.png', '/Tattoo2.png', '/Tattoo3.png', '/Tattoo4.png', '/Tattoo5.png', '/Tattoo6.png', '/Tattoo7.png']
+  let favoriteImages = ['/Tattoo1.png', '/Tattoo2.png', '/Tattoo3.png', '/Tattoo4.png', '/Tattoo5.png', '/Tattoo6.png',]
 
   function handlePageScroll() {
     window.scrollTo({
@@ -28,7 +28,7 @@ export default function Home() {
           <p className="hidden Tablet:block text-[1.5rem]">Weekend Bookings - Lynden, WA</p>
           <p className="hidden Tablet:block mt-10 text-[1.3rem] Tablet:text-[1.75rem]">218 Tattoo Company is a safe and inclusive space for all art lovers.</p>
           <p className="mt-10 Tablet:mt-2 text-[1.3rem] Tablet:text-[1.75rem]">Clean and professional, our artist is looking forward to bringing your next design to life.</p>
-          <Image className="opacity-[80%] hover:opacity-[100%] animate-arrowAnimate mt-[25vh] hover:cursor-pointer"
+          <Image className="opacity-[55%] hover:opacity-[100%] animate-arrowAnimate mt-[25vh] hover:cursor-pointer transition-opacity duration-1000"
             src="/downArrow.png"
             width={150}
             height={150}

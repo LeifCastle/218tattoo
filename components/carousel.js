@@ -40,11 +40,11 @@ export default function Carousel({ images }) {
     }
 
     return (
-        <div className="flex justify-evenly items-center border-[3px] border-[#184d54] rounded-md p-4">
+        <div className="flex justify-evenly items-center p-4">
             <Image className="rounded-lg"
-                src="/leftArrow.png"
-                width={50}
-                height={50}
+                src="/leftArrowWhite.png"
+                width={100}
+                height={100}
                 alt="NextPic"
                 onClick={() => moveImageRoll(-1)}
             />
@@ -60,9 +60,9 @@ export default function Carousel({ images }) {
                 ))}
             </div>
             <Image className="rounded-lg"
-                src="/rightArrow.png"
-                width={50}
-                height={50}
+                src="/rightArrowWhite.png"
+                width={100}
+                height={100}
                 alt="NextPic"
                 onClick={() => moveImageRoll(1)}
             />
