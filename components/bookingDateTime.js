@@ -16,11 +16,14 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
     const [timeOptions, setTimeOptions] = useState()
     const [selectedDay, setSelectedDay] = useState('') //Auto populate: { day: moment().format('M-D'), which: moment().day() }
     const [selectedTime, setSelectedTime] = useState('') //Auto populate: "12:00 PM"
+    const [boundary, setBoundary] = useState('start') //Hides the next/prev month arrow as needed
 
     const dateTimeBar = useRef(null)
 
     let SaturdayTimes = ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM"]
     let SundayTimes = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"]
+
+    let dynamicColumns = 5;
 
 
     //Converts chosen date and time to a Date variable
@@ -74,17 +77,18 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
         let weekendCount = 2;  //Use to determine which column the date will be assigned, currently accounts for crossover (weekend split over two months)
         for (let i = 0; i <= date.daysInMonth(); i++) {
             if (date.day() === 6) {
-                weekends.push({ day: date.format('M-D'), which: 1 }) // Saturday (row 1)
+                weekends.push({ day: date.format('D'), which: 1 }) // Saturday (row 1)
                 weekendCount++
             } else if (date.day() === 0) {
                 if (weekendCount === 2) { //Accounts for weekends split over the month **need to add a greyed out value to object as well or turn into a placeholder value
                     weekends.push({ day: date.clone().subtract(1, 'days').format('M-D'), which: 1 })
                     weekendCount++
                 }
-                weekends.push({ day: date.format('M-D'), which: 2 }) //Sunday (row 2)
+                weekends.push({ day: date.format('D'), which: 2 }) //Sunday (row 2)
             }
             date.add(1, 'days')
         }
+        weekends.length <= 8 ? dynamicColumns = 4 : dynamicColumns = 5;
         return weekends;
     }
 
@@ -94,6 +98,10 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
             let prevMonth = selectedMonth.subtract(1, 'months')
             setSelectedMonth(moment(prevMonth))
             setSelectedWeekends(getWeekends(prevMonth.format('M'), prevMonth.format('YYYY')))
+            setBoundary('');
+            if (parseInt(selectedMonth.format('M')) <= parseInt(moment().format('M'))) {
+                setBoundary('start');
+            }
         }
     }
     //--Advances the calendar to the next month **need to add something to allow crossover into next year
@@ -103,33 +111,49 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
             setSelectedMonth(moment(nextMonth))
             let newWeekends = getWeekends(nextMonth.format('M'), nextMonth.format('YYYY'))
             setSelectedWeekends(newWeekends)
+            setBoundary('');
+            if (parseInt(selectedMonth.format('M')) >= parseInt(moment().add(6, 'months').format('M'))) {
+                setBoundary('end');
+            }
         }
     }
 
     return (
         <>
             <div className="bg-blackA flex flex-col items-center justify-center">
-                <div className="flex bg-blueA py-2 w-full justify-between items-center ">
-                    <div className="w-[50px] ml-[5vw]"></div>
-                    <div className="mx-4 text-3xl">{selectedMonth.format('MMMM')}</div>
-                    <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] mr-[5vw] transition-all ease-in-out duration-500 cursor-pointer"
-                        src="/rightArrowWhite.png"
-                        width={50}
-                        height={50}
-                        alt="NextPic"
-                        onClick={(e) => hideBar(e, dateTimeBar.current)}
-                    />
-                </div>
-                <div ref={dateTimeBar} className="overflow-hidden transition-height ease-in-out duration-500">
-                    <div className="flex items-center">
-                        <Image className="rounded-lg  hover:scale-125 transition-all ease-in-out duration-500 cursor-pointer"
-                            src="/leftArrowWhite.png"
+                <div className="flex bg-blueA py-2 w-full justify-center items-center ">
+                    <div className="basis-1/3"></div>
+                    <div className="text-center basis-1/3 mx-4 text-3xl">Appointment</div>
+                    <div className="basis-1/3 flex justify-end pr-[5vw]">
+                        <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] transition-all ease-in-out duration-500 cursor-pointer"
+                            src="/rightArrowWhite.png"
                             width={50}
                             height={50}
                             alt="NextPic"
-                            onClick={() => prevMonth()}
+                            onClick={(e) => hideBar(e, dateTimeBar.current)}
                         />
-                        <div className="grid grid-cols-dateTime grid-rows-2 gap-y-1 px-20 py-8 place-items-center">
+                    </div>
+                </div>
+                <div ref={dateTimeBar} className="overflow-hidden transition-height ease-in-out duration-500">
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="translate-x-[50px] flex items-center justify-center mt-8">
+                            <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'start' ? 'invisible' : 'visible'}`}
+                                src="/leftArrowWhite.png"
+                                width={30}
+                                height={30}
+                                alt="NextPic"
+                                onClick={() => prevMonth()}
+                            />
+                            <p className="text-2xl mx-10">{selectedMonth.format('MMMM')}</p>
+                            <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'end' ? 'invisible' : 'visible'}`}
+                                src="/rightArrowWhite.png"
+                                width={30}
+                                height={30}
+                                alt="NextPic"
+                                onClick={() => nextMonth()}
+                            />
+                        </div>
+                        <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 gap-y-4 gap-x-3 gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6 Tablet:text-xl px-10 Tablet:px-20 py-8 place-items-center`}>
                             <div className="text-xl row-start-1 col-start-1">Saturday</div>
                             <div className="text-xl row-start-2 col-start-1">Sunday</div>
                             {selectedWeekends.map((weekend) => {
@@ -137,20 +161,12 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                                     <div key={weekend.day} onClick={() => setSelectedDay(weekend)}
                                         className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} transition-all ease-in-out duration-250
                                         row-start-${weekend.which} flex items-center justify-center 
-                                        my-4 rounded-[12px] Tablet:w-[70px] Tablet:h-[70px] hover:scale-110 hover:font-bold  cursor-pointer`}>
+                                        rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] hover:scale-110 hover:font-bold cursor-pointer`}>
                                         {weekend.day}</div>
                                 )
                             })}
                         </div>
-                        <Image className="rounded-lg hover:scale-125 transition-all ease-in-out duration-500"
-                            src="/rightArrowWhite.png"
-                            width={50}
-                            height={50}
-                            alt="NextPic"
-                            onClick={() => nextMonth()}
-                        />
                     </div>
-                    <div className="bg-white w-full border-[1px] rounded-3xl"></div>
                     <div className={`${selectedDay === "" ? 'invisible' : 'visibile'} flex justify-center gap-6 Tablet:gap-12 py-6`}>
                         {timeOptions}
                     </div>

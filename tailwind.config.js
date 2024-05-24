@@ -62,7 +62,7 @@ module.exports = {
         mobileNavBg: "rgba(0, 0, 0, .875)",
       },
       gridTemplateColumns: {
-        'dateTime': '200px repeat(5, minmax(20px, 200px))',
+        'dateTime': 'minmax(50px, 100px) repeat(var(--dynamic-columns), minmax(10px, 100px))',
         'listView': 'repeat(4, minmax(20px, 400px))',
       },
       backgroundImage: {
