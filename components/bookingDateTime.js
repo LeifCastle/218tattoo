@@ -40,12 +40,12 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
         }
         setTimeOptions(SundayTimes.map(time => {
             return (
-                <div key={time + 1} onClick={() => setSelectedTime(time)}
+                <div key={time + 1} onClick={() => selectedTime === time ? setSelectedTime('') : setSelectedTime(time)}
                     className={`${bookedDateTimes[selectedDay.day]?.includes(time) ? 'bg-black' : selectedTime === time ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} rounded-[12px] p-2 hover:scale-105`}>{time}</div>
             )
         }))
-        console.log("Dates: ", bookedDateTimes)
-        console.log('Selected Day: ', selectedDay.day, 'Selected Time: ', selectedTime)
+       //console.log("Dates: ", bookedDateTimes)
+        //console.log('Selected Day: ', selectedDay.day, 'Selected Time: ', selectedTime)
     }, [selectedDay, selectedTime])
 
     //--Set inital values & get initial date times already booked
@@ -134,9 +134,9 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                         />
                     </div>
                 </div>
-                <div ref={dateTimeBar} className="overflow-hidden transition-height ease-in-out duration-500">
+                <div ref={dateTimeBar} className="overflow-y-hidden transition-height ease-in-out duration-500">
                     <div className="flex flex-col items-center justify-center">
-                        <div className="translate-x-[50px] flex items-center justify-center mt-8">
+                        <div className="flex items-center justify-center mt-8">
                             <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'start' ? 'invisible' : 'visible'}`}
                                 src="/leftArrowWhite.png"
                                 width={30}
@@ -153,12 +153,12 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                                 onClick={() => nextMonth()}
                             />
                         </div>
-                        <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 gap-y-4 gap-x-3 gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6 Tablet:text-xl px-10 Tablet:px-20 py-8 place-items-center`}>
-                            <div className="text-xl row-start-1 col-start-1">Saturday</div>
-                            <div className="text-xl row-start-2 col-start-1">Sunday</div>
+                        <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6 Tablet:text-xl px-4 Mobile-M:px-6 Tablet:px-10 py-8 place-items-center`}>
+                            <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-1 col-start-1">Saturday</div>
+                            <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-2 col-start-1">Sunday</div>
                             {selectedWeekends.map((weekend) => {
                                 return (
-                                    <div key={weekend.day} onClick={() => setSelectedDay(weekend)}
+                                    <div key={weekend.day} onClick={() => selectedDay.day === weekend.day ? setSelectedDay('') : setSelectedDay(weekend)}
                                         className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} transition-all ease-in-out duration-250
                                         row-start-${weekend.which} flex items-center justify-center 
                                         rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] hover:scale-110 hover:font-bold cursor-pointer`}>
@@ -167,7 +167,7 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                             })}
                         </div>
                     </div>
-                    <div className={`${selectedDay === "" ? 'invisible' : 'visibile'} flex justify-center gap-6 Tablet:gap-12 py-6`}>
+                    <div className={`${selectedDay === '' ? 'hidden' : 'block'} flex flex-wrap justify-center gap-6 Tablet:gap-12 py-6`}>
                         {timeOptions}
                     </div>
                 </div>
