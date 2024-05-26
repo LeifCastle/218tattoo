@@ -180,7 +180,7 @@ export default function Book() {
                                                 <div className="flex gap-4">
                                                     {referencePhotos.map(photo => {
                                                         return (
-                                                            <div onChange={(e) => setComments(e.target.value)} className={`rounded-[12px] w-[75px] h-[75px] Tablet:w-[100px] Tablet:h-[100px] bg-greyB flex items-center justify-center relative`}>
+                                                            <div key={photo} onChange={(e) => setComments(e.target.value)} className={`rounded-[12px] w-[75px] h-[75px] Tablet:w-[100px] Tablet:h-[100px] bg-greyB flex items-center justify-center relative`}>
                                                                 <Image className="rounded-lg hover:scale-125 transition-all ease-in-out duration-500 cursor-pointer mb-[12px]"
                                                                     src="/addFile.png"
                                                                     width={50}
