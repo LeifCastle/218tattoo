@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/jwt-decode": "^3.1.0",
     "axios": "^1.6.7",
+    "cloudinary": "^2.2.0",
     "dotenv": "^16.4.5",
     "gh": "^2.8.9",
     "git": "^0.1.5",
@@ -18,11 +19,13 @@
     "jwt-decode": "^4.0.0",
     "moment": "^2.30.1",
     "next": "14.1.0",
+    "next-cloudinary": "^6.6.2",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
+    "@types/react": "18.3.3",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
