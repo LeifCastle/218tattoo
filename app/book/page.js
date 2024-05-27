@@ -238,16 +238,13 @@ export default function Book() {
                                             <p className={`${inputName}`}>Comments</p>
                                             <textarea id="Comments" placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} w-full max-w-[448px] h-[10vh]`}></textarea>
                                         </div>
+                                        <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked designs</p>
                                         <div onChange={(e) => setComments(e.target.value)} onClick={() => setDesignsWidget(!designsWidget)}
                                             style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                            className={`bg-${design === '' ? 'greyB' : ''} hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] h-[100px] flex items-center justify-center relative`}>
-                                            <div className="text-black text-2xl hover:cursor-pointer">Choose Flash Design</div>
+                                            className={`${design === '' ? 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                            <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Designs</div>
                                         </div>
-                                        <div className={`${designsWidget === true ? 'block' : 'hidden'} fixed top-0 left-0 opacity-[40%] w-[100vw] h-[100vh] bg-black`} onClick={() => setDesignsWidget(false)}>
-                                        </div>
-                                        <div className={`${designsWidget === true ? 'block' : 'hidden'} z-2 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[40vw] h-[60vh]`}>
-                                            <Designs setDesignsWidget={setDesignsWidget} setDesign={setDesign} />
-                                        </div>
+                                        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
                                     </div>
                                 }
                             </div>
@@ -298,16 +295,13 @@ export default function Book() {
                                     <p className={`${inputName}`}>Comments</p>
                                     <textarea id="Comments" placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} w-full max-w-[448px] h-[10vh]`}></textarea>
                                 </div>
-                                <div onChange={(e) => setComments(e.target.value)} className={`rounded-[12px] w-full max-w-[448px] h-[100px] bg-greyB flex items-center justify-center relative`}>
-                                    <Image className="rounded-lg hover:scale-125 transition-all ease-in-out duration-500 cursor-pointer mb-[24px]"
-                                        src="/addFile.png"
-                                        width={50}
-                                        height={50}
-                                        alt="Add Reference Photo"
-                                        onClick={() => addReferencePhoto()}
-                                    />
-                                    <div className="absolute bottom-[6px] text-black">Choose Peircing</div>
-                                </div>
+                                <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked peircings</p>
+                                        <div onChange={(e) => setComments(e.target.value)} onClick={() => setDesignsWidget(!designsWidget)}
+                                            style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
+                                            className={`${design === '' ? 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                            <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Piercings</div>
+                                        </div>
+                                        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Piercings"/>
                             </div>
                         </div>
                     )}
