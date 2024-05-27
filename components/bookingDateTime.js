@@ -7,7 +7,7 @@ import { useEffect, useState, useRef } from 'react';
 
 export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
     const client = axios.create({
-        baseURL: "http://localhost:5000"
+        baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
 
     const [bookedDateTimes, setBookedDateTimes] = useState({})

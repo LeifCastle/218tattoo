@@ -16,7 +16,7 @@ export default function Admin() {
     const [bookings, setBookings] = useState([])
 
     const client = axios.create({
-        baseURL: "http://localhost:5000"
+        baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
 
     const handleLogin = async (e) => {

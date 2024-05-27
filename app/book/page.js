@@ -11,7 +11,7 @@ import { CldUploadWidget } from 'next-cloudinary';
 
 export default function Book() {
     const client = axios.create({
-        baseURL: "http://localhost:5000"
+        baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
 
     const { service, setService } = useContext(GlobalStateContext);
