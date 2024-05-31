@@ -5,7 +5,7 @@ import Image from 'next/image';
 import moment from 'moment';
 import { useEffect, useState, useRef } from 'react';
 
-export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
+export default function BookingDateTime({ errors, hideBar, dateTime, setDateTime }) {
     const client = axios.create({
         baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
@@ -28,9 +28,11 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
 
     //Converts chosen date and time to a Date variable
     useEffect(() => {
-        const selectedDateTimeString = `${moment().format('YYYY')}-${selectedDay.day} ${selectedTime}`;
-        const selectedDateTimeMoment = moment(selectedDateTimeString, "YYYY-M-D h:mm A");
-        setDateTime(selectedDateTimeMoment.toDate());
+        if (selectedDay && selectedTime) {
+            const selectedDateTimeString = `${moment().format('YYYY')}-${selectedDay.day} ${selectedTime}`;
+            const selectedDateTimeMoment = moment(selectedDateTimeString, "YYYY-M-D h:mm A");
+            setDateTime(selectedDateTimeMoment.toDate());
+        }
     }, [selectedDay, selectedTime])
 
     //--Sets the appropriates times for each day **(need to check availability with backend eventually)
@@ -40,11 +42,19 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
         }
         setTimeOptions(SundayTimes.map(time => {
             return (
-                <div key={time + 1} onClick={() => selectedTime === time ? setSelectedTime('') : setSelectedTime(time)}
+                <div key={time + 1}
+                    onClick={() => {
+                        if (selectedTime === time) {
+                            setSelectedTime('')
+                            setDateTime('')
+                        } else {
+                            setSelectedTime(time)
+                        }
+                    }}
                     className={`${bookedDateTimes[selectedDay.day]?.includes(time) ? 'bg-black' : selectedTime === time ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} rounded-[12px] p-2 hover:scale-105`}>{time}</div>
             )
         }))
-       //console.log("Dates: ", bookedDateTimes)
+        //console.log("Dates: ", bookedDateTimes)
         //console.log('Selected Day: ', selectedDay.day, 'Selected Time: ', selectedTime)
     }, [selectedDay, selectedTime])
 
@@ -121,7 +131,7 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
     return (
         <>
             <div className="bg-blackA flex flex-col items-center justify-center">
-                <div className="flex bg-blueA py-2 w-full justify-center items-center ">
+                <div className={`${Object.values(errors?.appointment)?.some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-center py-2 w-full`}>
                     <div className="basis-1/3"></div>
                     <div className="text-center basis-1/3 mx-4 text-3xl">Appointment</div>
                     <div className="basis-1/3 flex justify-end pr-[5vw]">
@@ -158,7 +168,14 @@ export default function BookingDateTime({ hideBar, dateTime, setDateTime }) {
                             <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-2 col-start-1">Sunday</div>
                             {selectedWeekends.map((weekend) => {
                                 return (
-                                    <div key={weekend.day} onClick={() => selectedDay.day === weekend.day ? setSelectedDay('') : setSelectedDay(weekend)}
+                                    <div key={weekend.day} onClick={() => {
+                                        if (selectedDay.day === weekend.day) {
+                                            setSelectedDay('')
+                                            setDateTime('')
+                                        } else {
+                                            setSelectedDay(weekend)
+                                        }
+                                    }}
                                         className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} transition-all ease-in-out duration-250
                                         row-start-${weekend.which} flex items-center justify-center 
                                         rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] hover:scale-110 hover:font-bold cursor-pointer`}>
