@@ -209,7 +209,7 @@ export default function Book() {
     return (
         <>
             <div ref={errorBar} className='hidden bg-inputError h-[48px] flex items center jusifty center sticky top-[92px] z-[11]'>
-                <p className='text-2xl text-center w-full translate-y-[15%]'>Uh oh...it apperas you're missing some info</p>
+                <p className='text-2xl text-center w-full translate-y-[15%]'>Uh oh...it apperas you&apos;re missing some info</p>
             </div>
             <form onSubmit={handleBooking} className="bg-brownA bg-cover min-h-[50vh]">
                 <BookingDateTime errors={errors} hideBar={hideBar} dateTime={dateTime} setDateTime={setDateTime} />
