@@ -20,6 +20,7 @@ export default function Book() {
     const [phone, setPhone] = useState('')
     const [placement, setPlacement] = useState('')
     const [size, setSize] = useState('')
+    const [count, setCount] = useState('')
     const [comments, setComments] = useState('')
     const [tattooDesign, setTattooDesign] = useState('flash') //Custom or flash
     const [design, setDesign] = useState('')
@@ -47,6 +48,7 @@ export default function Book() {
             tattooDesign: tattooDesign,
             placement: placement,
             size: size,
+            count: count,
             comments: comments,
             design: design,
             referencePhotos: referencePhotos,
@@ -70,6 +72,7 @@ export default function Book() {
             comments: false,
             design: false,
             referencePhotos: false,
+            count: false,
         }
     })
 
@@ -83,9 +86,9 @@ export default function Book() {
             let booking = newBooking[section]
             let errors = newErrors[section]
             if (!booking[key]) {
-                errors[key] = true;
-                hasErrors.current = true;
                 if (usercheck) {
+                    errors[key] = true;
+                    hasErrors.current = true;
                     errorBar.current.style.display = "block"
                     setTimeout(() => {
                         errorBar.current.style.display = "none"
@@ -102,6 +105,16 @@ export default function Book() {
                 switch (key) {
                     case "comments":
                         if (tattooDesign === "custom") {
+                            checkForData(section, key)
+                        }
+                        break;
+                    case "size":
+                        if (service === "tattoo") {
+                            checkForData(section, key)
+                        }
+                        break;
+                    case "count":
+                        if (service !== "tattoo") {
                             checkForData(section, key)
                         }
                         break;
@@ -133,17 +146,15 @@ export default function Book() {
 
     //--Updates error status on-the-fly
     useEffect(() => {
-        if (hasErrors.current) {
-            checkForErrors()
-        }
-    }, [name, email, phone, dateTime, service, tattooDesign, placement, size, comments, design, referencePhotos])
+        checkForErrors()
+    }, [name, email, phone, dateTime, service, tattooDesign, placement, size, count, comments, design, referencePhotos])
 
     //--Submits booking
     function handleBooking(e) {
-        console.log('DateTime: ', dateTime)
         e.preventDefault();
         checkForErrors(true)
         if (!hasErrors.current) {
+            console.log('No Errors')
             client.post('/book/new', { newBooking })
                 .then(response => {
                     console.log('Sucess', response)
@@ -184,6 +195,15 @@ export default function Book() {
     function handleDesignChoice(choice) {
         setService(choice)
         setDesign('') //Resets design image
+        setCount('')
+        setPlacement('')
+        setComments('')
+        setSize('')
+        let newErrors = errors;
+        for (let key in newErrors.service) {
+            newErrors.service[key] = false
+        }
+        setErrors(newErrors)
     }
 
     return (
@@ -255,7 +275,7 @@ export default function Book() {
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
                                         <div className="flex gap-4 items-center">
                                             <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Select Design</p>
-                                            <select placeholder="Select" value={tattooDesign} onChange={(e) => setTattooDesign(e.target.value)} className={`${inputField} w-[238px] ${errors.service.size ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}>
+                                            <select placeholder="Select" value={tattooDesign} onChange={(e) => setTattooDesign(e.target.value)} className={`${inputField} w-[238px] border-[#998C7E]`}>
                                                 <option value="flash">Flash Design</option>
                                                 <option value="custom">Custom Design</option>
                                             </select>
@@ -316,15 +336,15 @@ export default function Book() {
                                         <div className='w-full flex flex-col items-center'>
                                             <div className="flex flex-col gap-4 pb-6 items-center w-full">
                                                 <p className={`${inputName}`}>Comments</p>
-                                                <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} ${errors.service.comments ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} w-full max-w-[448px] h-[10vh]`}></textarea>
+                                                <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
                                             </div>
                                             <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked designs</p>
-                                            <div onChange={(e) => setComments(e.target.value)} onClick={() => setDesignsWidget(!designsWidget)}
+                                            <div onClick={() => setDesignsWidget(!designsWidget)}
                                                 style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                                className={`${design === '' ? 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                                className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
                                                 <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Designs</div>
                                             </div>
-                                            <Designs className={`${errors.contact.email ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`} visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
+                                            <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
                                         </div>
                                     }
                                 </div>
@@ -335,21 +355,21 @@ export default function Book() {
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
                                         <div className="flex gap-4 items-center">
                                             <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
-                                            <input id="Placement" placeholder="Canines" value={placement} onChange={(e) => setPlacement(e.target.value)} className={inputField}></input>
+                                            <input placeholder="Canines" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
                                         </div>
                                         <div className="flex gap-4 items-center">
                                             <p className={`${inputName}`}>Gem Count</p>
-                                            <input id="Size" placeholder="2" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.appointment.name ? 'border-inputError' : 'transparent'}`}></input>
+                                            <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-4 pb-6 items-center w-full">
                                         <p className={`${inputName}`}>Comments</p>
-                                        <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} w-full max-w-[448px] h-[10vh]`}></textarea>
+                                        <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
                                     </div>
                                     <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked gems</p>
-                                    <div onChange={(e) => setComments(e.target.value)} onClick={() => setDesignsWidget(!designsWidget)}
+                                    <div onClick={() => setDesignsWidget(!designsWidget)}
                                         style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                        className={`${design === '' ? 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
                                         <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Gems</div>
                                     </div>
                                     <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Gem" />
@@ -361,21 +381,21 @@ export default function Book() {
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
                                         <div className="flex gap-4 items-center">
                                             <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
-                                            <input id="Placement" placeholder="Ears" value={placement} onChange={(e) => setPlacement(e.target.value)} className={inputField}></input>
+                                            <input placeholder="Ears" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
                                         </div>
                                         <div className="flex gap-4 items-center">
                                             <p className={`${inputName}`}>Peircing Count</p>
-                                            <input id="Count" placeholder="2" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.appointment.name ? 'border-inputError' : 'transparent'}`}></input>
+                                            <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-4 pb-6 items-center w-full">
                                         <p className={`${inputName}`}>Comments</p>
-                                        <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} w-full max-w-[448px] h-[10vh]`}></textarea>
+                                        <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
                                     </div>
                                     <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked peircings</p>
-                                    <div onChange={(e) => setComments(e.target.value)} onClick={() => setDesignsWidget(!designsWidget)}
+                                    <div onClick={() => setDesignsWidget(!designsWidget)}
                                         style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                        className={`${design === '' ? 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
                                         <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Piercings</div>
                                     </div>
                                     <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Piercings" />

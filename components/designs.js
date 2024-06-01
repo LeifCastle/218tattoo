@@ -7,27 +7,31 @@ export default function Designs(props) {
     });
 
     const [designs, setDesigns] = useState([])
-    const hasFetched = useRef(false)
 
     let imageCounter = 0; //Prevents key errors if duplicates are found
-
     useEffect(() => {
-        if (!hasFetched.current) {
-            client.get(`/book/designs/${props.designType}`, {
+        let folder = props.designType
+        console.log('Requesting Folder: ', folder)
+        if (localStorage.getItem(folder) === null) {
+            console.log('Creating Folder: ', folder)
+            client.get(`/book/designs/${folder}`, {
                 headers: {
                     'Test-Header': 'test-value'
                 }
             })
                 .then(response => {
                     setDesigns(response.data)
-                    //console.log(response.data)
+                    localStorage.setItem(folder, JSON.stringify(response.data))
+                    console.log('Check: ', JSON.parse(localStorage.getItem(folder)))
                 })
                 .catch(error => {
                     console.log('Error: ', error)
                 })
-            hasFetched.current = true;
+        } else {
+            console.log('Accessing: ', folder)
+            setDesigns(JSON.parse(localStorage.getItem(folder)))
         }
-    }, [])
+    }, [props.designType])
 
     return (
         <>
