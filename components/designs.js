@@ -1,4 +1,5 @@
 import axios from "axios"
+import moment from 'moment';
 import { useState, useEffect, useRef } from "react"
 
 export default function Designs(props) {
@@ -9,10 +10,10 @@ export default function Designs(props) {
     const [designs, setDesigns] = useState([])
 
     let imageCounter = 0; //Prevents key errors if duplicates are found
+    //localStorage.clear()
     useEffect(() => {
         let folder = props.designType
-        console.log('Requesting Folder: ', folder)
-        if (localStorage.getItem(folder) === null) {
+        if ((localStorage.getItem(folder) === null) || (parseInt(JSON.parse(localStorage.getItem(folder)).created) < parseInt(moment().format('HHMMDDYY')))) {
             console.log('Creating Folder: ', folder)
             client.get(`/book/designs/${folder}`, {
                 headers: {
@@ -21,17 +22,18 @@ export default function Designs(props) {
             })
                 .then(response => {
                     setDesigns(response.data)
-                    localStorage.setItem(folder, JSON.stringify(response.data))
-                    console.log('Check: ', JSON.parse(localStorage.getItem(folder)))
+                    localStorage.setItem(folder, JSON.stringify({ data: response.data, created: moment().format('HHMMDDYY') }))
+                    console.log('Created: ', JSON.parse(localStorage.getItem(folder)))
                 })
                 .catch(error => {
                     console.log('Error: ', error)
                 })
         } else {
             console.log('Accessing: ', folder)
-            setDesigns(JSON.parse(localStorage.getItem(folder)))
+            console.log('Found: ', JSON.parse(localStorage.getItem(folder)))
+            setDesigns(JSON.parse(localStorage.getItem(folder)).data)
         }
-    }, [props.designType])
+    }, [props.visibility, props.designType])
 
     return (
         <>
