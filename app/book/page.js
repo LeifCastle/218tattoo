@@ -27,11 +27,13 @@ export default function Book() {
     const [referencePhotos, setReferencePhotos] = useState([{ id: 1, src: '/addFile.png' }, { id: 2, src: '/addFile.png' }, { id: 3, src: '/addFile.png' }, { id: 4, src: '/addFile.png' }])
     const { service, setService } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
 
+    const [booked, setBooked] = useState(false)
     const [designsWidget, setDesignsWidget] = useState(false); //Sets the visibility of the designs widget (images from cloudinary folder)
     const contactBar = useRef(null)
     const serviceBar = useRef(null)
     const hasErrors = useRef(false)
     const errorBar = useRef(null)
+
 
     //--Form values to be submitted to server
     let newBooking = {
@@ -126,11 +128,16 @@ export default function Book() {
                     case "phone":
                         if (!email) {
                             checkForData(section, key)
+                        } else {
+                            errors.contact.phone = false
                         }
                         break;
                     case "email":
                         if (!phone) {
                             checkForData(section, key)
+                        }
+                        else {
+                            errors.contact.email = false
                         }
                         break;
                     case "tattooDesign":
@@ -155,6 +162,7 @@ export default function Book() {
         checkForErrors(true)
         if (!hasErrors.current) {
             console.log('No Errors')
+            setBooked(true)
             client.post('/book/new', { newBooking })
                 .then(response => {
                     console.log('Sucess', response)
@@ -206,13 +214,27 @@ export default function Book() {
         setErrors(newErrors)
     }
 
+    function disableScrolling() {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function enableScrolling() {
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+    }
+
+    useEffect(() => {
+        booked ? disableScrolling() : enableScrolling()
+    }, [booked])
+
     return (
         <>
             <div ref={errorBar} className='hidden bg-inputError h-[48px] flex items center jusifty center sticky top-[92px] z-[11]'>
                 <p className='text-2xl text-center w-full translate-y-[15%]'>Uh oh...it apperas you&apos;re missing some info</p>
             </div>
-            <form onSubmit={handleBooking} className="bg-brownA bg-cover min-h-[50vh]">
-                <BookingDateTime errors={errors} hideBar={hideBar} dateTime={dateTime} setDateTime={setDateTime} />
+            <form onSubmit={handleBooking} className={`${booked ? 'opacity-[.3]' : ''} bg-brownA bg-cover min-h-[50vh]`}>
+                <BookingDateTime booked={booked} errors={errors} hideBar={hideBar} setDateTime={setDateTime} />
                 {/* Contact Bar */}
                 <div className={`${Object.values(errors?.contact)?.some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-center py-2 w-full`}>
                     <div className="basis-1/3"></div>
@@ -341,7 +363,7 @@ export default function Book() {
                                             <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked designs</p>
                                             <div onClick={() => setDesignsWidget(!designsWidget)}
                                                 style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                                className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                                className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
                                                 <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Designs</div>
                                             </div>
                                             <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
@@ -369,7 +391,7 @@ export default function Book() {
                                     <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked gems</p>
                                     <div onClick={() => setDesignsWidget(!designsWidget)}
                                         style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
                                         <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Gems</div>
                                     </div>
                                     <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Gem" />
@@ -395,7 +417,7 @@ export default function Book() {
                                     <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked peircings</p>
                                     <div onClick={() => setDesignsWidget(!designsWidget)}
                                         style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} bg-cover hover:cursor-pointer hover:scale-[1.075] duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
                                         <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Piercings</div>
                                     </div>
                                     <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Piercings" />
@@ -408,7 +430,7 @@ export default function Book() {
                 <div className="w-full h-2 bg-blueA"></div>
                 {/* Finalize Booking (without payment for now) */}
                 <div className="w-full flex justify-center py-10">
-                    <button type="submit" className="bg-blueA rounded-md p-5 text-2xl duration-[750ms] hover:scale-[1.15]">Book Your Appointment</button>
+                    <button type="submit" className={`${booked ? 'cursor-default' : 'hover:scale-[1.15]'} bg-blueA rounded-md p-5 text-2xl duration-[750ms]`}>Book Your Appointment</button>
                 </div>
                 {/* <div className="flex">
                 <button>Tattoo</button>
@@ -417,6 +439,26 @@ export default function Book() {
             </div> */}
 
             </form>
+            <div className={`${booked ? '' : 'hidden'} rounded-lg w-[50vw] h-auto bg-greyB fixed top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] flex flex-col justify-between items-center p-4`}>
+                <div className="absolute top-0 right-0 w-[50px] h-[60px] hover:scale-[1.25] duration-500" onClick={() => {
+                    setBooked(false)
+                    setDesign('')
+                    setEmail('')
+                    setPhone('')
+                    setName('')
+                    setPlacement('')
+                    setSize('')
+                    setCount('')
+                    setComments('')
+                    setReferencePhotos('')
+                }}>
+                    <div className="absolute top-0 right-0 translate-x-[-30px] translate-y-[17px] rotate-45 bg-blackA rounded w-[5px] h-[30px]"></div>
+                    <div className="absolute top-0 right-0 translate-x-[-30px] translate-y-[17px] rotate-[-45deg] bg-blackA rounded w-[5px] h-[30px]"></div>
+                </div>
+                <p className='text-6xl text-black mt-6'>Success!</p>
+                <p className='text-2xl text-black my-12'>You're appointment has been scheduled, please check your{email ? phone ? ' phone or email' : ' email' : ' phone'} for our confirmation</p>
+                <p className='text-4xl text-black mb-6'>Thanks for booking with us!</p>
+            </div>
         </>
     )
 }

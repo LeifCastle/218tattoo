@@ -44,9 +44,10 @@ export default function Designs(props) {
         setQuery(newQuery)
         if (newQuery !== '') {
             let matchingDesigns = designRef.current.filter(design => {
-                return design.tags.some(tag => { 
-                let partialTag = tag.slice(0, newQuery.length)
-                return partialTag === newQuery})
+                return design.tags.some(tag => {
+                    let partialTag = tag.slice(0, newQuery.length)
+                    return partialTag.toLowerCase() === newQuery.toLowerCase()
+                })
             })
             setDesigns(matchingDesigns)
         } else {
@@ -54,10 +55,16 @@ export default function Designs(props) {
         }
     }
 
+    useEffect(() => {
+        if(!props.visibility){
+            setQuery('')
+        }
+    }, [props.visibility])
+
 
     return (
         <>
-            <div className={`${props.visibility === true ? 'block' : 'hidden'} fixed top-0 left-0 opacity-[40%] w-[100vw] h-[100vh] bg-black`} onClick={() => props.setVisibility(false)}></div>
+            <div className={`${props.visibility === true ? 'block' : 'hidden'} fixed top-0 left-0 opacity-[40%] w-[100vw] h-[100vh] bg-black`} onClick={() => {props.setVisibility(false)}}></div>
             <div className={`${props.visibility === true ? 'block' : 'hidden'} bg-greyB z-2 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[90vw] Tablet:w-[60vw] h-[75vh] Tablet:h-[75vh] overflow-y-scroll rounded-lg`}>
                 <div className="flex items-center bg-white h-[60px] top-[-1px] sticky z-[4]">
                     <div className="flex Tablet:basis-1/3"></div>

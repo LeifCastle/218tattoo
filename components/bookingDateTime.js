@@ -3,9 +3,9 @@
 import axios from 'axios';
 import Image from 'next/image';
 import moment from 'moment';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, use } from 'react';
 
-export default function BookingDateTime({ errors, hideBar, dateTime, setDateTime }) {
+export default function BookingDateTime({ booked, errors, hideBar, setDateTime }) {
     const client = axios.create({
         baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
@@ -24,6 +24,14 @@ export default function BookingDateTime({ errors, hideBar, dateTime, setDateTime
     let SundayTimes = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"]
 
     let dynamicColumns = 5;
+
+    useEffect(() => {
+        if (booked) {
+            setSelectedDay('')
+            setSelectedTime('')
+            setDateTime('')
+        }
+    })
 
 
     //Converts chosen date and time to a Date variable
