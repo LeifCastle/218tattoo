@@ -132,6 +132,11 @@ export default function Book() {
                             errors.contact.phone = false
                         }
                         break;
+                    case "design":
+                        if (tattooDesign !== "custom") {
+                            checkForData(section, key)
+                        }
+                        break;
                     case "email":
                         if (!phone) {
                             checkForData(section, key)
@@ -148,7 +153,7 @@ export default function Book() {
             }
         }
         setErrors(newErrors);
-        console.log('Errors: ', newErrors)
+        //console.log('Errors: ', newErrors)
     }
 
     //--Updates error status on-the-fly
@@ -161,7 +166,8 @@ export default function Book() {
         e.preventDefault();
         checkForErrors(true)
         if (!hasErrors.current) {
-            console.log('No Errors')
+            let truePhotos = referencePhotos.filter(photo => photo.src != '/addFile.png')
+            newBooking.service.referencePhotos = [...truePhotos]
             setBooked(true)
             client.post('/book/new', { newBooking })
                 .then(response => {
@@ -332,7 +338,7 @@ export default function Book() {
                                                                     alt="Add Reference Photo"
                                                                 />
                                                                 <div className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} absolute bottom-0 Tablet:bottom-[6px] text-black}`}>Upload</div>
-                                                                <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}book/signImage`}
+                                                                <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`}
                                                                     onSuccess={(results) => {
                                                                         console.log('Public ID', results);
                                                                         const url = results.info.url;
@@ -439,7 +445,7 @@ export default function Book() {
             </div> */}
 
             </form>
-            <div className={`${booked ? '' : 'hidden'} rounded-lg w-[50vw] h-auto bg-greyB fixed top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] flex flex-col justify-between items-center p-4`}>
+            <div className={`${booked ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] h-auto bg-greyB fixed top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] flex flex-col justify-between items-center p-4`}>
                 <div className="absolute top-0 right-0 w-[50px] h-[60px] hover:scale-[1.25] duration-500" onClick={() => {
                     setBooked(false)
                     setDesign('')
@@ -450,14 +456,14 @@ export default function Book() {
                     setSize('')
                     setCount('')
                     setComments('')
-                    setReferencePhotos('')
+                    setReferencePhotos([{ id: 1, src: '/addFile.png' }, { id: 2, src: '/addFile.png' }, { id: 3, src: '/addFile.png' }, { id: 4, src: '/addFile.png' }])
                 }}>
                     <div className="absolute top-0 right-0 translate-x-[-30px] translate-y-[17px] rotate-45 bg-blackA rounded w-[5px] h-[30px]"></div>
                     <div className="absolute top-0 right-0 translate-x-[-30px] translate-y-[17px] rotate-[-45deg] bg-blackA rounded w-[5px] h-[30px]"></div>
                 </div>
                 <p className='text-6xl text-black mt-6'>Success!</p>
-                <p className='text-2xl text-black my-12'>You're appointment has been scheduled, please check your{email ? phone ? ' phone or email' : ' email' : ' phone'} for our confirmation</p>
-                <p className='text-4xl text-black mb-6'>Thanks for booking with us!</p>
+                <p className='text-2xl text-black my-12 text-center'>You're appointment has been scheduled, please check your{email ? phone ? ' phone or email' : ' email' : ' phone'} for our confirmation</p>
+                <p className='text-4xl text-black mb-6 text-center'>Thanks for booking with us!</p>
             </div>
         </>
     )

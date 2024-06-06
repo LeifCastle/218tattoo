@@ -37,9 +37,13 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
     //Converts chosen date and time to a Date variable
     useEffect(() => {
         if (selectedDay && selectedTime) {
-            const selectedDateTimeString = `${moment().format('YYYY')}-${selectedDay.day} ${selectedTime}`;
+            const selectedDateTimeString = `${moment().format('YYYY')}-${selectedMonth.format('MM')}-${selectedDay.day} ${selectedTime}`;
             const selectedDateTimeMoment = moment(selectedDateTimeString, "YYYY-M-D h:mm A");
             setDateTime(selectedDateTimeMoment.toDate());
+            console.log('Selcted Month: ', selectedMonth.format('MM'))
+            console.log('Selcted Day: ', selectedDay.day)
+            console.log('Selcted Time: ', selectedTime)
+            console.log('Date Variable: ', selectedDateTimeMoment.toDate())
         }
     }, [selectedDay, selectedTime])
 
@@ -49,6 +53,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
             SundayTimes = SaturdayTimes;
         }
         setTimeOptions(SundayTimes.map(time => {
+            let bookedDate = `${selectedMonth.format('M')}-${selectedDay.day}`
             return (
                 <div key={time + 1}
                     onClick={() => {
@@ -59,10 +64,10 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                             setSelectedTime(time)
                         }
                     }}
-                    className={`${bookedDateTimes[selectedDay.day]?.includes(time) ? 'bg-black' : selectedTime === time ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} rounded-[12px] p-2 hover:scale-105`}>{time}</div>
+                    className={`${bookedDateTimes[bookedDate]?.includes(time) ? 'hidden' : selectedTime === time ? 'bg-blue-500 hover:scale-105' : 'hover:scale-105 bg-white/15 hover:bg-white/30'} rounded-[12px] p-2`}>{time}</div>
             )
         }))
-        //console.log("Dates: ", bookedDateTimes)
+        console.log("Dates: ", bookedDateTimes)
         //console.log('Selected Day: ', selectedDay.day, 'Selected Time: ', selectedTime)
     }, [selectedDay, selectedTime])
 
@@ -85,8 +90,9 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                 });
                 // Update state with the newly built object
                 setBookedDateTimes(updatedBookedDateTimes);
+                console.log('Booked: ', updatedBookedDateTimes)
             })
-    }, [])
+    }, [booked])
 
     //--Returns all the weekeends in a given month
     function getWeekends(month, year) {
@@ -192,7 +198,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                             })}
                         </div>
                     </div>
-                    <div className={`${selectedDay === '' ? 'hidden' : 'block'} flex flex-wrap justify-center gap-6 Tablet:gap-12 py-6`}>
+                    <div className={`${selectedDay === '' ? 'hidden' : 'block'} flex flex-wrap justify-center gap-6 Tablet:gap-12 py-6 overflow-hidden`}>
                         {timeOptions}
                     </div>
                 </div>

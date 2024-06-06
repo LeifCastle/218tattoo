@@ -26,14 +26,14 @@ export default function Designs(props) {
                     setDesigns(response.data)
                     designRef.current = designs
                     localStorage.setItem(folder, JSON.stringify({ data: response.data, created: moment().format('HHMMDDYY') }))
-                    console.log('Created: ', JSON.parse(localStorage.getItem(folder)))
+                    //console.log('Created: ', JSON.parse(localStorage.getItem(folder)))
                 })
                 .catch(error => {
                     console.log('Error: ', error)
                 })
         } else {
-            console.log('Accessing: ', folder)
-            console.log('Found: ', JSON.parse(localStorage.getItem(folder)))
+            //console.log('Accessing: ', folder)
+            //console.log('Found: ', JSON.parse(localStorage.getItem(folder)))
             setDesigns(JSON.parse(localStorage.getItem(folder)).data)
             designRef.current = designs
         }
