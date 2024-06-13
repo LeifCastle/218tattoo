@@ -462,7 +462,7 @@ export default function Book() {
                     <div className="absolute top-0 right-0 translate-x-[-30px] translate-y-[17px] rotate-[-45deg] bg-blackA rounded w-[5px] h-[30px]"></div>
                 </div>
                 <p className='text-6xl text-black mt-6'>Success!</p>
-                <p className='text-2xl text-black my-12 text-center'>You're appointment has been scheduled, please check your{email ? phone ? ' phone or email' : ' email' : ' phone'} for our confirmation</p>
+                <p className='text-2xl text-black my-12 text-center'>You&apos;re appointment has been scheduled, please check your{email ? phone ? ' phone or email' : ' email' : ' phone'} for our confirmation</p>
                 <p className='text-4xl text-black mb-6 text-center'>Thanks for booking with us!</p>
             </div>
         </>
