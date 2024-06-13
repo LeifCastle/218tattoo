@@ -47,7 +47,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
         }
     }, [selectedDay, selectedTime])
 
-    //--Sets the appropriates times for each day **(need to check availability with backend eventually)
+    //--Sets the appropriates times for each day **(need to check availability from admin controled options with backend)
     useEffect(() => {
         if (selectedDay.which === 1 || selectedDay.which === 6) { //If the day is a saturday reassign saturday time values
             SundayTimes = SaturdayTimes;
@@ -67,8 +67,6 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                     className={`${bookedDateTimes[bookedDate]?.includes(time) ? 'hidden' : selectedTime === time ? 'bg-blue-500 hover:scale-105' : 'hover:scale-105 bg-white/15 hover:bg-white/30'} rounded-[12px] p-2`}>{time}</div>
             )
         }))
-        console.log("Dates: ", bookedDateTimes)
-        //console.log('Selected Day: ', selectedDay.day, 'Selected Time: ', selectedTime)
     }, [selectedDay, selectedTime])
 
     //--Set inital values & get initial date times already booked
@@ -100,10 +98,10 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
         let date = moment({ year, month: month - 1, day: 1 }); //Subtracting 1 to account for zero indexing of months (.format method is not zero indexed)
         let weekendCount = 2;  //Use to determine which column the date will be assigned, currently accounts for crossover (weekend split over two months)
         for (let i = 0; i <= date.daysInMonth(); i++) {
-            if (date.day() === 6) {
+            if (date.day() === 6 && date.format('MMDD') > moment().format('MMDD')) {
                 weekends.push({ day: date.format('D'), which: 1 }) // Saturday (row 1)
                 weekendCount++
-            } else if (date.day() === 0) {
+            } else if (date.day() === 0 && date.format('MMDD') > moment().format('MMDD')) {
                 if (weekendCount === 2) { //Accounts for weekends split over the month **need to add a greyed out value to object as well or turn into a placeholder value
                     weekends.push({ day: date.clone().subtract(1, 'days').format('M-D'), which: 1 })
                     weekendCount++

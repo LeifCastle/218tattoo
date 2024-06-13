@@ -35,16 +35,16 @@ export default function Home() {
           <p className="mt-10 Tablet:mt-2 text-[1.3rem] Tablet:text-[1.75rem]">Clean and professional, our artist is looking forward to bringing your next design to life.</p>
           <div className="h-[5vh] Tablet:h-[20vh]"></div>
         </div>
-        <Image className="hidden Tablet:block opacity-[55%] hover:opacity-[100%] animate-arrowAnimate absolute bottom-0 mb-[10vh] hover:cursor-pointer transition-opacity duration-1000"
+        <Image className="hidden Tablet:block opacity-[55%] hover:opacity-[100%] animate-arrowAnimate absolute bottom-0 mb-[7vh] hover:cursor-pointer transition-opacity duration-1000"
           src="/downArrow.png"
-          width={150}
-          height={150}
+          width={100}
+          height={100}
           alt="Down Arrow"
           onClick={handlePageScroll}
         />
       </div>
       <div className="relative bg-brownA text-black py-10">
-        <div className="flex items-center justify-center absolute top-0 left-0 h-[60px] w-full Tablet:w-[40vw] bg-blueA Tablet:rounded-br-md mr-10">
+        <div className="flex items-center justify-center absolute top-0 left-0 h-[60px] w-full Tablet:w-[25vw] bg-blueA Tablet:rounded-br-md mr-10">
           <p className="text-[1.8rem] text-white">What We Offer</p>
         </div>
         <div className="flex items-center justify-center gap-10 mt-10 flex flex-col Tablet:flex-row mx-10">
@@ -90,7 +90,7 @@ export default function Home() {
         </div>
       </div >
       <div className="flex flex-col items-center justify-center bg-brownA text-black pb-10">
-        <div className="self-start flex items-center justify-center h-[60px] w-full Tablet:w-[40vw] bg-blueA Tablet:rounded-tr-md Tablet:rounded-br-md">
+        <div className="self-start flex items-center justify-center h-[60px] w-full Tablet:w-[25vw] bg-blueA Tablet:rounded-tr-md Tablet:rounded-br-md">
           <p className="text-[1.8rem] text-white">Customer Favorites</p>
         </div>
         <div className="mt-10">
