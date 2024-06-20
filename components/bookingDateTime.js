@@ -144,17 +144,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
         <>
             <div className="bg-blackA flex flex-col items-center justify-center">
                 <div className={`${Object.values(errors?.appointment)?.some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-center py-2 w-full`}>
-                    <div className="basis-1/3"></div>
                     <div className="text-center basis-1/3 mx-4 text-3xl">Appointment</div>
-                    <div className="basis-1/3 flex justify-end pr-[5vw]">
-                        <Image className="rounded-lg  hover:scale-125 rotate-[-90deg] transition-all ease-in-out duration-500 cursor-pointer"
-                            src="/rightArrowWhite.png"
-                            width={50}
-                            height={50}
-                            alt="NextPic"
-                            onClick={(e) => hideBar(e, dateTimeBar.current)}
-                        />
-                    </div>
                 </div>
                 <div ref={dateTimeBar} className="overflow-y-hidden transition-height ease-in-out duration-500">
                     <div className="flex flex-col items-center justify-center">
@@ -199,6 +189,11 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                     <div className={`${selectedDay === '' ? 'hidden' : 'block'} flex flex-wrap justify-center gap-6 Tablet:gap-12 py-6 overflow-hidden`}>
                         {timeOptions}
                     </div>
+                </div>
+
+                {/* Finalize Booking (without payment for now) */}
+                <div className="w-full flex justify-center py-10">
+                    <button type="submit" className={`${booked ? 'cursor-default' : 'hover:scale-[1.15]'} bg-blueA rounded-md p-5 text-2xl duration-[750ms]`}>Book Your Appointment</button>
                 </div>
             </div>
         </>
