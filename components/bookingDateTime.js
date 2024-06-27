@@ -143,9 +143,6 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
     return (
         <>
             <div className="bg-blackA flex flex-col items-center justify-center">
-                <div className={`${Object.values(errors?.appointment)?.some(Boolean) ? 'bg-inputError' : 'bg-blueA'} flex justify-between items-center py-2 w-full`}>
-                    <div className="text-center basis-1/3 mx-4 text-3xl">Appointment</div>
-                </div>
                 <div ref={dateTimeBar} className="overflow-y-hidden transition-height ease-in-out duration-500">
                     <div className="flex flex-col items-center justify-center">
                         <div className="flex items-center justify-center mt-8">

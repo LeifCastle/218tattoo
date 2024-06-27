@@ -36,7 +36,7 @@ export default function Book() {
     const hasErrors = useRef(false)
     const errorBar = useRef(null)
 
-    const [formProgress, setFormProgress] = useState("serviceOptions")
+    const [formProgress, setFormProgress] = useState(1)
 
 
     //--Form values to be submitted to server
@@ -229,9 +229,9 @@ export default function Book() {
     return (
         <>
             <div ref={errorBar} className='hidden bg-inputError h-[48px] flex items center jusifty center sticky top-[92px] z-[11]'>
-                <p className='text-2xl text-center w-full translate-y-[15%]'>Uh oh...it apperas you&apos;re missing some info</p>
+                <p className='text-2xl text-center w-full translate-y-[15%]'>Missing info</p>
             </div>
-            <form onSubmit={handleBooking} className={`${booked ? 'opacity-[.3]' : ''} bg-brownA opacity-90 bg-cover min-h-[50vh] relative`}>
+            <form onSubmit={handleBooking} className={`${booked ? 'opacity-[.3]' : ''} bg-brownA opacity-90 bg-cover min-h-[50vh] relative flex flex-col items-center`}>
                 <Image className={`w-full h-[300px] object-cover opacity-80`}
                     src='/tattooBanner.jpg'
                     width={1798}
@@ -242,163 +242,151 @@ export default function Book() {
                 <div className='text-white text-8xl text-center absolute top-0 left-0 w-full h-[300px] flex items-center justify-center'>
                     <h2>Book Your Appointment</h2>
                 </div>
-                <div className={`bg-blueA flex justify-between items-center w-full`}>
-                    <div className="text-center basis-1/4 text-3xl bg-blueA h-full py-3">Service</div>
-                    <div className="text-center basis-1/4 text-3xl bg-white text-black opacity-90 h-full py-3">Service Details</div>
-                    <div className="text-center basis-1/4 text-3xl bg-white text-black opacity-90 h-full py-3">Contact</div>
-                    <div className="text-center basis-1/4 text-3xl bg-white text-black opacity-90 h-full py-3">Appointment</div>
+                <div className={`flex justify-between items-center w-full text-2xl`}>
+                    <div className={`bg-blueA text-white text-center basis-1/4 h-full py-1`}>Service</div>
+                    <div className={`${formProgress < 2 ? 'bg-white opacity-90 text-black' : 'bg-blueA text-white'} text-center basis-1/4 h-full py-1`}>Service Details</div>
+                    <div className={`${formProgress < 3 ? 'bg-white opacity-90 text-black' : 'bg-blueA text-white'} text-center basis-1/4 h-full py-1`}>Contact</div>
+                    <div className={`${formProgress < 4 ? 'bg-white opacity-90 text-black' : 'bg-blueA text-white'} text-center basis-1/4 h-full py-1`}>Appointment</div>
                 </div>
-                <div>
+                <div className='py-10'>
                     {/*----Service Options----*/}
-                    <div className={formProgress === "serviceOptions" ? 'block' : 'hidden'}>
+                    <div className={formProgress === 1 ? 'block' : 'hidden'}>
                         <ServiceOptions setService={setService} setFormProgress={setFormProgress} />
                     </div>
                     {/*----Service Details----*/}
-                    <div className={`${formProgress === "serviceDetails" ? 'block' : 'hidden'} overflow-y-hidden transition-height ease-in-out duration-[800ms]`}>
-                        <div className="flex flex-col Tablet:flex-row justify-center my-10">
-                            <div className="flex flex-row Tablet:flex-col basis-1/3 justify-center items-center gap-6 text-xl pb-6 Tablet:pb-0">
-                                <button type="button" className={`rounded-md ${service === 'tattoo' ? 'bg-blueA p-3 Tablet:p-5 text-2xl' : 'bg-greyB p-2 Tablet:p-3 text-xl'}`} onClick={() => handleDesignChoice('tattoo')}>Tattoo</button>
-                                <button type="button" className={`rounded-md ${service === 'piercing' ? 'bg-blueA p-3 Tablet:p-5 text-2xl' : 'bg-greyB p-2 Tablet:p-3 text-xl'}`} onClick={() => handleDesignChoice('piercing')}>Peircing</button>
-                                <button type="button" className={`rounded-md ${service === 'tooth' ? 'bg-blueA p-3 Tablet:p-5 text-2xl' : 'bg-greyB p-2 Tablet:p-3 text-xl'}`} onClick={() => handleDesignChoice('tooth')}>Tooth Gem</button>
-                            </div>
-                            {service === 'tattoo' ? ( //Tattoo 
-                                <div className="basis-1/3 mx-6 grow-1">
-                                    <div className="flex flex-col items-center">
-                                        <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
-                                            <div className="flex gap-4 items-center">
-                                                <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Select Design</p>
-                                                <select placeholder="Select" value={tattooDesign} onChange={(e) => setTattooDesign(e.target.value)} className={`${inputField} w-[238px] border-[#998C7E]`}>
-                                                    <option value="flash">Flash Design</option>
-                                                    <option value="custom">Custom Design</option>
-                                                </select>
-                                            </div>
-                                            <div className="flex gap-4 items-center">
-                                                <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
-                                                <input id="Placement" placeholder="Left shoulder" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} ${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                            </div>
-                                            <div className="flex gap-4 items-center">
-                                                <p className={`${inputName}`}>Rough Size</p>
-                                                <input id="Size" placeholder="3 inches" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.service.size ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                            </div>
-                                        </div>
-                                        {tattooDesign === "custom" ?
-                                            <div>
-                                                <div className="flex flex-col gap-4 pb-6 items-center">
-                                                    <p className={`${inputName}`}>Description</p>
-                                                    <textarea id="Comments" placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} ${errors.service.comments ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} w-full max-w-[448px] h-[10vh]`}></textarea>
-                                                </div>
-                                                <div className="flex flex-col gap-4 items-center">
-                                                    <p className={`${inputName}`}>Reference Photos</p>
-                                                    <div className="flex gap-4">
-                                                        {referencePhotos.map(photo => {
-                                                            return (
-                                                                <div key={photo.id} onChange={(e) => setComments(e.target.value)}
-                                                                    style={{ backgroundImage: (photo.src === '/addFile.png' ? 'none' : `url(${photo.src})`) }}
-                                                                    className={`rounded-[12px] w-[75px] h-[75px] Tablet:w-[100px] Tablet:h-[100px] bg-${photo.src === '/addFile.png' ? 'greyB' : ''} bg-cover flex items-center justify-center relative`}>
-                                                                    <Image className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} rounded-lg hover:scale-125 transition-all ease-in-out duration-500 cursor-pointer mb-[12px]`}
-                                                                        src={photo.src}
-                                                                        width={50}
-                                                                        height={50}
-                                                                        alt="Add Reference Photo"
-                                                                    />
-                                                                    <div className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} absolute bottom-0 Tablet:bottom-[6px] text-black}`}>Upload</div>
-                                                                    <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`}
-                                                                        onSuccess={(results) => {
-                                                                            console.log('Public ID', results);
-                                                                            const url = results.info.url;
-                                                                            console.log('URL: ', url)
-                                                                            updatePhotoTiles(photo.id, url)
-                                                                        }}>
-                                                                        {({ open }) => {
-                                                                            return (
-                                                                                <div className="absolute top-0 left-0 w-full h-full hover:cursor-pointer" onClick={() => open()}>
+                    <div className={`${formProgress === 2 ? 'block' : 'hidden'} py-10 w-[50vw]`}>
+                        {service === 'tattoo' ? ( //Tattoo 
+                            <div className="flex items-center justify-between">
+                                <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Select Design</p>
+                                        <select placeholder="Select" value={tattooDesign} onChange={(e) => setTattooDesign(e.target.value)} className={`${inputField} w-[238px] border-[#998C7E]`}>
+                                            <option value="flash">Flash Design</option>
+                                            <option value="custom">Custom Design</option>
+                                        </select>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
+                                        <input id="Placement" placeholder="Left shoulder" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} ${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`}>Rough Size</p>
+                                        <input id="Size" placeholder="3 inches" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.service.size ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`}>Description</p>
+                                        <textarea id="Comments" placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} ${errors.service.comments ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} w-full max-w-[448px] h-[10vh]`}></textarea>
+                                    </div>
+                                </div>
+                                <div>
+                                    {tattooDesign === "custom" ?
+                                        <div>
+                                            <div className="flex flex-col gap-4 items-center">
+                                                <p className={`${inputName}`}>Reference Photos</p>
+                                                <div className="flex gap-4">
+                                                    {referencePhotos.map(photo => {
+                                                        return (
+                                                            <div key={photo.id} onChange={(e) => setComments(e.target.value)}
+                                                                style={{ backgroundImage: (photo.src === '/addFile.png' ? 'none' : `url(${photo.src})`) }}
+                                                                className={`rounded-[12px] w-[75px] h-[75px] Tablet:w-[100px] Tablet:h-[100px] bg-${photo.src === '/addFile.png' ? 'greyB' : ''} bg-cover flex items-center justify-center relative`}>
+                                                                <Image className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} rounded-lg hover:scale-125 transition-all ease-in-out duration-500 cursor-pointer mb-[12px]`}
+                                                                    src={photo.src}
+                                                                    width={50}
+                                                                    height={50}
+                                                                    alt="Add Reference Photo"
+                                                                />
+                                                                <div className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} absolute bottom-0 Tablet:bottom-[6px] text-black}`}>Upload</div>
+                                                                <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`}
+                                                                    onSuccess={(results) => {
+                                                                        console.log('Public ID', results);
+                                                                        const url = results.info.url;
+                                                                        console.log('URL: ', url)
+                                                                        updatePhotoTiles(photo.id, url)
+                                                                    }}>
+                                                                    {({ open }) => {
+                                                                        return (
+                                                                            <div className="absolute top-0 left-0 w-full h-full hover:cursor-pointer" onClick={() => open()}>
 
-                                                                                </div>
-                                                                            );
-                                                                        }}
-                                                                    </CldUploadWidget>
-                                                                </div>
-                                                            )
-                                                        })
-                                                        }
-                                                    </div>
+                                                                            </div>
+                                                                        );
+                                                                    }}
+                                                                </CldUploadWidget>
+                                                            </div>
+                                                        )
+                                                    })
+                                                    }
                                                 </div>
                                             </div>
-                                            :
-                                            <div className='w-full flex flex-col items-center'>
-                                                <div className="flex flex-col gap-4 pb-6 items-center w-full">
-                                                    <p className={`${inputName}`}>Comments</p>
-                                                    <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
-                                                </div>
-                                                <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked designs</p>
-                                                <div onClick={() => setDesignsWidget(!designsWidget)}
-                                                    style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                                    className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
-                                                    <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Designs</div>
-                                                </div>
-                                                <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
+                                        </div>
+                                        :
+                                        <div className='w-full flex flex-col items-center'>
+                                            <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked designs</p>
+                                            <div onClick={() => setDesignsWidget(!designsWidget)}
+                                                style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
+                                                className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                                <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Designs</div>
                                             </div>
-                                        }
+                                            <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        ) : service === 'tooth' ? ( //Tooth Gem
+                            <div className="flex items-center w-full justify-between">
+                                <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
+                                        <input placeholder="Canines" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`}>Gem Count</p>
+                                        <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`}>Comments</p>
+                                        <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
                                     </div>
                                 </div>
-                            ) : service === 'tooth' ? ( //Tooth Gem
-                                <div className="basis-1/3 mx-6">
-                                    <div className="flex flex-col items-center">
-                                        <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
-                                            <div className="flex gap-4 items-center">
-                                                <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
-                                                <input placeholder="Canines" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
-                                            </div>
-                                            <div className="flex gap-4 items-center">
-                                                <p className={`${inputName}`}>Gem Count</p>
-                                                <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-4 pb-6 items-center w-full">
-                                            <p className={`${inputName}`}>Comments</p>
-                                            <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
-                                        </div>
-                                        <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked gems</p>
-                                        <div onClick={() => setDesignsWidget(!designsWidget)}
-                                            style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                            className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
-                                            <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Gems</div>
-                                        </div>
-                                        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Gem" />
+                                <div>
+                                    <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked gems</p>
+                                    <div onClick={() => setDesignsWidget(!designsWidget)}
+                                        style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
+                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                        <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Gems</div>
+                                    </div>
+                                    <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Gem" />
+                                </div>
+                            </div>
+                        ) : ( //Pericing
+                            <div className="flex items-center w-full justify-between">
+                                <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
+                                        <input placeholder="Ears" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`}>Peircing Count</p>
+                                        <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <p className={`${inputName}`}>Comments</p>
+                                        <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
                                     </div>
                                 </div>
-                            ) : ( //Pericing
-                                <div className="basis-1/3 mx-6">
-                                    <div className="flex flex-col items-center">
-                                        <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
-                                            <div className="flex gap-4 items-center">
-                                                <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
-                                                <input placeholder="Ears" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
-                                            </div>
-                                            <div className="flex gap-4 items-center">
-                                                <p className={`${inputName}`}>Peircing Count</p>
-                                                <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-4 pb-6 items-center w-full">
-                                            <p className={`${inputName}`}>Comments</p>
-                                            <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
-                                        </div>
-                                        <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked peircings</p>
-                                        <div onClick={() => setDesignsWidget(!designsWidget)}
-                                            style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                            className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
-                                            <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Piercings</div>
-                                        </div>
-                                        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Piercings" />
+                                <div>
+                                    <p className={`${inputName} pb-6`}>Chose from over 100+ handpicked peircings</p>
+                                    <div onClick={() => setDesignsWidget(!designsWidget)}
+                                        style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
+                                        className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
+                                        <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Piercings</div>
                                     </div>
+                                    <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Piercings" />
                                 </div>
-                            )}
-                            <div className="basis-1/3 grow-0"></div>
-                        </div>
+                            </div>
+                        )}
                     </div>
                     {/*----Contact----*/}
-                    <div className={`${formProgress === "contact" ? '' : 'hidden'} overflow-y-hidden transition-height ease-in-out duration-500`}>
+                    <div className={`${formProgress === 3 ? '' : 'hidden'}`}>
                         <div className="flex flex-col items-center justify-center items-end gap-6 py-6 text-xl">
                             <div className="flex gap-4 items-center">
                                 <p className={`${inputName}`}>Name</p>
@@ -420,11 +408,14 @@ export default function Book() {
                         </div>
                     </div>
                     {/*----Appointment----*/}
-                    <div className={`${formProgress === "appointment" ? '' : 'hidden'}`}>
+                    <div className={`${formProgress === 4 ? '' : 'hidden'} w-[50vw]`}>
                         <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} />
                     </div>
                 </div>
-
+                <div className='flex justify-between w-[50vw] mb-10'>
+                    <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} bg-white text-black w-[150px] h-[50px] rounded-md`} onClick={() => setFormProgress(formProgress - 1)}>Back</button>
+                    <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} bg-white text-black w-[150px] h-[50px] rounded-md`} onClick={() => setFormProgress(formProgress + 1)}>Continue</button>
+                </div>
             </form>
             <div className={`${booked ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] h-auto bg-greyB fixed top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] flex flex-col justify-between items-center p-4`}>
                 <div className="absolute top-0 right-0 w-[50px] h-[60px] hover:scale-[1.25] duration-500" onClick={() => {
