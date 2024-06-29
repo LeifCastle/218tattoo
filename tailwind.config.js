@@ -70,6 +70,7 @@ module.exports = {
         inputHoverBg: "rgba(255, 255, 255, .75)",
         inputError: "#8E0000",
         mobileNavBg: "rgba(0, 0, 0, .875)",
+        progressBarComplete: '#184d54' //teal-600: #0C857B
       },
       gridTemplateColumns: {
         'dateTime': 'minmax(50px, 100px) repeat(var(--dynamic-columns), minmax(10px, 100px))',

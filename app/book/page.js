@@ -250,7 +250,7 @@ export default function Book() {
                 <p className='text-2xl text-center w-full translate-y-[15%]'>Missing info</p>
             </div>
             <form onSubmit={handleBooking} className={`${booked ? 'opacity-[.3]' : ''} bg-white opacity-90 bg-cover min-h-[50vh] relative flex flex-col items-center`}>
-                {/* <Image className={`w-full h-[300px] object-cover opacity-80`}
+                <Image className={`w-full h-[300px] object-cover opacity-80`}
                     src='/tattooBanner.jpg'
                     width={1798}
                     height={1200}
@@ -260,45 +260,50 @@ export default function Book() {
                 <div className='text-white text-8xl text-center absolute top-0 left-0 w-full h-[300px] flex items-center justify-center'>
                     <h2>Book Your Appointment</h2>
                 </div>
-                */}
-                {/*Start*/}
-                <div class="p-5 w-[75vw]">
+               
+                {/*---Progress Bar---*/}
+                <div class="p-5 w-[60vw]">
                     <div class="flex items-center">
                         {/* Step 1 */}
-                        <div class="flex items-center text-teal-600 relative">
-                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-teal-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark ">
-                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        <div class="flex items-center text-progressBarComplete relative">
+                            <div className={`${formProgress >= 1 ? 'border-progressBarComplete' : 'border-gray-300'} ${formProgress > 1 ? 'bg-progressBarComplete' : ''} rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2`}>
+                                <svg viewBox="0 0 20 22" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill={`${formProgress > 1 ? 'white' : '#606773'}`}><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus "></g><g id="SVGRepo_iconCarrier">
+                                    <path d="M4.334 21.39a6.166 6.166 0 0 1-1.151-.317 4.233 4.233 0 0 1-2.014-1.575 3.945 3.945 0 0 1 .575-4.804 13.407 13.407 0 0 1 3.549-2.401c1.133-.607 2.337-1.328 2.458-2.122.073-.41-.072-.67-.52-1.024a7.441 7.441 0 0 0-1.631-.82c-.61-.243-1.249-.463-1.903-.766a5.268 5.268 0 0 1-.99-.578 1.985 1.985 0 0 1-.786-1.19 1.525 1.525 0 0 1 .09-.828 1.803 1.803 0 0 1 .426-.606 3.477 3.477 0 0 1 1.022-.645 7.69 7.69 0 0 1 2.105-.529 10.898 10.898 0 0 1 4.193.338.5.5 0 0 1-.265.965 9.856 9.856 0 0 0-3.786-.207 6.592 6.592 0 0 0-1.775.49 2.352 2.352 0 0 0-.665.433c-.164.187-.174.241-.154.37.023.236.537.597 1.107.822.572.244 1.21.443 1.854.675a8.645 8.645 0 0 1 1.979.932 2.905 2.905 0 0 1 .907.96 2.275 2.275 0 0 1 .25 1.423 3.454 3.454 0 0 1-1.347 2.122 14.096 14.096 0 0 1-1.778 1.182 12.174 12.174 0 0 0-3.041 2.157 2.45 2.45 0 0 0-.617 1.33 1.794 1.794 0 0 0 .295 1.28A3.3 3.3 0 0 0 5.5 19.5a.99.99 0 0 1 .363.063 2.958 2.958 0 0 1-.755.639 1.493 1.493 0 0 0-.774 1.189zM22.11 6.018L18.4 9.35l-7.45 7.25 1.4 1.4 7.25-7.449 3.383-3.661a.626.626 0 0 0-.873-.873zM9.368 17.619l1.439 1.738a2.94 2.94 0 0 1-1.63 2.234 3.92 3.92 0 0 1-1.626.359 3.598 3.598 0 0 1-1.733-.427s1.8-.968 1.809-2.464c.006-1.38 1.451-1.44 1.703-1.44zm.35 1.99l-.78-.94a.379.379 0 0 0-.311.395 3.191 3.191 0 0 1-.633 1.85 3.042 3.042 0 0 0 .772-.234 1.823 1.823 0 0 0 .952-1.07z"></path><path fill="none" d="M0 0h24v24H0z"></path></g>
                                 </svg>
                             </div>
-                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-teal-600">Service</div>
+                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-progressBarComplete">Service</div>
                         </div>
                         {/* Border */}
                         <div className="relative flex-auto">
                             <div className="absolute inset-0 border-t-2 border-gray-300"></div>
-                            <div className={`absolute inset-0 border-t-2 border-teal-600 transition-all duration-1000 ${formProgress > 1 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
+                            <div className={`absolute inset-0 border-t-2 border-progressBarComplete transition-all duration-1000 ${formProgress > 1 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
                         </div>
                         {/* Step 2 */}
                         <div class="flex items-center text-white relative">
-                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 bg-teal-600 border-teal-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus ">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="8.5" cy="7" r="4"></circle>
-                                    <line x1="20" y1="8" x2="20" y2="14"></line>
-                                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                            <div className={`${formProgress >= 2 ? 'border-progressBarComplete' : 'border-gray-300'} ${formProgress > 2 ? 'bg-progressBarComplete' : ''} rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2`}>
+                                <svg fill={`${formProgress > 2 ? 'white' : '#606773'}`} width="100%" height="100%" viewBox="0 0 34 34" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>clipboard-line</title>
+                                        <path d="M29.29,5H27V7h2V32H7V7H9V5H7A1.75,1.75,0,0,0,5,6.69V32.31A1.7,1.7,0,0,0,6.71,34H29.29A1.7,1.7,0,0,0,31,32.31V6.69A1.7,1.7,0,0,0,29.29,5Z" class="clr-i-outline clr-i-outline-path-1"></path>
+                                        <path d="M26,7.33A2.34,2.34,0,0,0,23.67,5H21.87a4,4,0,0,0-7.75,0H12.33A2.34,2.34,0,0,0,10,7.33V11H26ZM24,9H12V7.33A.33.33,0,0,1,12.33,7H16V6a2,2,0,0,1,4,0V7h3.67a.33.33,0,0,1,.33.33Z" class="clr-i-outline clr-i-outline-path-2"></path>
+                                        <rect x="11" y="14" width="14" height="2" class="clr-i-outline clr-i-outline-path-3"></rect>
+                                        <rect x="11" y="18" width="14" height="2" class="clr-i-outline clr-i-outline-path-4"></rect>
+                                        <rect x="11" y="22" width="14" height="2" class="clr-i-outline clr-i-outline-path-5"></rect>
+                                        <rect x="11" y="26" width="14" height="2" class="clr-i-outline clr-i-outline-path-6"></rect>
+                                        <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect>
+                                    </g>
                                 </svg>
                             </div>
-                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-teal-600">Service Details</div>
+                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-progressBarComplete">Service Details</div>
                         </div>
                         {/* Border */}
                         <div className="relative flex-auto">
                             <div className="absolute inset-0 border-t-2 border-gray-300"></div>
-                            <div className={`absolute inset-0 border-t-2 border-teal-600 transition-all duration-1000 ${formProgress > 2 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
+                            <div className={`absolute inset-0 border-t-2 border-progressBarComplete transition-all duration-1000 ${formProgress > 2 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
                         </div>
                         {/* Step 3 */}
                         <div class="flex items-center text-gray-500 relative">
-                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-gray-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail ">
+                            <div className={`${formProgress >= 3 ? 'border-progressBarComplete' : 'border-gray-300'} ${formProgress > 3 ? 'bg-progressBarComplete' : ''} rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-gray-300`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke={`${formProgress > 3 ? 'white' : '#606773'}`} stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail ">
                                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
@@ -308,22 +313,21 @@ export default function Book() {
                         {/* Border */}
                         <div className="relative flex-auto">
                             <div className="absolute inset-0 border-t-2 border-gray-300"></div>
-                            <div className={`absolute inset-0 border-t-2 border-teal-600 transition-all duration-1000 ${formProgress > 3 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
+                            <div className={`absolute inset-0 border-t-2 border-progressBarComplete transition-all duration-1000 ${formProgress > 3 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
                         </div>
                         {/* Step 4 */}
                         <div class="flex items-center text-gray-500 relative">
-                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-gray-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database ">
-                                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                            <div className={`${formProgress >= 4 ? 'border-progressBarComplete' : 'border-gray-300'} ${formProgress > 4 ? 'bg-progressBarComplete' : ''} rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-gray-300`}>
+                                <svg viewBox="0 0 31 31" fill="none" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
+                                    <g clip-path="url(#clip0_901_963)">
+                                        <path d="M26 4H30C30.553 4 31 4.447 31 5V30C31 30.553 30.553 31 30 31H2C1.447 31 1 30.553 1 30V5C1 4.447 1.447 4 2 4H3M10 4H19M7 13H9M7 19H9M7 25H9M15 13H17M15 19H17M15 25H17M23 13H25M23 19H25M23 25H25M10 6C10 6.553 9.553 7 9 7H7C6.447 7 6 6.553 6 6V2C6 1.447 6.447 1 7 1H9C9.553 1 10 1.447 10 2V6ZM26 6C26 6.553 25.553 7 25 7H23C22.447 7 22 6.553 22 6V2C22 1.447 22.447 1 23 1H25C25.553 1 26 1.447 26 2V6Z" stroke={`${formProgress > 4 ? 'white' : '#606773'}`} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </g> <defs> <clipPath id="clip0_901_963"> <rect width="32" height="32" fill="white"></rect> </clipPath> </defs> </g>
                                 </svg>
                             </div>
                             <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-500">Appointment</div>
                         </div>
                     </div>
                 </div>
-                {/*End*/}
                 <div className='text-5xl text-black pt-10'>{formTitle}</div>
                 <div className='py-10'>
                     {/*----Service Options----*/}
@@ -492,8 +496,8 @@ export default function Book() {
                 <div className='flex justify-between w-[50vw] mb-10'>
                     <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-200 ease-in-out border-gray-600 transition`}
                         onClick={() => setFormProgress(formProgress - 1)}>Previous</button>
-                    <button type="button" className={`${formProgress > 1 && formProgress < 4 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-teal-600  bg-teal-600 text-teal-100 border duration-200 ease-in-out border-teal-600 transition`}
-                        onClick={() => setFormProgress(formProgress + 1)}>Next</button>
+                    <button type="button" className={`${formProgress > 1  ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-teal-100 border duration-200 ease-in-out border-progressBarComplete transition`}
+                        onClick={() => setFormProgress(formProgress + 1)}>{ formProgress > 3  ? 'Book Appointment' : 'Next'}</button>
                 </div>
             </form>
             <div className={`${booked ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] h-auto bg-greyB fixed top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] flex flex-col justify-between items-center p-4`}>
