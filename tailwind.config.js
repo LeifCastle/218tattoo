@@ -16,10 +16,20 @@ module.exports = {
           '40%': { transform: 'translateY(-30px)' },
           '60%': { transform: 'translateY(-15px)' },
         },
+        progressForward: {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
+        progressBackward: {
+          '0%': { width: '100%' },
+          '100%': { width: '0%' },
+        },
       },
       animation: {
         arrowAnimate: 'arrowAnimate 1.25s ease-in-out infinite',
         barAnimate: 'barAnimate 1.25s ease-in-out infinite',
+        progressForward: 'progressForward ease-in-out forwards',
+        progressBackward: 'progressBackward ease-in-out forwards',
       },
       screens: {
         'Mobile-S': '320px',

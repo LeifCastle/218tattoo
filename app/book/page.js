@@ -31,13 +31,12 @@ export default function Book() {
 
     const [booked, setBooked] = useState(false)
     const [designsWidget, setDesignsWidget] = useState(false); //Sets the visibility of the designs widget (images from cloudinary folder)
-    const contactBar = useRef(null)
-    const serviceBar = useRef(null)
     const hasErrors = useRef(false)
     const errorBar = useRef(null)
+    const [formTitle, setFormTitle] = useState('Service')
+
 
     const [formProgress, setFormProgress] = useState(1)
-
 
     //--Form values to be submitted to server
     let newBooking = {
@@ -168,6 +167,7 @@ export default function Book() {
     //--Submits booking
     function handleBooking(e) {
         e.preventDefault();
+        console.log('tryna be booked')
         checkForErrors(true)
         if (!hasErrors.current) {
             let truePhotos = referencePhotos.filter(photo => photo.src != '/addFile.png')
@@ -222,6 +222,24 @@ export default function Book() {
         document.body.style.overflow = '';
     }
 
+    //Sets the form title according to a user's form progress
+    useEffect(() => {
+        switch (formProgress) {
+            case 1:
+                setFormTitle("Service")
+                break;
+            case 2:
+                setFormTitle('Service Details')
+                break;
+            case 3:
+                setFormTitle("Contact")
+                break;
+            case 4:
+                setFormTitle("Appointment")
+                break;
+        }
+    }, [formProgress])
+
     useEffect(() => {
         booked ? disableScrolling() : enableScrolling()
     }, [booked])
@@ -231,8 +249,8 @@ export default function Book() {
             <div ref={errorBar} className='hidden bg-inputError h-[48px] flex items center jusifty center sticky top-[92px] z-[11]'>
                 <p className='text-2xl text-center w-full translate-y-[15%]'>Missing info</p>
             </div>
-            <form onSubmit={handleBooking} className={`${booked ? 'opacity-[.3]' : ''} bg-brownA opacity-90 bg-cover min-h-[50vh] relative flex flex-col items-center`}>
-                <Image className={`w-full h-[300px] object-cover opacity-80`}
+            <form onSubmit={handleBooking} className={`${booked ? 'opacity-[.3]' : ''} bg-white opacity-90 bg-cover min-h-[50vh] relative flex flex-col items-center`}>
+                {/* <Image className={`w-full h-[300px] object-cover opacity-80`}
                     src='/tattooBanner.jpg'
                     width={1798}
                     height={1200}
@@ -242,12 +260,71 @@ export default function Book() {
                 <div className='text-white text-8xl text-center absolute top-0 left-0 w-full h-[300px] flex items-center justify-center'>
                     <h2>Book Your Appointment</h2>
                 </div>
-                <div className={`flex justify-between items-center w-full text-2xl`}>
-                    <div className={`bg-blueA text-white text-center basis-1/4 h-full py-1`}>Service</div>
-                    <div className={`${formProgress < 2 ? 'bg-white opacity-90 text-black' : 'bg-blueA text-white'} text-center basis-1/4 h-full py-1`}>Service Details</div>
-                    <div className={`${formProgress < 3 ? 'bg-white opacity-90 text-black' : 'bg-blueA text-white'} text-center basis-1/4 h-full py-1`}>Contact</div>
-                    <div className={`${formProgress < 4 ? 'bg-white opacity-90 text-black' : 'bg-blueA text-white'} text-center basis-1/4 h-full py-1`}>Appointment</div>
+                */}
+                {/*Start*/}
+                <div class="p-5 w-[75vw]">
+                    <div class="flex items-center">
+                        {/* Step 1 */}
+                        <div class="flex items-center text-teal-600 relative">
+                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-teal-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bookmark ">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-teal-600">Service</div>
+                        </div>
+                        {/* Border */}
+                        <div className="relative flex-auto">
+                            <div className="absolute inset-0 border-t-2 border-gray-300"></div>
+                            <div className={`absolute inset-0 border-t-2 border-teal-600 transition-all duration-1000 ${formProgress > 1 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
+                        </div>
+                        {/* Step 2 */}
+                        <div class="flex items-center text-white relative">
+                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 bg-teal-600 border-teal-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus ">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="8.5" cy="7" r="4"></circle>
+                                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                                </svg>
+                            </div>
+                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-teal-600">Service Details</div>
+                        </div>
+                        {/* Border */}
+                        <div className="relative flex-auto">
+                            <div className="absolute inset-0 border-t-2 border-gray-300"></div>
+                            <div className={`absolute inset-0 border-t-2 border-teal-600 transition-all duration-1000 ${formProgress > 2 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
+                        </div>
+                        {/* Step 3 */}
+                        <div class="flex items-center text-gray-500 relative">
+                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail ">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-500">Contact</div>
+                        </div>
+                        {/* Border */}
+                        <div className="relative flex-auto">
+                            <div className="absolute inset-0 border-t-2 border-gray-300"></div>
+                            <div className={`absolute inset-0 border-t-2 border-teal-600 transition-all duration-1000 ${formProgress > 3 ? `w-full animate-progressForwards` : 'w-0 animate-progressBackwards'}`}></div>
+                        </div>
+                        {/* Step 4 */}
+                        <div class="flex items-center text-gray-500 relative">
+                            <div class="rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database ">
+                                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-500">Appointment</div>
+                        </div>
+                    </div>
                 </div>
+                {/*End*/}
+                <div className='text-5xl text-black pt-10'>{formTitle}</div>
                 <div className='py-10'>
                     {/*----Service Options----*/}
                     <div className={formProgress === 1 ? 'block' : 'hidden'}>
@@ -413,8 +490,10 @@ export default function Book() {
                     </div>
                 </div>
                 <div className='flex justify-between w-[50vw] mb-10'>
-                    <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} bg-white text-black w-[150px] h-[50px] rounded-md`} onClick={() => setFormProgress(formProgress - 1)}>Back</button>
-                    <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} bg-white text-black w-[150px] h-[50px] rounded-md`} onClick={() => setFormProgress(formProgress + 1)}>Continue</button>
+                    <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-200 ease-in-out border-gray-600 transition`}
+                        onClick={() => setFormProgress(formProgress - 1)}>Previous</button>
+                    <button type="button" className={`${formProgress > 1 && formProgress < 4 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-teal-600  bg-teal-600 text-teal-100 border duration-200 ease-in-out border-teal-600 transition`}
+                        onClick={() => setFormProgress(formProgress + 1)}>Next</button>
                 </div>
             </form>
             <div className={`${booked ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] h-auto bg-greyB fixed top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] flex flex-col justify-between items-center p-4`}>
