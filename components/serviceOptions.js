@@ -26,7 +26,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
                 </div>
             </div>
             <div
-                onClick={() => chooseService('piercing')}
+                onClick={() => chooseService('tattoo')}
                 className="group hover:cursor-pointer relative flex flex-row Tablet:flex-col bg-[#CCCCCC] rounded-lg text-center Tablet:gap-4 text-xl Tablet:pb-4 group h-[320px] w-[80vw] Tablet:w-auto Tablet:max-w-[350px]">
                 <Image className="basis-1/2 rounded-tl-lg rounded-bl-lg Tablet:rounded-bl-none Tablet:rounded-tr-lg group-hover:opacity-[30%] duration-500"
                     src="/TattooSessionCover.jpg"
@@ -40,7 +40,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
                 </div>
             </div>
             <div
-                onClick={() => chooseService('piercing')}
+                onClick={() => chooseService('tooth')}
                 className="group hover:cursor-pointer relative flex flex-row Tablet:flex-col bg-[#CCCCCC] rounded-lg text-center Tablet:gap-4 text-xl Tablet:pb-4 group h-[320px] w-[80vw] Tablet:w-auto Tablet:max-w-[350px]">
                 <Image className="basis-1/2 rounded-tl-lg rounded-bl-lg Tablet:rounded-bl-none Tablet:rounded-tr-lg group-hover:opacity-[30%] duration-500"
                     src="/ToothGemCover.jpg"
