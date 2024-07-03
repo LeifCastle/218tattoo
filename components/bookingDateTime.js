@@ -20,8 +20,8 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
 
     const dateTimeBar = useRef(null)
 
-    let SaturdayTimes = ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM"]
-    let SundayTimes = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"]
+    let SaturdayTimes = ["8:00am", "10:00am", "12:00pm", "2:00pm", "4:00pm"]
+    let SundayTimes = ["8:00am", "10:00am", "12:00pm", "2:00pm", "4:00pm"]
 
     let dynamicColumns = 5;
 
@@ -64,7 +64,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                             setSelectedTime(time)
                         }
                     }}
-                    className={`${bookedDateTimes[bookedDate]?.includes(time) ? 'hidden' : selectedTime === time ? 'bg-blue-500 hover:scale-105' : 'hover:scale-105 bg-white/15 hover:bg-white/30'} rounded-[12px] p-2`}>{time}</div>
+                    className={`${bookedDateTimes[bookedDate]?.includes(time) ? 'hidden' : selectedTime === time ? 'bg-teal-600 text-white' : 'bg-black/20 hover:bg-black/30'} text-xl hover:cursor-pointer text-black rounded-[12px] p-2`}>{time}</div>
             )
         }))
     }, [selectedDay, selectedTime])
@@ -142,7 +142,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
 
     return (
         <>
-            <div className="bg-blackA flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center">
                 <div ref={dateTimeBar} className="overflow-y-hidden transition-height ease-in-out duration-500">
                     <div className="flex flex-col items-center justify-center">
                         <div className="flex items-center justify-center mt-8">
@@ -153,7 +153,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                                 alt="NextPic"
                                 onClick={() => prevMonth()}
                             />
-                            <p className="text-2xl mx-10">{selectedMonth.format('MMMM')}</p>
+                            <p className="text-3xl text-black mx-10">{selectedMonth.format('MMMM')}</p>
                             <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'end' ? 'invisible' : 'visible'}`}
                                 src="/rightArrowWhite.png"
                                 width={30}
@@ -163,8 +163,8 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                             />
                         </div>
                         <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6 Tablet:text-xl px-4 Mobile-M:px-6 Tablet:px-10 py-8 place-items-center`}>
-                            <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-1 col-start-1">Saturday</div>
-                            <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-2 col-start-1">Sunday</div>
+                            <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-1 col-start-1 text-black">Saturday</div>
+                            <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-2 col-start-1 text-black">Sunday</div>
                             {selectedWeekends.map((weekend) => {
                                 return (
                                     <div key={weekend.day} onClick={() => {
@@ -175,9 +175,9 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                                             setSelectedDay(weekend)
                                         }
                                     }}
-                                        className={`${selectedDay.day === weekend.day ? 'bg-blue-500' : 'bg-white/15 hover:bg-white/30'} transition-all ease-in-out duration-250
+                                        className={`${selectedDay.day === weekend.day ? 'bg-teal-600 text-white' : 'bg-black/20 hover:bg-black/30 text-black'} text-4xl transition-all ease-in-out duration-250
                                         row-start-${weekend.which} flex items-center justify-center 
-                                        rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] hover:scale-110 hover:font-bold cursor-pointer`}>
+                                        rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] hover:scale-110 hover:cursor-pointer`}>
                                         {weekend.day}</div>
                                 )
                             })}
@@ -186,11 +186,6 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                     <div className={`${selectedDay === '' ? 'hidden' : 'block'} flex flex-wrap justify-center gap-6 Tablet:gap-12 py-6 overflow-hidden`}>
                         {timeOptions}
                     </div>
-                </div>
-
-                {/* Finalize Booking (without payment for now) */}
-                <div className="w-full flex justify-center py-10">
-                    <button type="submit" className={`${booked ? 'cursor-default' : 'hover:scale-[1.15]'} bg-blueA rounded-md p-5 text-2xl duration-[750ms]`}>Book Your Appointment</button>
                 </div>
             </div>
         </>

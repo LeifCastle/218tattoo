@@ -346,7 +346,7 @@ export default function Book() {
                         </div>
                     </div>
                     <div className='text-5xl text-black mt-20'>{formTitle}</div>
-                    <div className='w-full flex justify-center mt-4'><div className='w-[50vw] h-[2px] bg-gray-300'>s</div></div>
+                    <div className='w-full flex justify-center mt-4'><div className={`${formProgress <= 2 ? 'w-[50vw]' : 'w-[25vw]'}  h-[2px] bg-gray-300`}>s</div></div>
                     <div className='pb-10'>
                         {/*----Service Options----*/}
                         <div className={formProgress === 1 ? 'block' : 'hidden'}>
@@ -365,11 +365,11 @@ export default function Book() {
                                             </select>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
+                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Body Placement</p>
                                             <input id="Placement" placeholder="Left shoulder" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} ${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`}>Rough Size</p>
+                                            <p className={`${inputName}`}>Artwork Size</p>
                                             <input id="Size" placeholder="3 inches" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.service.size ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
@@ -419,13 +419,13 @@ export default function Book() {
                                             </div>
                                             :
                                             <div className="flex flex-col gap-2 items-start w-full h-full py-6">
-                                                <p className={`${inputName}`}>Chose tattoo design</p>
+                                                <p className={`${inputName}`}>Upload reference photo</p>
                                                 <div className='relative w-full h-full'>
                                                     <div className='w-full h-full duration-500 bg-black rounded-md'></div>
                                                     <div onClick={() => setDesignsWidget(!designsWidget)}
                                                         style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
                                                         className={`${design ? '' : 'border-gray-300 border-2 hover:cursor-pointer'} bg-cover rounded-md absolute top-0 left-0 rounded-md w-full h-full flex items-center justify-center bg-gray-100 group hover:bg-opacity-[90%] duration-500`}>
-                                                        <div className={`${design === '' ? 'block' : 'hidden hover:cursor-pointer'} text-black text-4xl group-hover:scale-[1.2] duration-500 hover:cursor-pointer`}>Choose Design</div>
+                                                        <div className={`${design === '' ? 'block' : 'hidden hover:cursor-pointer'} text-black text-4xl group-hover:scale-[1.2] duration-500 hover:cursor-pointer`}>Upload</div>
                                                         <div className={`${design === '' ? 'hidden' : 'block'} opacity-[50%] bg-white absolute top-0 right-0 w-[50px] h-[50px] rounded-bl-md rounded-tr-md`} onClick={() => setDesign()}>
                                                             <div className='absolute top-0 right-0 w-[50px] h-[60px] hover:cursor-pointer hover:scale-[1.25] duration-500'>
                                                                 <div className="hover:cursor-pointer absolute top-0 right-0 translate-x-[-22px] translate-y-[10px] rotate-45 bg-blackA rounded w-[5px] h-[30px]"></div>
@@ -433,7 +433,21 @@ export default function Book() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
+                                                    <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`}
+                                                        onSuccess={(results) => {
+                                                            console.log('Public ID', results);
+                                                            const url = results.info.url;
+                                                            console.log('URL: ', url)
+                                                            updatePhotoTiles(photo.id, url)
+                                                        }}>
+                                                        {({ open }) => {
+                                                            return (
+                                                                <div className="absolute top-0 left-0 w-full h-full hover:cursor-pointer" onClick={() => open()}>
+
+                                                                </div>
+                                                            );
+                                                        }}
+                                                    </CldUploadWidget>
                                                 </div>
                                             </div>
                                         }
@@ -443,7 +457,7 @@ export default function Book() {
                                 <div className="flex items-center w-full justify-between">
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
+                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Body Placement</p>
                                             <input placeholder="Canines" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
@@ -455,21 +469,12 @@ export default function Book() {
                                             <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
                                         </div>
                                     </div>
-                                    <div className='max-w-[350px] w-full'>
-                                        <p className={`${inputName}`}>Chose from over 100+ handpicked gems</p>
-                                        <div onClick={() => setDesignsWidget(!designsWidget)}
-                                            style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                            className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
-                                            <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Gems</div>
-                                        </div>
-                                        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Gem" />
-                                    </div>
                                 </div>
                             ) : ( //Pericing
-                                <div className="flex items-center w-full justify-between">
-                                    <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl">
+                                <div className="flex items-center justify-center w-full">
+                                    <div className="flex flex-col justify-center items-center gap-6 py-6 text-xl w-full max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Placement</p>
+                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Body Placement</p>
                                             <input placeholder="Ears" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
@@ -481,45 +486,32 @@ export default function Book() {
                                             <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
                                         </div>
                                     </div>
-                                    <div className='max-w-[350px] w-full'>
-                                        <p className={`${inputName}`}>Chose from over 100+ handpicked peircings</p>
-                                        <div onClick={() => setDesignsWidget(!designsWidget)}
-                                            style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                            className={`${design === '' ? errors.service.design ? 'bg-inputError h-[100px]' : 'bg-greyB h-[100px]' : 'h-[448px]'} ${booked ? '' : 'hover:scale-[1.075] hover:cursor-pointer'} bg-cover duration-500 rounded-[12px] w-full max-w-[448px] flex items-center justify-center relative`}>
-                                            <div className={`${design === '' ? 'block' : 'hidden'} text-white text-4xl hover:cursor-pointer`}>Browse Piercings</div>
-                                        </div>
-                                        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Piercings" />
-                                    </div>
                                 </div>
                             )}
                         </div>
                         {/*----Contact----*/}
-                        <div className={`${formProgress === 3 ? '' : 'hidden'}`}>
-                            <div className="flex items-center justify-center items-end gap-16 py-6 text-xl">
-                                <div className='flex flex-col gap-6'>
-                                    <div className="flex flex-col gap-2 items-start w-full">
-                                        <p className={`${inputName}`}>First Name</p>
-                                        <input id="name" placeholder="Mr" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.contact.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                    </div>
-                                    <div className="flex flex-col gap-2 items-start w-full">
-                                        <p className={`${inputName}`}>Email</p>
-                                        <input id="email" placeholder="me@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputField} ${errors.contact.email ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                    </div>
+                        <div className={`${formProgress === 3 ? '' : 'hidden'} py-10 w-[50vw] flex justify-center`}>
+                            <div className="flex flex-col justify-center items-center gap-6 py-6 text-xl w-full max-w-[350px]">
+                                <div className="flex flex-col gap-2 items-start w-full">
+                                    <p className={`${inputName}`}>First Name</p>
+                                    <input id="name" placeholder="John" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.contact.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
                                 </div>
-                                <div className='flex flex-col gap-6'>
-                                    <div className="flex flex-col gap-2 items-start w-full">
-                                        <p className={`${inputName}`}>Last Name</p>
-                                        <input id="name" placeholder="Me" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.contact.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                    </div>
-                                    <div className="flex flex-col gap-2 items-start w-full">
-                                        <p className={`${inputName}`}>Phone</p>
-                                        <input id="phone" placeholder="360-663-6036" value={phone} type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                                            onChange={(e) => {
-                                                const phoneNumber = e.target.value.replace(/[^\d-]/g, ""); // Remove non-numeric characters except "-"
-                                                e.target.value = phoneNumber;
-                                                setPhone(phoneNumber)
-                                            }} className={`${inputField} ${errors.contact.phone ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
-                                    </div>
+                                <div className="flex flex-col gap-2 items-start w-full">
+                                    <p className={`${inputName}`}>Last Name</p>
+                                    <input id="name" placeholder="Smith" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.contact.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                </div>
+                                <div className="flex flex-col gap-2 items-start w-full">
+                                    <p className={`${inputName}`}>Email</p>
+                                    <input id="email" placeholder="john.smith@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputField} ${errors.contact.email ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                </div>
+                                <div className="flex flex-col gap-2 items-start w-full">
+                                    <p className={`${inputName}`}>Phone</p>
+                                    <input id="phone" placeholder="123-456-7890" value={phone} type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                        onChange={(e) => {
+                                            const phoneNumber = e.target.value.replace(/[^\d-]/g, ""); // Remove non-numeric characters except "-"
+                                            e.target.value = phoneNumber;
+                                            setPhone(phoneNumber)
+                                        }} className={`${inputField} ${errors.contact.phone ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
                                 </div>
                             </div>
                         </div>
@@ -531,7 +523,7 @@ export default function Book() {
                     <div className='flex justify-between w-[50vw] mb-10'>
                         <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-200 ease-in-out border-gray-600 transition`}
                             onClick={() => setFormProgress(formProgress - 1)}>Previous</button>
-                        <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-teal-100 border duration-200 ease-in-out border-progressBarComplete transition`}
+                        <button type={`${formProgress === 4 ? 'submit' : "button"}`} className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-200 ease-in-out border-progressBarComplete transition`}
                             onClick={() => setFormProgress(formProgress + 1)}>{formProgress > 3 ? 'Book Appointment' : 'Next'}</button>
                     </div>
                 </div>
@@ -559,3 +551,25 @@ export default function Book() {
         </>
     )
 }
+
+
+
+//Choose design
+{/* <div className="flex flex-col gap-2 items-start w-full h-full py-6">
+    <p className={`${inputName}`}>Chose tattoo design</p>
+    <div className='relative w-full h-full'>
+        <div className='w-full h-full duration-500 bg-black rounded-md'></div>
+        <div onClick={() => setDesignsWidget(!designsWidget)}
+            style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
+            className={`${design ? '' : 'border-gray-300 border-2 hover:cursor-pointer'} bg-cover rounded-md absolute top-0 left-0 rounded-md w-full h-full flex items-center justify-center bg-gray-100 group hover:bg-opacity-[90%] duration-500`}>
+            <div className={`${design === '' ? 'block' : 'hidden hover:cursor-pointer'} text-black text-4xl group-hover:scale-[1.2] duration-500 hover:cursor-pointer`}>Choose Design</div>
+            <div className={`${design === '' ? 'hidden' : 'block'} opacity-[50%] bg-white absolute top-0 right-0 w-[50px] h-[50px] rounded-bl-md rounded-tr-md`} onClick={() => setDesign()}>
+                <div className='absolute top-0 right-0 w-[50px] h-[60px] hover:cursor-pointer hover:scale-[1.25] duration-500'>
+                    <div className="hover:cursor-pointer absolute top-0 right-0 translate-x-[-22px] translate-y-[10px] rotate-45 bg-blackA rounded w-[5px] h-[30px]"></div>
+                    <div className="hover:cursor-pointer absolute top-0 right-0 translate-x-[-22px] translate-y-[10px] rotate-[-45deg] bg-blackA rounded w-[5px] h-[30px]"></div>
+                </div>
+            </div>
+        </div>
+        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
+    </div>
+</div> */}
