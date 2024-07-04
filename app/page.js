@@ -47,7 +47,7 @@ export default function Home() {
       </div>
       <div className='bg-white/80'>
         <div className="relative bg text-black pt-10">
-          <p className="text-[1.8rem] w-full text-center text-7xl text-black/80 pb-10">Book An Appointment</p>
+          <p className="w-full text-center text-3xl Mobile-L:text-4xl Tablet:text-5xl Laptop:text-6xl text-black/80 px-4 pb-5 Tablet:pb-10">Book An Appointment</p>
           <ServiceOptions setService={setService} setFormProgress={setFormProgress} />
         </div >
         <div className='w-full flex justify-center mt-4'><div className={`${formProgress <= 2 ? 'w-[70vw]' : 'w-[25vw]'}  h-[3px] bg-black my-20`}></div></div>
