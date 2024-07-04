@@ -83,7 +83,7 @@ export default function Book() {
 
     //Tailwind CSS Presets
     let inputName = "text-sm text-black"
-    let inputField = `w-full rounded-md pl-2 text-black bg-white border-2 border-black focus:border-teal-600 focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
+    let inputField = `w-full rounded-md pl-2 text-black bg-white border-2 focus:border-teal-600 focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
 
     //--Checks for any errors in booking information (missing, etc...)
     function checkForErrors(usercheck) {
@@ -344,8 +344,8 @@ export default function Book() {
                             </div>
                         </div>
                     </div>
-                    <div className='text-5xl text-black mt-20'>{formTitle}</div>
-                    <div className='px-5 pb-5'>
+                    <div className='text-5xl text-black text-center mt-20'>{formTitle}</div>
+                    <div className='pb-5'>
                         {/*----Service Options----*/}
                         <div className={formProgress === 1 ? 'block' : 'hidden'}>
                             <ServiceOptions setService={setService} setFormProgress={setFormProgress} />
@@ -354,7 +354,7 @@ export default function Book() {
                         <div className={`${formProgress === 2 ? 'block' : 'hidden'} pt-10 Tablet:pb-10 w-full`}>
                             {service === 'tattoo' ? ( //Tattoo 
                                 <div className="flex flex-col Tablet:flex-row items-center Tablet:items-stretch Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
-                                    <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-L:max-w-[350px]">
+                                    <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Select Design</p>
                                             <select placeholder="Select" value={tattooDesign} onChange={(e) => setTattooDesign(e.target.value)} className={`${inputField} border-[#998C7E]`}>
@@ -375,7 +375,7 @@ export default function Book() {
                                             <textarea id="Comments" placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} ${errors.service.comments ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} h-[15vh]`}></textarea>
                                         </div>
                                     </div>
-                                    <div className='max-w-[250px] Mobile-L:max-w-[350px] w-full flex-1'>
+                                    <div className='max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px] w-full flex-1'>
                                         {tattooDesign === "custom" ?
                                             <div>
                                                 <div className="flex flex-col gap-4 items-center">
@@ -392,7 +392,7 @@ export default function Book() {
                                                                         height={50}
                                                                         alt="Add Reference Photo"
                                                                     />
-                                                                    <div className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} absolute bottom-0 Tablet:bottom-[6px] text-black}`}>Upload</div>
+                                                                    <div className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} h-[150px] absolute bottom-0 Tablet:bottom-[6px] text-black}`}>Upload</div>
                                                                     <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`}
                                                                         onSuccess={(results) => {
                                                                             console.log('Public ID', results);
@@ -418,7 +418,7 @@ export default function Book() {
                                             :
                                             <div className="flex flex-col gap-2 items-start w-full h-full py-6">
                                                 <p className={`${inputName}`}>Upload reference photo</p>
-                                                <div className='relative w-full h-[150px] Tablet:h-full h-full'>
+                                                <div className='relative w-full h-[150px] Tablet:h-full'>
                                                     <div className='w-full h-full duration-500 bg-black rounded-md'></div>
                                                     <div onClick={() => setDesignsWidget(!designsWidget)}
                                                         style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
@@ -518,11 +518,11 @@ export default function Book() {
                             <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} />
                         </div>
                     </div>
-                    <div className='flex justify-between justify-between Mobile-L:[px-10] w-[250px] Mobile-L:w-[350px] Tablet:w-[80vw] Monitor:w-[50vw] mb-10'>
+                    <div className='flex justify-between justify-between Mobile-L:[px-10] w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px] Tablet:w-[80vw] Monitor:w-[50vw] mb-10'>
                         <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-300 ease-in-out border-gray-600 transition`}
                             onClick={() => setFormProgress(formProgress - 1)}>Previous</button>
                         <button type={`${formProgress === 4 ? 'submit' : "button"}`} className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
-                            onClick={() => setFormProgress(formProgress + 1)}>{formProgress > 3 ? 'Book Appointment' : 'Next'}</button>
+                            onClick={() => setFormProgress(formProgress + 1)}>{formProgress > 3 ? 'Book' : 'Next'}</button>
                     </div>
                 </div>
             </form>
