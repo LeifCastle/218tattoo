@@ -1,16 +1,25 @@
 
+"use client"
+
 import Image from "next/image"
-import { useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function ServiceOptions({ setService, setFormProgress }) {
+
+    const router = useRouter()
+    const currentPath = usePathname();
 
     function chooseService(service) {
         setService(service)
         setFormProgress(2)
+        if (currentPath === process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000') {
+            router.push('/book')
+        }
     }
 
+
     return (
-        <div className="relative bg-white text-black flex items-center justify-center gap-10 mt-10 flex flex-col Tablet:flex-row mx-10">
+        <div className="relative text-black flex items-center justify-center gap-10 mt-10 flex flex-col Tablet:flex-row mx-10">
             <div
                 onClick={() => chooseService('piercing')}
                 className="group hover:cursor-pointer relative flex flex-row Tablet:flex-col bg-[#CCCCCC] rounded-lg text-center Tablet:gap-4 text-xl Tablet:pb-4 group h-[320px] w-[80vw] Tablet:w-auto Tablet:max-w-[350px]">
@@ -20,7 +29,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
                     height={400}
                     alt="Tattoo"
                 />
-                <div className="hover:cursor-pointer absolute bottom-0 left-0 w-full rounded-bl-lg rounded-br-lg bg-[#CCCCCC] flex flex-col justify-center items-center h-[33%] group-hover:h-[40%] duration-500">
+                <div className="hover:cursor-pointer absolute bottom-0 left-0 w-full rounded-bl-lg rounded-br-lg bg-white flex flex-col justify-center items-center h-[33%] group-hover:h-[40%] duration-500">
                     <p className="hover:cursor-pointer font-bold">Ear Piercing</p>
                     <p className="hover:cursor-pointer">$15 Depoist</p>
                 </div>
@@ -34,7 +43,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
                     height={400}
                     alt="Tattoo"
                 />
-                <div className="hover:cursor-pointer absolute bottom-0 left-0 w-full rounded-bl-lg rounded-br-lg bg-[#CCCCCC] flex flex-col justify-center items-center h-[33%] group-hover:h-[40%] duration-500">
+                <div className="hover:cursor-pointer absolute bottom-0 left-0 w-full rounded-bl-lg rounded-br-lg bg-white flex flex-col justify-center items-center h-[33%] group-hover:h-[40%] duration-500">
                     <p className="hover:cursor-pointer font-bold">Tattoo Session</p>
                     <p className="hover:cursor-pointer">$25 Depoist</p>
                 </div>
@@ -48,7 +57,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
                     height={400}
                     alt="Tattoo"
                 />
-                <div className="hover:cursor-pointer absolute bottom-0 left-0 w-full rounded-bl-lg rounded-br-lg bg-[#CCCCCC] flex flex-col justify-center items-center h-[33%] group-hover:h-[40%] duration-500">
+                <div className="hover:cursor-pointer absolute bottom-0 left-0 w-full rounded-bl-lg rounded-br-lg bg-white flex flex-col justify-center items-center h-[33%] group-hover:h-[40%] duration-500">
                     <p className="hover:cursor-pointer font-bold">Tooth Gem</p>
                     <p className="hover:cursor-pointer">$15 Depoist</p>
                 </div>

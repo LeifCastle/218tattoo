@@ -78,6 +78,7 @@ module.exports = {
       },
       backgroundImage: {
         'homePage': "url('https://marineagency.com/wp-content/uploads/2020/10/Screen-Shot-2020-10-16-at-9.28.25-AM-1024x679.png')",
+        'test': "url('https://png.pngtree.com/thumb_back/fh260/background/20231104/pngtree-abstract-texture-subtle-gray-light-overlay-image_13781884.png')"
       },
     },
   },
