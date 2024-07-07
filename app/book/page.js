@@ -3,10 +3,10 @@
 import axios from 'axios';
 import Image from 'next/image.js';
 import BookingDateTime from "../../components/bookingDateTime"
-import Designs from "../../components/designs"
 import { useRef, useState, useEffect, useContext } from "react"
 import { GlobalStateContext } from '../utils/context.js';
 import { CldUploadWidget } from 'next-cloudinary';
+import CustomUpload from "../../components/customUpload"
 
 import ServiceOptions from "../../components/serviceOptions"
 
@@ -34,6 +34,7 @@ export default function Book() {
     const [designsWidget, setDesignsWidget] = useState(false); //Sets the visibility of the designs widget (images from cloudinary folder)
     const hasErrors = useRef(false)
     const errorBar = useRef(null)
+    const uploadRef = useRef(null)
     const [formTitle, setFormTitle] = useState('Service')
     const [scrolled, setScrolled] = useState(false)
 
@@ -86,78 +87,78 @@ export default function Book() {
     let inputField = `w-full rounded-md pl-2 text-black bg-white border-2 focus:border-teal-600 focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
 
     //--Checks for any errors in booking information (missing, etc...)
-    function checkForErrors(usercheck) {
-        function checkForData(section, key) {
-            let booking = newBooking[section]
-            let errors = newErrors[section]
-            if (!booking[key]) {
-                if (usercheck) {
-                    errors[key] = true;
-                    hasErrors.current = true;
-                    errorBar.current.style.display = "block"
-                    setTimeout(() => {
-                        errorBar.current.style.display = "none"
-                    }, 3500)
-                }
-            } else {
-                errors[key] = false;
-            }
-        }
-        hasErrors.current = false
-        const newErrors = { ...errors };
-        for (const section in newBooking) {
-            for (const key in newBooking[section]) {
-                switch (key) {
-                    case "comments":
-                        if (tattooDesign === "custom") {
-                            checkForData(section, key)
-                        }
-                        break;
-                    case "size":
-                        if (service === "tattoo") {
-                            checkForData(section, key)
-                        }
-                        break;
-                    case "count":
-                        if (service !== "tattoo") {
-                            checkForData(section, key)
-                        }
-                        break;
-                    case "referencePhotos":
-                        if (tattooDesign === "custom") {
-                            checkForData(section, key)
-                        }
-                        break;
-                    case "phone":
-                        if (!email) {
-                            checkForData(section, key)
-                        } else {
-                            errors.contact.phone = false
-                        }
-                        break;
-                    case "design":
-                        if (tattooDesign !== "custom") {
-                            checkForData(section, key)
-                        }
-                        break;
-                    case "email":
-                        if (!phone) {
-                            checkForData(section, key)
-                        }
-                        else {
-                            errors.contact.email = false
-                        }
-                        break;
-                    case "tattooDesign":
-                        break;
-                    default:
-                        checkForData(section, key)
-                }
-            }
-        }
-        setErrors(newErrors);
-        //console.log('Errors: ', newErrors)
-    }
+    // function checkForErrors(usercheck) {
+    //     function checkForData(section, key) {
+    //         let booking = newBooking[section]
+    //         let errors = newErrors[section]
+    //         if (!booking[key]) {
+    //             if (usercheck) {
+    //                 errors[key] = true;
+    //                 hasErrors.current = true;
+    //                 errorBar.current.style.display = "block"
+    //                 setTimeout(() => {
+    //                     errorBar.current.style.display = "none"
+    //                 }, 3500)
+    //             }
+    //         } else {
+    //             errors[key] = false;
+    //         }
+    //     }
+    //     hasErrors.current = false
+    //     const newErrors = { ...errors };
+    //     for (const section in newBooking) {
+    //         for (const key in newBooking[section]) {
+    //             switch (key) {
+    //                 case "comments":
+    //                     if (tattooDesign === "custom") {
+    //                         checkForData(section, key)
+    //                     }
+    //                     break;
+    //                 case "size":
+    //                     if (service === "tattoo") {
+    //                         checkForData(section, key)
+    //                     }
+    //                     break;
+    //                 case "count":
+    //                     if (service !== "tattoo") {
+    //                         checkForData(section, key)
+    //                     }
+    //                     break;
+    //                 case "referencePhotos":
+    //                     if (tattooDesign === "custom") {
+    //                         checkForData(section, key)
+    //                     }
+    //                     break;
+    //                 case "phone":
+    //                     if (!email) {
+    //                         checkForData(section, key)
+    //                     } else {
+    //                         errors.contact.phone = false
+    //                     }
+    //                     break;
+    //                 case "design":
+    //                     if (tattooDesign !== "custom") {
+    //                         checkForData(section, key)
+    //                     }
+    //                     break;
+    //                 case "email":
+    //                     if (!phone) {
+    //                         checkForData(section, key)
+    //                     }
+    //                     else {
+    //                         errors.contact.email = false
+    //                     }
+    //                     break;
+    //                 case "tattooDesign":
+    //                     break;
+    //                 default:
+    //                     checkForData(section, key)
+    //             }
+    //         }
+    //     }
+    //     setErrors(newErrors);
+    //     //console.log('Errors: ', newErrors)
+    // }
 
     //--Updates error status on-the-fly
     useEffect(() => {
@@ -255,6 +256,19 @@ export default function Book() {
             }
         });
     }, [])
+
+    function checkForErrors() {
+        setFormProgress(formProgress + 1)
+    }
+
+    function advanceFormProgress(){
+        switch (formProgress){
+            case 2:
+            checkForErrors(2)
+            break;
+        }
+        
+    }
 
     return (
         <>
@@ -356,15 +370,24 @@ export default function Book() {
                                 <div className="flex flex-col Tablet:flex-row items-center Tablet:items-stretch Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Select Design</p>
+                                            <p className={`${inputName}`}>Select Design</p>
                                             <select placeholder="Select" value={tattooDesign} onChange={(e) => setTattooDesign(e.target.value)} className={`${inputField} border-[#998C7E]`}>
                                                 <option value="flash">Flash Design</option>
                                                 <option value="custom">Custom Design</option>
                                             </select>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Body Placement</p>
-                                            <input id="Placement" placeholder="Left shoulder" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} ${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                            <p className={`${inputName}`}>Body Placement</p>
+                                            <select placeholder="Select" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} border-[#998C7E]`}>
+                                                <option value="arm">Arm</option>
+                                                <option value="shoulder">Shoulder</option>
+                                                <option value="hand">Hand</option>
+                                                <option value="neck">Neck</option>
+                                                <option value="torso">Torso</option>
+                                                <option value="leg">Leg</option>
+                                                <option value="feet">Feet</option>
+                                                <option value="other">Other</option>
+                                            </select>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Artwork Size</p>
@@ -375,81 +398,7 @@ export default function Book() {
                                             <textarea id="Comments" placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} ${errors.service.comments ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} h-[15vh]`}></textarea>
                                         </div>
                                     </div>
-                                    <div className='max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px] w-full flex-1'>
-                                        {tattooDesign === "custom" ?
-                                            <div>
-                                                <div className="flex flex-col gap-4 items-center">
-                                                    <p className={`${inputName}`}>Reference Photos</p>
-                                                    <div className="flex gap-4 h-[150px]">
-                                                        {referencePhotos.map(photo => {
-                                                            return (
-                                                                <div key={photo.id} onChange={(e) => setComments(e.target.value)}
-                                                                    style={{ backgroundImage: (photo.src === '/addFile.png' ? 'none' : `url(${photo.src})`) }}
-                                                                    className={`rounded-[12px] w-[75px] h-[75px] Tablet:w-[100px] Tablet:h-[100px] bg-${photo.src === '/addFile.png' ? 'greyB' : ''} bg-cover flex items-center justify-center relative`}>
-                                                                    <Image className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} rounded-lg hover:scale-125 transition-all ease-in-out duration-500 cursor-pointer mb-[12px]`}
-                                                                        src={photo.src}
-                                                                        width={50}
-                                                                        height={50}
-                                                                        alt="Add Reference Photo"
-                                                                    />
-                                                                    <div className={`${photo.src === '/addFile.png' ? photo.src : 'hidden'} h-[150px] absolute bottom-0 Tablet:bottom-[6px] text-black}`}>Upload</div>
-                                                                    <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`}
-                                                                        onSuccess={(results) => {
-                                                                            console.log('Public ID', results);
-                                                                            const url = results.info.url;
-                                                                            console.log('URL: ', url)
-                                                                            updatePhotoTiles(photo.id, url)
-                                                                        }}>
-                                                                        {({ open }) => {
-                                                                            return (
-                                                                                <div className="absolute top-0 left-0 w-full h-full hover:cursor-pointer" onClick={() => open()}>
-
-                                                                                </div>
-                                                                            );
-                                                                        }}
-                                                                    </CldUploadWidget>
-                                                                </div>
-                                                            )
-                                                        })
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            :
-                                            <div className="flex flex-col gap-2 items-start w-full h-full py-6">
-                                                <p className={`${inputName}`}>Upload reference photo</p>
-                                                <div className='relative w-full h-[150px] Tablet:h-full'>
-                                                    <div className='w-full h-full duration-500 bg-black rounded-md'></div>
-                                                    <div onClick={() => setDesignsWidget(!designsWidget)}
-                                                        style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-                                                        className={`${design ? '' : 'border-gray-400 border-2 hover:cursor-pointer'} bg-cover rounded-md absolute top-0 left-0 rounded-md w-full h-full flex items-center justify-center bg-gray-100 group hover:bg-opacity-[90%] duration-500`}>
-                                                        <div className={`${design === '' ? 'block' : 'hidden hover:cursor-pointer'} text-black text-4xl group-hover:scale-[1.2] duration-500 hover:cursor-pointer`}>Upload</div>
-                                                        <div className={`${design === '' ? 'hidden' : 'block'} opacity-[50%] bg-white absolute top-0 right-0 w-[50px] h-[50px] rounded-bl-md rounded-tr-md`} onClick={() => setDesign()}>
-                                                            <div className='absolute top-0 right-0 w-[50px] h-[60px] hover:cursor-pointer hover:scale-[1.25] duration-500'>
-                                                                <div className="hover:cursor-pointer absolute top-0 right-0 translate-x-[-22px] translate-y-[10px] rotate-45 bg-blackA rounded w-[5px] h-[30px]"></div>
-                                                                <div className="hover:cursor-pointer absolute top-0 right-0 translate-x-[-22px] translate-y-[10px] rotate-[-45deg] bg-blackA rounded w-[5px] h-[30px]"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <CldUploadWidget signatureEndpoint={`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`}
-                                                        onSuccess={(results) => {
-                                                            console.log('Public ID', results);
-                                                            const url = results.info.url;
-                                                            console.log('URL: ', url)
-                                                            updatePhotoTiles(photo.id, url)
-                                                        }}>
-                                                        {({ open }) => {
-                                                            return (
-                                                                <div className="absolute top-0 left-0 w-full h-full hover:cursor-pointer" onClick={() => open()}>
-
-                                                                </div>
-                                                            );
-                                                        }}
-                                                    </CldUploadWidget>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
+                                    <CustomUpload setReferencePhotos={setReferencePhotos}/>
                                 </div>
                             ) : service === 'tooth' ? ( //Tooth Gem
                                 <div className="flex items-center w-full justify-between">
@@ -488,8 +437,8 @@ export default function Book() {
                             )}
                         </div>
                         {/*----Contact----*/}
-                        <div className={`${formProgress === 3 ? '' : 'hidden'} py-5 Tablet:py-10 w-[250px] Mobile-L:w-[350px] flex justify-center`}>
-                            <div className="flex flex-col justify-center items-center gap-6 text-xl w-full max-w-[350px]">
+                        <div className={`${formProgress === 3 ? '' : 'hidden'} py-5 Tablet:py-10 w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px] flex justify-center`}>
+                            <div className="flex flex-col justify-center items-center gap-6 text-xl w-full">
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>First Name</p>
                                     <input id="name" placeholder="John" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.contact.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
@@ -514,7 +463,7 @@ export default function Book() {
                             </div>
                         </div>
                         {/*----Appointment----*/}
-                        <div className={`${formProgress === 4 ? '' : 'hidden'} w-[250px] Mobile-L:w-[350px]`}>
+                        <div className={`${formProgress === 4 ? '' : 'hidden'} w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px]`}>
                             <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} />
                         </div>
                     </div>
@@ -522,7 +471,7 @@ export default function Book() {
                         <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-300 ease-in-out border-gray-600 transition`}
                             onClick={() => setFormProgress(formProgress - 1)}>Previous</button>
                         <button type={`${formProgress === 4 ? 'submit' : "button"}`} className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
-                            onClick={() => setFormProgress(formProgress + 1)}>{formProgress > 3 ? 'Book' : 'Next'}</button>
+                            onClick={() => advanceFormProgress()}>{formProgress > 3 ? 'Book' : 'Next'}</button>
                     </div>
                 </div>
             </form>
@@ -549,25 +498,3 @@ export default function Book() {
         </>
     )
 }
-
-
-
-//Choose design
-{/* <div className="flex flex-col gap-2 items-start w-full h-full py-6">
-    <p className={`${inputName}`}>Chose tattoo design</p>
-    <div className='relative w-full h-full'>
-        <div className='w-full h-full duration-500 bg-black rounded-md'></div>
-        <div onClick={() => setDesignsWidget(!designsWidget)}
-            style={{ backgroundImage: (design === '' ? 'none' : `url(${design})`) }}
-            className={`${design ? '' : 'border-gray-400 border-2 hover:cursor-pointer'} bg-cover rounded-md absolute top-0 left-0 rounded-md w-full h-full flex items-center justify-center bg-gray-100 group hover:bg-opacity-[90%] duration-500`}>
-            <div className={`${design === '' ? 'block' : 'hidden hover:cursor-pointer'} text-black text-4xl group-hover:scale-[1.2] duration-500 hover:cursor-pointer`}>Choose Design</div>
-            <div className={`${design === '' ? 'hidden' : 'block'} opacity-[50%] bg-white absolute top-0 right-0 w-[50px] h-[50px] rounded-bl-md rounded-tr-md`} onClick={() => setDesign()}>
-                <div className='absolute top-0 right-0 w-[50px] h-[60px] hover:cursor-pointer hover:scale-[1.25] duration-500'>
-                    <div className="hover:cursor-pointer absolute top-0 right-0 translate-x-[-22px] translate-y-[10px] rotate-45 bg-blackA rounded w-[5px] h-[30px]"></div>
-                    <div className="hover:cursor-pointer absolute top-0 right-0 translate-x-[-22px] translate-y-[10px] rotate-[-45deg] bg-blackA rounded w-[5px] h-[30px]"></div>
-                </div>
-            </div>
-        </div>
-        <Designs visibility={designsWidget} setVisibility={setDesignsWidget} setDesign={setDesign} designType="Test" />
-    </div>
-</div> */}
