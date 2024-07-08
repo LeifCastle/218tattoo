@@ -24,19 +24,18 @@ export default function Book() {
     const [size, setSize] = useState('')
     const [count, setCount] = useState('')
     const [comments, setComments] = useState('')
-    const [tattooDesign, setTattooDesign] = useState('flash') //Custom or flash
-    const [design, setDesign] = useState('')
+    const [designType, setDesignType] = useState('')
     const [referencePhotos, setReferencePhotos] = useState([{ id: 1, src: '/addFile.png' }, { id: 2, src: '/addFile.png' }, { id: 3, src: '/addFile.png' }, { id: 4, src: '/addFile.png' }])
     const { service, setService } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
     const { formProgress, setFormProgress } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
+    const userSubmissionAttempt = useRef(false);
 
     const [booked, setBooked] = useState(false)
-    const [designsWidget, setDesignsWidget] = useState(false); //Sets the visibility of the designs widget (images from cloudinary folder)
     const hasErrors = useRef(false)
     const errorBar = useRef(null)
-    const uploadRef = useRef(null)
     const [formTitle, setFormTitle] = useState('Service')
     const [scrolled, setScrolled] = useState(false)
+
 
 
     //--Form values to be submitted to server
@@ -51,119 +50,30 @@ export default function Book() {
         },
         service: {
             service: service,
-            tattooDesign: tattooDesign,
+            designType: designType,
             placement: placement,
             size: size,
             count: count,
             comments: comments,
-            design: design,
             referencePhotos: referencePhotos,
         }
     }
 
     const [errors, setErrors] = useState({
-        appointment: {
-            dateTime: false,
-        },
-        contact: {
-            name: false,
-            email: false,
-            phone: false,
-        },
-        service: {
-            service: false,
-            tattooDesign: false,
-            placement: false,
-            size: false,
-            comments: false,
-            design: false,
-            referencePhotos: false,
-            count: false,
-        }
+        //Service Details
+        designType: false,
+        placement: false,
+        size: false,
+        count: false,
+        comments: false,
+
+        //Contact
+        name: false,
     })
 
     //Tailwind CSS Presets
     let inputName = "text-sm text-black"
     let inputField = `w-full rounded-md pl-2 text-black bg-white border-2 focus:border-teal-600 focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
-
-    //--Checks for any errors in booking information (missing, etc...)
-    // function checkForErrors(usercheck) {
-    //     function checkForData(section, key) {
-    //         let booking = newBooking[section]
-    //         let errors = newErrors[section]
-    //         if (!booking[key]) {
-    //             if (usercheck) {
-    //                 errors[key] = true;
-    //                 hasErrors.current = true;
-    //                 errorBar.current.style.display = "block"
-    //                 setTimeout(() => {
-    //                     errorBar.current.style.display = "none"
-    //                 }, 3500)
-    //             }
-    //         } else {
-    //             errors[key] = false;
-    //         }
-    //     }
-    //     hasErrors.current = false
-    //     const newErrors = { ...errors };
-    //     for (const section in newBooking) {
-    //         for (const key in newBooking[section]) {
-    //             switch (key) {
-    //                 case "comments":
-    //                     if (tattooDesign === "custom") {
-    //                         checkForData(section, key)
-    //                     }
-    //                     break;
-    //                 case "size":
-    //                     if (service === "tattoo") {
-    //                         checkForData(section, key)
-    //                     }
-    //                     break;
-    //                 case "count":
-    //                     if (service !== "tattoo") {
-    //                         checkForData(section, key)
-    //                     }
-    //                     break;
-    //                 case "referencePhotos":
-    //                     if (tattooDesign === "custom") {
-    //                         checkForData(section, key)
-    //                     }
-    //                     break;
-    //                 case "phone":
-    //                     if (!email) {
-    //                         checkForData(section, key)
-    //                     } else {
-    //                         errors.contact.phone = false
-    //                     }
-    //                     break;
-    //                 case "design":
-    //                     if (tattooDesign !== "custom") {
-    //                         checkForData(section, key)
-    //                     }
-    //                     break;
-    //                 case "email":
-    //                     if (!phone) {
-    //                         checkForData(section, key)
-    //                     }
-    //                     else {
-    //                         errors.contact.email = false
-    //                     }
-    //                     break;
-    //                 case "tattooDesign":
-    //                     break;
-    //                 default:
-    //                     checkForData(section, key)
-    //             }
-    //         }
-    //     }
-    //     setErrors(newErrors);
-    //     //console.log('Errors: ', newErrors)
-    // }
-
-    //--Updates error status on-the-fly
-    useEffect(() => {
-        checkForErrors()
-    }, [name, email, phone, dateTime, service, tattooDesign, placement, size, count, comments, design, referencePhotos])
 
     //--Submits booking
     function handleBooking(e) {
@@ -184,35 +94,6 @@ export default function Book() {
         }
     }
 
-    function updatePhotoTiles(id, url) {
-        const update = referencePhotos.map(photo => {
-            if (photo.id === id) {
-                console.log(photo.id)
-                photo.src = url
-                console.log('Photo: ', photo)
-                return photo;
-            }
-            else {
-                return photo;
-            }
-        })
-        setReferencePhotos(update)
-    }
-
-    function handleDesignChoice(choice) {
-        setService(choice)
-        setDesign('') //Resets design image
-        setCount('')
-        setPlacement('')
-        setComments('')
-        setSize('')
-        let newErrors = errors;
-        for (let key in newErrors.service) {
-            newErrors.service[key] = false
-        }
-        setErrors(newErrors)
-    }
-
     function disableScrolling() {
         document.documentElement.style.overflow = 'hidden';
         document.body.style.overflow = 'hidden';
@@ -223,7 +104,25 @@ export default function Book() {
         document.body.style.overflow = '';
     }
 
-    //Sets the form title according to a user's form progress
+    //--Disables/Enables Scrolling based on booked status
+    useEffect(() => {
+        booked ? disableScrolling() : enableScrolling()
+    }, [booked])
+
+    //--Sets scrolled status
+    useEffect(() => {
+        window.addEventListener('scroll', function () {
+            const scrollPosition = window.scrollY;
+            if (scrollPosition > 1) {
+                setScrolled(true)
+            }
+            if (scrollPosition < 1) {
+                setScrolled(false)
+            }
+        });
+    }, [])
+
+    //--Sets the form title according to a user's form progress
     useEffect(() => {
         switch (formProgress) {
             case 1:
@@ -241,34 +140,40 @@ export default function Book() {
         }
     }, [formProgress])
 
-    useEffect(() => {
-        booked ? disableScrolling() : enableScrolling()
-    }, [booked])
-
-    useEffect(() => {
-        window.addEventListener('scroll', function () {
-            const scrollPosition = window.scrollY;
-            if (scrollPosition > 1) {
-                setScrolled(true)
+    function updateErrorStatus(inputs) {
+        let noErrors = true;
+        for (let key in inputs) {
+            if (inputs[key] === "" && userSubmissionAttempt.current === true) {
+                setErrors(prevErrors => ({ ...prevErrors, [key]: true }));
+                noErrors = false;
+            } else {
+                setErrors(prevErrors => ({ ...prevErrors, [key]: false }));
             }
-            if (scrollPosition < 1) {
-                setScrolled(false)
-            }
-        });
-    }, [])
-
-    function checkForErrors() {
-        setFormProgress(formProgress + 1)
-    }
-
-    function advanceFormProgress(){
-        switch (formProgress){
-            case 2:
-            checkForErrors(2)
-            break;
         }
-        
+        if (noErrors && userSubmissionAttempt.current === true) {
+            setFormProgress(prevProgress => prevProgress + 1); // Increment form progress
+            userSubmissionAttempt.current = false; // Update user submission attempt flag
+        }
     }
+
+    // Effect to update error status whenever inputs change
+    useEffect(() => {
+        updateErrorStatus({ designType, placement, size, count, comments });
+    }, [designType, placement, size, count, comments]);
+
+    // Function to advance form progress
+    function advanceFormProgress() {
+        userSubmissionAttempt.current = true; // Set submission attempt flag
+
+        switch (formProgress) {
+            case 2:
+                updateErrorStatus({ designType, placement, size, count, comments });
+                break;
+            default:
+                break;
+        }
+    }
+
 
     return (
         <>
@@ -370,15 +275,17 @@ export default function Book() {
                                 <div className="flex flex-col Tablet:flex-row items-center Tablet:items-stretch Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`}>Select Design</p>
-                                            <select placeholder="Select" value={tattooDesign} onChange={(e) => setTattooDesign(e.target.value)} className={`${inputField} border-[#998C7E]`}>
+                                            <p className={`${inputName}`}>Tattoo Design</p>
+                                            <select value={designType} onChange={(e) => setDesignType(e.target.value)} className={`${inputField} ${errors.designType ? 'border-inputError' : 'border-inputBorder'}`}>
+                                                <option className="hidden" value="" disabled>Select Design</option>
                                                 <option value="flash">Flash Design</option>
                                                 <option value="custom">Custom Design</option>
                                             </select>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Body Placement</p>
-                                            <select placeholder="Select" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} border-[#998C7E]`}>
+                                            <select value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} ${errors.placement ? 'border-inputError' : 'border-inputBorder'}`}>
+                                                <option value="" disabled className='hidden'>Select Placement</option>
                                                 <option value="arm">Arm</option>
                                                 <option value="shoulder">Shoulder</option>
                                                 <option value="hand">Hand</option>
@@ -391,14 +298,14 @@ export default function Book() {
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Artwork Size</p>
-                                            <input id="Size" placeholder="3 inches" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.service.size ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                            <input placeholder="3 inches" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Description</p>
-                                            <textarea id="Comments" placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} ${errors.service.comments ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} h-[15vh]`}></textarea>
+                                            <textarea placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`h-[15vh] ${inputField}`}></textarea>
                                         </div>
                                     </div>
-                                    <CustomUpload setReferencePhotos={setReferencePhotos}/>
+                                    <CustomUpload setReferencePhotos={setReferencePhotos} />
                                 </div>
                             ) : service === 'tooth' ? ( //Tooth Gem
                                 <div className="flex items-center w-full justify-between">
@@ -441,15 +348,15 @@ export default function Book() {
                             <div className="flex flex-col justify-center items-center gap-6 text-xl w-full">
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>First Name</p>
-                                    <input id="name" placeholder="John" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.contact.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    <input id="name" placeholder="John" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
                                 </div>
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>Last Name</p>
-                                    <input id="name" placeholder="Smith" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.contact.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    <input id="name" placeholder="Smith" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} `}></input>
                                 </div>
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>Email</p>
-                                    <input id="email" placeholder="john.smith@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputField} ${errors.contact.email ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    <input id="email" placeholder="john.smith@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputField}'}`}></input>
                                 </div>
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>Phone</p>
@@ -458,7 +365,7 @@ export default function Book() {
                                             const phoneNumber = e.target.value.replace(/[^\d-]/g, ""); // Remove non-numeric characters except "-"
                                             e.target.value = phoneNumber;
                                             setPhone(phoneNumber)
-                                        }} className={`${inputField} ${errors.contact.phone ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                        }} className={`${inputField} `}></input>
                                 </div>
                             </div>
                         </div>

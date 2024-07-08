@@ -51,8 +51,8 @@ module.exports = {
         'mobileNavInactiveSize': '3rem',
       },
       borderColor: {
-        inputBorder: "#3882F6",
-        inputError: "#8E0000",
+        inputError: "#B91C1C",
+        inputBorder: "#998C7E",
       },
       colors: {
         NavbarBackground: '#FFFFFF',
