@@ -15,16 +15,23 @@ export default function Book() {
         baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
 
-    //--Form Values
-    const [dateTime, setDateTime] = useState('')
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
+    //**----Form Values----**//
+    //Service Details
     const [placement, setPlacement] = useState('')
     const [size, setSize] = useState('')
     const [count, setCount] = useState('')
     const [comments, setComments] = useState('')
     const [designType, setDesignType] = useState('')
+
+    //Contact
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+
+    //Appointment
+    const [dateTime, setDateTime] = useState('')
+
     const [referencePhotos, setReferencePhotos] = useState([{ id: 1, src: '/addFile.png' }, { id: 2, src: '/addFile.png' }, { id: 3, src: '/addFile.png' }, { id: 4, src: '/addFile.png' }])
     const { service, setService } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
     const { formProgress, setFormProgress } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
@@ -44,7 +51,8 @@ export default function Book() {
             dateTime: dateTime,
         },
         contact: {
-            name: name,
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             phone: phone,
         },
@@ -68,7 +76,10 @@ export default function Book() {
         comments: false,
 
         //Contact
-        name: false,
+        firstName: false,
+        lastName: false,
+        email: false,
+        phone: false,
     })
 
     //Tailwind CSS Presets
@@ -167,11 +178,30 @@ export default function Book() {
 
         switch (formProgress) {
             case 2:
-                updateErrorStatus({ designType, placement, size, count, comments });
-                break;
-            default:
+                switch (service) {
+                    case 'tattoo':
+                        updateErrorStatus({ designType, placement, size, comments });
+                        break;
+                    case 'piercing':
+                        updateErrorStatus({ placement, count, comments });
+                        break;
+                    case 'tooth':
+                        updateErrorStatus({ size, count, comments });
+                        break;
+                }
+            case 3:
+                updateErrorStatus({ firstName, lastName, email, phone });
                 break;
         }
+    }
+
+    function regressFormProgress() {
+        let resetErrors = errors
+        for (let input in resetErrors) {
+            resetErrors[input] = false;
+        }
+        setErrors(resetErrors);
+        setFormProgress(formProgress - 1)
     }
 
 
@@ -298,11 +328,11 @@ export default function Book() {
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Artwork Size</p>
-                                            <input placeholder="3 inches" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField}`}></input>
+                                            <input placeholder="3 inches" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.size ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Description</p>
-                                            <textarea placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`h-[15vh] ${inputField}`}></textarea>
+                                            <textarea placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`h-[15vh] ${inputField} ${errors.comments ? 'border-inputError' : 'border-inputBorder'}`}></textarea>
                                         </div>
                                     </div>
                                     <CustomUpload setReferencePhotos={setReferencePhotos} />
@@ -311,16 +341,16 @@ export default function Book() {
                                 <div className="flex items-center w-full justify-between">
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Body Placement</p>
-                                            <input placeholder="Canines" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
+                                            <p className={`${inputName}`}>Gem size</p>
+                                            <input placeholder="Canines" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.size ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Gem Count</p>
-                                            <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                            <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.count ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Comments</p>
-                                            <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
+                                            <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`h-[15vh] ${inputField} ${errors.comments ? 'border-inputError' : 'border-inputBorder'}`}></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -328,16 +358,20 @@ export default function Book() {
                                 <div className="flex items-center justify-center w-full">
                                     <div className="flex flex-col justify-center items-center gap-6 py-6 text-xl w-full max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
-                                            <p className={`${inputName}`} value={placement} onChange={(e) => setPlacement(e.target.value)}>Body Placement</p>
-                                            <input placeholder="Ears" value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${errors.service.placement ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'} ${inputField}`}></input>
+                                            <select value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} ${errors.placement ? 'border-inputError' : 'border-inputBorder'}`}>
+                                                <option value="" disabled className='hidden'>Select Placement</option>
+                                                <option value="top Lobe">Top Lobe</option>
+                                                <option value="bottom Lobe">Bottom Lobe</option>
+                                                <option value="other">Other</option>
+                                            </select>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Peircing Count</p>
-                                            <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.service.count ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                            <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.count ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Comments</p>
-                                            <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`${inputField} border-[#998C7E] w-full max-w-[448px] h-[10vh]`}></textarea>
+                                            <textarea placeholder="I would like..." value={comments} onChange={(e) => setComments(e.target.value)} className={`h-[15vh] ${inputField} ${errors.comments ? 'border-inputError' : 'border-inputBorder'}`}></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -348,24 +382,24 @@ export default function Book() {
                             <div className="flex flex-col justify-center items-center gap-6 text-xl w-full">
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>First Name</p>
-                                    <input id="name" placeholder="John" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} ${errors.name === true ? 'border-inputError border-opacity-60' : 'border-[#998C7E]'}`}></input>
+                                    <input  placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`${inputField} ${errors.firstName ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                 </div>
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>Last Name</p>
-                                    <input id="name" placeholder="Smith" value={name} onChange={(e) => setName(e.target.value)} className={`${inputField} `}></input>
+                                    <input placeholder="Smith" value={lastName} onChange={(e) => setLastName(e.target.value)} className={`${inputField} ${errors.lastName ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                 </div>
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>Email</p>
-                                    <input id="email" placeholder="john.smith@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputField}'}`}></input>
+                                    <input placeholder="john.smith@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputField} ${errors.email ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                 </div>
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>Phone</p>
-                                    <input id="phone" placeholder="123-456-7890" value={phone} type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                    <input placeholder="123-456-7890" value={phone} type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                                         onChange={(e) => {
                                             const phoneNumber = e.target.value.replace(/[^\d-]/g, ""); // Remove non-numeric characters except "-"
                                             e.target.value = phoneNumber;
                                             setPhone(phoneNumber)
-                                        }} className={`${inputField} `}></input>
+                                        }} className={`${inputField} ${errors.phone ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                 </div>
                             </div>
                         </div>
@@ -376,7 +410,7 @@ export default function Book() {
                     </div>
                     <div className='flex justify-between justify-between Mobile-L:[px-10] w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px] Tablet:w-[80vw] Monitor:w-[50vw] mb-10'>
                         <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-300 ease-in-out border-gray-600 transition`}
-                            onClick={() => setFormProgress(formProgress - 1)}>Previous</button>
+                            onClick={() => regressFormProgress()}>Previous</button>
                         <button type={`${formProgress === 4 ? 'submit' : "button"}`} className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
                             onClick={() => advanceFormProgress()}>{formProgress > 3 ? 'Book' : 'Next'}</button>
                     </div>
