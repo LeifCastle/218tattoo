@@ -60,7 +60,7 @@ module.exports = {
         navLinkActiveColorDefault: '#FFFFFF',
         navLinkHoverColorDefault: '#bdbdbd',
         navLinkInactiveColorContrast: '#000000',
-        navLinkActiveColorContrast: '#184d54',
+        navLinkActiveColorContrast: '#0C857B',
         navLinkHoverColorContrast: '#998c7e',
         greyB: '#C1C1C1',
         blackA: '#1B1D1F',

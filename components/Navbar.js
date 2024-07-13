@@ -15,10 +15,10 @@ export default function Navbar() {
     let links = [{ name: "Home", href: '/' }, { name: "Book", href: '/book' }, { name: "About", href: '/about' }, { name: "Shop", href: '/shop' }]
 
     //--CSS Variables
-    let activeNavLinkDefault = "underline text-navLinkActiveSize text-navLinkActiveColorDefault hover:text-navLinkHoverColorDefault pb-[3px]"
-    let inactiveNavLinkDefault = "text-navLinkInactiveSize text-navLinkInactiveColorDefault hover:text-navLinkHoverColorDefault"
-    let activeNavLinkContrast = "underline text-navLinkActiveSize text-navLinkActiveColorContrast hover:text-navLinkHoverColorContrast pb-[3px]"
-    let inactiveNavLinkContrast = "text-navLinkInactiveSize text-navLinkInactiveColorContrast hover:text-navLinkHoverColorContrast"
+    let activeNavLinkDefault = `underline text-navLinkActiveSize text-navLinkActiveColorDefault pb-[3px] hover:text-navLinkHoverColorDefault`
+    let inactiveNavLinkDefault = `text-navLinkInactiveSize text-navLinkInactiveColorDefault hover:text-navLinkHoverColorDefault`
+    let activeNavLinkContrast = `underline text-navLinkActiveSize text-navLinkActiveColorContrast hover:text-navLinkHoverColorContrast pb-[3px]`
+    let inactiveNavLinkContrast = `text-navLinkInactiveSize text-navLinkInactiveColorContrast hover:text-navLinkHoverColorContrast`
 
     let DOMloaded = false;
     let pathname = usePathname()

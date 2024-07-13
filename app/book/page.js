@@ -5,8 +5,8 @@ import Image from 'next/image.js';
 import BookingDateTime from "../../components/bookingDateTime"
 import { useRef, useState, useEffect, useContext } from "react"
 import { GlobalStateContext } from '../utils/context.js';
-import { CldUploadWidget } from 'next-cloudinary';
 import CustomUpload from "../../components/customUpload"
+import {useRouter } from 'next/navigation';
 
 import ServiceOptions from "../../components/serviceOptions"
 
@@ -42,6 +42,8 @@ export default function Book() {
     const errorBar = useRef(null)
     const [formTitle, setFormTitle] = useState('Service')
     const [scrolled, setScrolled] = useState(false)
+
+    const router = useRouter()
 
 
 
@@ -148,6 +150,9 @@ export default function Book() {
             case 4:
                 setFormTitle("Appointment")
                 break;
+            case 5:
+                setFormTitle("Sucess")
+                break;
         }
     }, [formProgress])
 
@@ -164,6 +169,18 @@ export default function Book() {
         if (noErrors && userSubmissionAttempt.current === true) {
             setFormProgress(prevProgress => prevProgress + 1); // Increment form progress
             userSubmissionAttempt.current = false; // Update user submission attempt flag
+            if (formProgress === 4) { //Resets the form after a user books
+                setBooked(false)
+                setDesignType('')
+                setEmail('')
+                setPhone('')
+                setFirstName('')
+                setLastName('')
+                setPlacement('')
+                setSize('')
+                setCount('')
+                setComments('')
+            }
         }
     }
 
@@ -175,7 +192,6 @@ export default function Book() {
     // Function to advance form progress
     function advanceFormProgress() {
         userSubmissionAttempt.current = true; // Set submission attempt flag
-
         switch (formProgress) {
             case 2:
                 switch (service) {
@@ -191,6 +207,9 @@ export default function Book() {
                 }
             case 3:
                 updateErrorStatus({ firstName, lastName, email, phone });
+                break;
+            case 4:
+                updateErrorStatus({ dateTime });
                 break;
         }
     }
@@ -382,7 +401,7 @@ export default function Book() {
                             <div className="flex flex-col justify-center items-center gap-6 text-xl w-full">
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>First Name</p>
-                                    <input  placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`${inputField} ${errors.firstName ? 'border-inputError' : 'border-inputBorder'}`}></input>
+                                    <input placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={`${inputField} ${errors.firstName ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                 </div>
                                 <div className="flex flex-col gap-2 items-start w-full">
                                     <p className={`${inputName}`}>Last Name</p>
@@ -407,35 +426,23 @@ export default function Book() {
                         <div className={`${formProgress === 4 ? '' : 'hidden'} w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px]`}>
                             <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} />
                         </div>
+                        {/*----Booking Success----*/}
+                        <div className={`${formProgress === 5 ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] flex flex-col justify-between items-center p-4`}>
+                            <p className='text-2xl text-black my-12 text-center'>You&apos;re appointment has been scheduled, please check your{email ? phone ? ' phone or email' : ' email' : ' phone'} for our confirmation</p>
+                            <p className='text-4xl text-black mb-6 text-center'>Thanks for booking with us!</p>
+                        </div>
                     </div>
-                    <div className='flex justify-between justify-between Mobile-L:[px-10] w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px] Tablet:w-[80vw] Monitor:w-[50vw] mb-10'>
-                        <button type="button" className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-300 ease-in-out border-gray-600 transition`}
+                    <div className={`${formProgress > 4 ? 'justify-center' : 'justify-between'} flex Mobile-L:[px-10] w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px] Tablet:w-[80vw] Monitor:w-[50vw] mb-10`}>
+                        <button type="button" className={`${formProgress > 1 && formProgress < 5 ? 'block' : 'hidden'} text-base hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-300 ease-in-out border-gray-600 transition`}
                             onClick={() => regressFormProgress()}>Previous</button>
-                        <button type={`${formProgress === 4 ? 'submit' : "button"}`} className={`${formProgress > 1 ? 'visible' : 'invisible'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
+                        <button type={`${formProgress === 4 ? 'submit' : "button"}`} className={`${formProgress > 1 && formProgress < 5 ? 'block' : 'hidden'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
                             onClick={() => advanceFormProgress()}>{formProgress > 3 ? 'Book' : 'Next'}</button>
+                        <button type="button" className={`${formProgress > 4 ? 'block' : 'hidden'} text-base ml-2 hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
+                            onClick={() => router.push('/')}>Return to Home</button>
+
                     </div>
                 </div>
             </form>
-            <div className={`${booked ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] h-auto bg-greyB fixed top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] flex flex-col justify-between items-center p-4`}>
-                <div className="absolute top-0 right-0 w-[50px] h-[60px] hover:scale-[1.25] duration-500" onClick={() => {
-                    setBooked(false)
-                    setDesign('')
-                    setEmail('')
-                    setPhone('')
-                    setName('')
-                    setPlacement('')
-                    setSize('')
-                    setCount('')
-                    setComments('')
-                    setReferencePhotos([{ id: 1, src: '/addFile.png' }, { id: 2, src: '/addFile.png' }, { id: 3, src: '/addFile.png' }, { id: 4, src: '/addFile.png' }])
-                }}>
-                    <div className="absolute top-0 right-0 translate-x-[-30px] translate-y-[17px] rotate-45 bg-blackA rounded w-[5px] h-[30px]"></div>
-                    <div className="absolute top-0 right-0 translate-x-[-30px] translate-y-[17px] rotate-[-45deg] bg-blackA rounded w-[5px] h-[30px]"></div>
-                </div>
-                <p className='text-6xl text-black mt-6'>Success!</p>
-                <p className='text-2xl text-black my-12 text-center'>You&apos;re appointment has been scheduled, please check your{email ? phone ? ' phone or email' : ' email' : ' phone'} for our confirmation</p>
-                <p className='text-4xl text-black mb-6 text-center'>Thanks for booking with us!</p>
-            </div>
         </>
     )
 }

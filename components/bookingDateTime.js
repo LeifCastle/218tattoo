@@ -20,8 +20,8 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
 
     const dateTimeBar = useRef(null)
 
-    let SaturdayTimes = ["8:00am", "10:00am", "12:00pm", "2:00pm", "4:00pm"]
-    let SundayTimes = ["8:00am", "10:00am", "12:00pm", "2:00pm", "4:00pm"]
+    let SaturdayTimes = ["8:00am", "10:00am", "12:00pm", "2:00pm"]
+    let SundayTimes = ["8:00am", "10:00am", "12:00pm", "2:00pm"]
 
     let dynamicColumns = 5;
 
@@ -54,6 +54,10 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
         }
         setTimeOptions(SundayTimes.map(time => {
             let bookedDate = `${selectedMonth.format('M')}-${selectedDay.day}`
+            let disabled = false
+            // if (moment().add('1', 'hours').format('hh:mma') > time) { If you want to allow same day bookings
+            //     disabled = true
+            // }
             return (
                 <div key={time + 1}
                     onClick={() => {
@@ -64,7 +68,12 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                             setSelectedTime(time)
                         }
                     }}
-                    className={`${bookedDateTimes[bookedDate]?.includes(time) ? 'hidden' : selectedTime === time ? 'bg-teal-600 text-white' : 'bg-black/20 hover:bg-black/30'} text-xl hover:cursor-pointer text-black rounded-[12px] p-2`}>{time}</div>
+                    className={`
+                        ${bookedDateTimes[bookedDate]?.includes(time) ? 'hidden' : selectedTime === time ? 'bg-teal-600 text-white' : 'bg-black/30 hover:bg-black/40'} 
+                        ${disabled ? 'bg-black/10 pointer-events-none text-black/40' : 'hover:cursor-pointer text-black'}
+                        text-xl rounded-[12px] p-2
+                    `}>{time}
+                </div>
             )
         }))
     }, [selectedDay, selectedTime])
@@ -98,15 +107,21 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
         let date = moment({ year, month: month - 1, day: 1 }); //Subtracting 1 to account for zero indexing of months (.format method is not zero indexed)
         let weekendCount = 2;  //Use to determine which column the date will be assigned, currently accounts for crossover (weekend split over two months)
         for (let i = 0; i <= date.daysInMonth(); i++) {
-            if (date.day() === 6 && date.format('MMDD') > moment().format('MMDD')) {
-                weekends.push({ day: date.format('D'), which: 1 }) // Saturday (row 1)
+            if (date.day() === 6) {
+                let disabled = false; //Improve this its repetetive and silly
+                date.format('MMDD') > moment().format('MMDD') ? disabled = false : disabled = true
+                weekends.push({ day: date.format('D'), which: 1, disabled }) // Saturday (row 1)
                 weekendCount++
-            } else if (date.day() === 0 && date.format('MMDD') > moment().format('MMDD')) {
+            } else if (date.day() === 0) {
                 if (weekendCount === 2) { //Accounts for weekends split over the month **need to add a greyed out value to object as well or turn into a placeholder value
-                    weekends.push({ day: date.clone().subtract(1, 'days').format('M-D'), which: 1 })
+                    let disabled = false;
+                    date.format('MMDD') > moment().format('MMDD') ? disabled = false : disabled = true
+                    weekends.push({ day: date.clone().subtract(1, 'days').format('M-D'), which: 1, disabled })
                     weekendCount++
                 }
-                weekends.push({ day: date.format('D'), which: 2 }) //Sunday (row 2)
+                let disabled = false;
+                date.format('MMDD') > moment().format('MMDD') ? disabled = false : disabled = true
+                weekends.push({ day: date.format('D'), which: 2, disabled }) //Sunday (row 2)
             }
             date.add(1, 'days')
         }
@@ -114,27 +129,31 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
         return weekends;
     }
 
-    //--Advances the calendar to the previous month **need to add something to allow crossover into last year
     function prevMonth() {
-        if (parseInt(selectedMonth.format('M')) > parseInt(moment().format('M'))) {
-            let prevMonth = selectedMonth.subtract(1, 'months')
-            setSelectedMonth(moment(prevMonth))
-            setSelectedWeekends(getWeekends(prevMonth.format('M'), prevMonth.format('YYYY')))
+        const minDate = moment();
+        console.log(`Selected month: ${selectedMonth.format('YYYY-MM-DD')} vs Min date: ${minDate.format('YYYY-MM-DD')}`);
+        if (selectedMonth.isAfter(minDate, 'month')) {
+            console.log('Going to previous month');
+            const prevMonth = selectedMonth.clone().subtract(1, 'months');
+            setSelectedMonth(prevMonth);
+            const newWeekends = getWeekends(prevMonth.format('M'), prevMonth.format('YYYY'));
+            setSelectedWeekends(newWeekends);
             setBoundary('');
-            if (parseInt(selectedMonth.format('M')) <= parseInt(moment().format('M'))) {
+            if (!prevMonth.isAfter(minDate, 'month')) {
                 setBoundary('start');
             }
         }
     }
-    //--Advances the calendar to the next month **need to add something to allow crossover into next year
+
     function nextMonth() {
-        if (parseInt(selectedMonth.format('M')) < parseInt(moment().add(6, 'months').format('M'))) {
-            let nextMonth = selectedMonth.add(1, 'months')
-            setSelectedMonth(moment(nextMonth))
-            let newWeekends = getWeekends(nextMonth.format('M'), nextMonth.format('YYYY'))
-            setSelectedWeekends(newWeekends)
+        const maxDate = moment().add(6, 'months');
+        if (selectedMonth.isBefore(maxDate, 'month')) {
+            const nextMonth = selectedMonth.clone().add(1, 'months');
+            setSelectedMonth(nextMonth);
+            const newWeekends = getWeekends(nextMonth.format('M'), nextMonth.format('YYYY'));
+            setSelectedWeekends(newWeekends);
             setBoundary('');
-            if (parseInt(selectedMonth.format('M')) >= parseInt(moment().add(6, 'months').format('M'))) {
+            if (!nextMonth.isBefore(maxDate, 'month')) {
                 setBoundary('end');
             }
         }
@@ -147,7 +166,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                     <div className="flex flex-col items-center justify-center">
                         <div className="flex items-center justify-center mt-8">
                             <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'start' ? 'invisible' : 'visible'}`}
-                                src="/leftArrowWhite.png"
+                                src="/leftArrow.png"
                                 width={30}
                                 height={30}
                                 alt="NextPic"
@@ -155,7 +174,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                             />
                             <p className="text-3xl text-black mx-10">{selectedMonth.format('MMMM')}</p>
                             <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'end' ? 'invisible' : 'visible'}`}
-                                src="/rightArrowWhite.png"
+                                src="/rightArrow.png"
                                 width={30}
                                 height={30}
                                 alt="NextPic"
@@ -175,10 +194,13 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                                             setSelectedDay(weekend)
                                         }
                                     }}
-                                        className={`${selectedDay.day === weekend.day ? 'bg-teal-600 text-white' : 'bg-black/20 hover:bg-black/30 text-black'} text-4xl transition-all ease-in-out duration-250
-                                        row-start-${weekend.which} flex items-center justify-center 
-                                        rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] hover:scale-110 hover:cursor-pointer`}>
-                                        {weekend.day}</div>
+                                        className={`
+                                            ${selectedDay.day === weekend.day ? 'bg-teal-600 text-white' : 'bg-black/30 text-black hover:bg-black/40'} 
+                                            ${weekend.disabled ? 'bg-black/10 pointer-events-none text-black/40' : 'hover:scale-110 hover:cursor-pointer'}
+                                            text-4xl transition-all ease-in-out duration-250 row-start-${weekend.which} flex items-center justify-center 
+                                            rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] 
+                                        `}>{weekend.day}
+                                    </div>
                                 )
                             })}
                         </div>
