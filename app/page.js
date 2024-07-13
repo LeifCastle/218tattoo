@@ -50,7 +50,7 @@ export default function Home() {
           <p className="w-full text-center text-3xl Mobile-L:text-4xl Tablet:text-5xl Laptop:text-6xl text-black/80 px-4 pb-5 Tablet:pb-10">Book An Appointment</p>
           <ServiceOptions setService={setService} setFormProgress={setFormProgress} />
         </div >
-        <div className='w-full flex justify-center mt-4'><div className={`${formProgress <= 2 ? 'w-[70vw]' : 'w-[25vw]'}  h-[3px] bg-black my-10 Tablet:my-20`}></div></div>
+        <div className='w-full flex justify-center mt-4'><div className='w-[70vw] Tablet:w-[50vw] Monitor:w-[45vw] h-[3px] bg-black my-10 Tablet:my-20'></div></div>
         <div className="flex flex-col items-center justify-center text-black pb-10">
           <div className="">
             <Collage images={favoriteImages} />

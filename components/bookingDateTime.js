@@ -38,7 +38,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
     useEffect(() => {
         if (selectedDay && selectedTime) {
             const selectedDateTimeString = `${moment().format('YYYY')}-${selectedMonth.format('MM')}-${selectedDay.day} ${selectedTime}`;
-            const selectedDateTimeMoment = moment(selectedDateTimeString, "YYYY-M-D h:mm A");
+            const selectedDateTimeMoment = moment(selectedDateTimeString, "YYYY-M-D h:mma");
             setDateTime(selectedDateTimeMoment.toDate());
             console.log('Selcted Month: ', selectedMonth.format('MM'))
             console.log('Selcted Day: ', selectedDay.day)
@@ -69,7 +69,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                         }
                     }}
                     className={`
-                        ${bookedDateTimes[bookedDate]?.includes(time) ? 'hidden' : selectedTime === time ? 'bg-teal-600 text-white' : 'bg-black/30 hover:bg-black/40'} 
+                        ${bookedDateTimes[bookedDate]?.includes(time) ? 'bg-black/10 pointer-events-none text-black/40' : selectedTime === time ? 'bg-teal-600 text-white' : 'bg-black/30 hover:bg-black/40'} 
                         ${disabled ? 'bg-black/10 pointer-events-none text-black/40' : 'hover:cursor-pointer text-black'}
                         text-xl rounded-[12px] p-2
                     `}>{time}
@@ -87,7 +87,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                 const updatedBookedDateTimes = {};
                 response.data.forEach(dateTime => {
                     const dayFormatted = moment(dateTime.dateTime).format('M-D');
-                    const timeFormatted = moment(dateTime.dateTime).format('h:mm A');
+                    const timeFormatted = moment(dateTime.dateTime).format('h:mma');
                     // Check if the day key already exists; if not, initialize it as an empty array
                     if (!updatedBookedDateTimes[dayFormatted]) {
                         updatedBookedDateTimes[dayFormatted] = [];

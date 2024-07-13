@@ -6,7 +6,7 @@ import BookingDateTime from "../../components/bookingDateTime"
 import { useRef, useState, useEffect, useContext } from "react"
 import { GlobalStateContext } from '../utils/context.js';
 import CustomUpload from "../../components/customUpload"
-import {useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import ServiceOptions from "../../components/serviceOptions"
 
@@ -32,13 +32,12 @@ export default function Book() {
     //Appointment
     const [dateTime, setDateTime] = useState('')
 
-    const [referencePhotos, setReferencePhotos] = useState([{ id: 1, src: '/addFile.png' }, { id: 2, src: '/addFile.png' }, { id: 3, src: '/addFile.png' }, { id: 4, src: '/addFile.png' }])
+    const [referencePhotos, setReferencePhotos] = useState([])
     const { service, setService } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
     const { formProgress, setFormProgress } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
     const userSubmissionAttempt = useRef(false);
 
     const [booked, setBooked] = useState(false)
-    const hasErrors = useRef(false)
     const errorBar = useRef(null)
     const [formTitle, setFormTitle] = useState('Service')
     const [scrolled, setScrolled] = useState(false)
@@ -89,38 +88,19 @@ export default function Book() {
     let inputField = `w-full rounded-md pl-2 text-black bg-white border-2 focus:border-teal-600 focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
 
     //--Submits booking
-    function handleBooking(e) {
-        e.preventDefault();
+    function handleBooking() {
         console.log('tryna be booked')
-        checkForErrors(true)
-        if (!hasErrors.current) {
-            let truePhotos = referencePhotos.filter(photo => photo.src != '/addFile.png')
-            newBooking.service.referencePhotos = [...truePhotos]
-            setBooked(true)
-            client.post('/book/new', { newBooking })
-                .then(response => {
-                    console.log('Sucess', response)
-                })
-                .catch(error => {
-                    console.log('Error: ', error)
-                })
-        }
-    }
+        //let truePhotos = referencePhotos.filter(photo => photo.src != '/addFile.png')
+        //newBooking.service.referencePhotos = [...truePhotos]
 
-    function disableScrolling() {
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
+        client.post('/book/new', { newBooking })
+            .then(response => {
+                console.log('Sucess', response)
+            })
+            .catch(error => {
+                console.log('Error: ', error)
+            })
     }
-
-    function enableScrolling() {
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-    }
-
-    //--Disables/Enables Scrolling based on booked status
-    useEffect(() => {
-        booked ? disableScrolling() : enableScrolling()
-    }, [booked])
 
     //--Sets scrolled status
     useEffect(() => {
@@ -180,6 +160,7 @@ export default function Book() {
                 setSize('')
                 setCount('')
                 setComments('')
+                handleBooking() //Book the appointment
             }
         }
     }
@@ -435,10 +416,10 @@ export default function Book() {
                     <div className={`${formProgress > 4 ? 'justify-center' : 'justify-between'} flex Mobile-L:[px-10] w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px] Tablet:w-[80vw] Monitor:w-[50vw] mb-10`}>
                         <button type="button" className={`${formProgress > 1 && formProgress < 5 ? 'block' : 'hidden'} text-base hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 border duration-300 ease-in-out border-gray-600 transition`}
                             onClick={() => regressFormProgress()}>Previous</button>
-                        <button type={`${formProgress === 4 ? 'submit' : "button"}`} className={`${formProgress > 1 && formProgress < 5 ? 'block' : 'hidden'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
+                        <button type="button" className={`${formProgress > 1 && formProgress < 5 ? 'block' : 'hidden'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
                             onClick={() => advanceFormProgress()}>{formProgress > 3 ? 'Book' : 'Next'}</button>
                         <button type="button" className={`${formProgress > 4 ? 'block' : 'hidden'} text-base ml-2 hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
-                            onClick={() => router.push('/')}>Return to Home</button>
+                            onClick={() => router.push('/')}>Return Home</button>
 
                     </div>
                 </div>
