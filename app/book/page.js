@@ -225,7 +225,7 @@ export default function Book() {
                     </div>
                 </div>
                 {/*---Booking Form---*/}
-                <div className={`${scrolled ? 'mt-[-20px] Tablet:mt-[-40px] Laptop:mt-[-100px]' : ''} bg-white/90 w-full z-[2] flex flex-col items-center transition-all duration-500`}>
+                <div className={`${scrolled ? 'mt-[-20px] Tablet:mt-[-40px] Laptop:mt-[-100px]' : ''} bg-pageGrey w-full z-[2] flex flex-col items-center transition-all duration-500`}>
                     {/*---Progress Bar---*/}
                     <div className="px-5 pt-10 Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
                         <div className="flex items-center">
@@ -419,7 +419,10 @@ export default function Book() {
                         <button type="button" className={`${formProgress > 1 && formProgress < 5 ? 'block' : 'hidden'} text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
                             onClick={() => advanceFormProgress()}>{formProgress > 3 ? 'Book' : 'Next'}</button>
                         <button type="button" className={`${formProgress > 4 ? 'block' : 'hidden'} text-base ml-2 hover:scale-110 focus:outline-none flex justify-center px-6 py-3 rounded font-bold cursor-pointer hover:bg-progressBarComplete  bg-progressBarComplete text-white border duration-300 ease-in-out border-progressBarComplete transition`}
-                            onClick={() => router.push('/')}>Return Home</button>
+                            onClick={() => {
+                                router.push('/')
+                                setFormProgress(1)
+                            }}>Return Home</button>
 
                     </div>
                 </div>

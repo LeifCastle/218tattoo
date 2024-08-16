@@ -45,7 +45,7 @@ export default function Home() {
           onClick={handlePageScroll}
         />
       </div>
-      <div className='bg-white/80'>
+      <div className='bg-pageGrey'>
         <div className="relative bg text-black pt-10">
           <p className="w-full text-center text-3xl Mobile-L:text-4xl Tablet:text-5xl Laptop:text-6xl text-black/80 px-4 pb-5 Tablet:pb-10">Book An Appointment</p>
           <ServiceOptions setService={setService} setFormProgress={setFormProgress} />

@@ -7,7 +7,7 @@ export default function WebFooter() {
 
     if (pathname != "/admin") {
         return (
-            <div className="bg-blackA flex flex-col items-center justify-center py-10 px-7 gap-10">
+            <div className="bg-blackA flex flex-col items-center justify-center py-10 px-7 gap-10 text-white">
                 <div className="flex gap-7 Tablet:gap-20 text-center">
                     <div className="flex-col">
                         <p className="text-2xl pb-2">Location</p>

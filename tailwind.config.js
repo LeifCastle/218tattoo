@@ -66,6 +66,7 @@ module.exports = {
         blackA: '#1B1D1F',
         brownA: '#998c7e',
         blueA: '#184d54',
+        pageGrey: '#CCCCCC',
         inputBg: "rgba(255, 255, 255, .5)",
         inputHoverBg: "rgba(255, 255, 255, .75)",
         inputError: "#8E0000",
