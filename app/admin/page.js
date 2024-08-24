@@ -2,10 +2,11 @@
 
 import axios from 'axios';
 import Link from "next/link"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, use } from "react"
 import setAuthToken from "../utils/setAuthToken";
 import ListView from "../../components/listView"
 import SetAvailability from "../../components/setAvailability"
+import moment from 'moment';
 
 export default function Admin() {
 
@@ -14,7 +15,9 @@ export default function Admin() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState('');
     const [user, setUser] = useState('');
-    const [bookings, setBookings] = useState([])
+    const [viewAll, setViewAll] = useState(false)
+    const bookings = useRef([])
+    const [filteredBookings, setFilteredBookings] = useState([])
 
     //Tailwind CSS Presets
     let inputName = "text-sm text-black"
@@ -36,7 +39,8 @@ export default function Admin() {
                 localStorage.setItem('adminToken', token); // Save the token
                 setAuthToken(response.data.token);
                 setIsAuthenticated(true);
-                getBookings()
+                await getBookings()
+                filterBookings('current') //Sets the user's view to only current bookings rather than all
             } else {
                 // Handle case where response is successful but no token is returned
                 alert('Login successful but no token received');
@@ -46,8 +50,6 @@ export default function Admin() {
             // Handle HTTP error responses (status code outside 2xx)
             if (error.response) {
                 console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
                 alert(`Login failed: ${error.response.data.message || 'Unknown error'}`);
             } else if (error.request) {
                 console.log(error.request);
@@ -58,11 +60,29 @@ export default function Admin() {
         }
     };
 
+    function filterBookings(filter) {
+        switch (filter) {
+            case 'none':
+                setFilteredBookings(bookings.current)
+                console.log('filtered none')
+                break;
+            case 'current': //Shows only bookings on or after today's date
+                let today = moment()
+                setFilteredBookings(bookings.current
+                    .filter((booking) => {
+                        const momentDateTime = moment(booking.dateTime)
+                        return momentDateTime.isSameOrAfter(today, 'day');
+                    })
+                )
+                break;
+        }
+    }
+
     function getBookings() {
-        client.get('/admin')
+        return client.get('/admin')
             .then((response) => {
                 console.log('Found Booking: ', response.data);
-                setBookings(response.data);
+                bookings.current = response.data;
             })
             .catch(error => console.error("Failed to fetch bookings:", error));
     }
@@ -80,8 +100,20 @@ export default function Admin() {
                     </div>
                     <div className="basis-1/3"></div>
                 </div>
+                <div className='flex p-6'>
+                    <div className={`${viewAll === true ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
+                        onClick={() => {
+                            filterBookings('none')
+                            setViewAll(true)
+                        }}>All</div>
+                    <div className={`${viewAll === false ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} flex justify-center items-center w-[100px] h-[32px] rounded-tr-lg rounded-br-lg`}
+                        onClick={() => {
+                            filterBookings('current')
+                            setViewAll(false)
+                        }}>Current</div>
+                </div>
                 <div className={`${panel === "listView" ? 'visible' : 'invisible'}`}>
-                    <ListView bookings={bookings} />
+                    <ListView bookings={filteredBookings} />
                 </div>
                 <div className={`${panel === "setAvailability" ? 'visible' : 'invisible'}`}>
                     <SetAvailability />

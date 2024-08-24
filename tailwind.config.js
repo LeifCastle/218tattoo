@@ -71,7 +71,9 @@ module.exports = {
         inputHoverBg: "rgba(255, 255, 255, .75)",
         inputError: "#8E0000",
         mobileNavBg: "rgba(0, 0, 0, .875)",
-        progressBarComplete: '#0C857B' //origional: #184d54 //teal-600: #0C857B
+        progressBarComplete: '#0C857B', //origional: #184d54 //teal-600: #0C857B
+        toggleSelected: '#0C857B', //admin page
+        toggleUnselected: '#C1C1C1',  //admin page
       },
       gridTemplateColumns: {
         'dateTime': 'minmax(50px, 100px) repeat(var(--dynamic-columns), minmax(10px, 100px))',
