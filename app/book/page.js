@@ -44,8 +44,6 @@ export default function Book() {
 
     const router = useRouter()
 
-
-
     //--Form values to be submitted to server
     let newBooking = {
         appointment: {
@@ -85,7 +83,7 @@ export default function Book() {
 
     //Tailwind CSS Presets
     let inputName = "text-sm text-black"
-    let inputField = `w-full rounded-md pl-2 text-black bg-white border-2 focus:border-teal-600 focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
+    let inputField = `w-full rounded pl-2 text-black bg-white border-2 focus:border-teal-600 focus:outline-none hover:bg-inputHoverBg focus:bg-inputHoverBg`
 
     //--Submits booking
     function handleBooking() {
@@ -338,8 +336,8 @@ export default function Book() {
                                     <CustomUpload setReferencePhotos={setReferencePhotos} />
                                 </div>
                             ) : service === 'tooth' ? ( //Tooth Gem
-                                <div className="flex items-center w-full justify-between">
-                                    <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[350px]">
+                                <div className="flex flex-col items-center Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
+                                    <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Gem size</p>
                                             <input placeholder="Canines" value={size} onChange={(e) => setSize(e.target.value)} className={`${inputField} ${errors.size ? 'border-inputError' : 'border-inputBorder'}`}></input>
@@ -355,8 +353,8 @@ export default function Book() {
                                     </div>
                                 </div>
                             ) : ( //Pericing
-                                <div className="flex items-center justify-center w-full">
-                                    <div className="flex flex-col justify-center items-center gap-6 py-6 text-xl w-full max-w-[350px]">
+                                <div className="flex flex-col items-center Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
+                                    <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <select value={placement} onChange={(e) => setPlacement(e.target.value)} className={`${inputField} ${errors.placement ? 'border-inputError' : 'border-inputBorder'}`}>
                                                 <option value="" disabled className='hidden'>Select Placement</option>
