@@ -4,7 +4,6 @@ import axios from 'axios';
 import Link from "next/link"
 import { useEffect, useState, useRef, use } from "react"
 import setAuthToken from "../utils/setAuthToken";
-import ListView from "../../components/listView"
 import SetAvailability from "../../components/setAvailability"
 import moment from 'moment';
 
@@ -18,6 +17,13 @@ export default function Admin() {
     const [viewAll, setViewAll] = useState(false)
     const bookings = useRef([])
     const [filteredBookings, setFilteredBookings] = useState([])
+
+    const toggleDateSort = useRef(false) //sorting booking by ascending/decending order
+
+
+    const bookingGrid = useRef(null)
+    const [viewPort, setViewport] = useState('list')
+    const [expanded, setExpanded] = useState(false)
 
     //Tailwind CSS Presets
     let inputName = "text-sm text-black"
@@ -60,6 +66,15 @@ export default function Admin() {
         }
     };
 
+    function getBookings() {
+        return client.get('/admin')
+            .then((response) => {
+                console.log('Found Booking: ', response.data);
+                bookings.current = response.data;
+            })
+            .catch(error => console.error("Failed to fetch bookings:", error));
+    }
+
     function filterBookings(filter) {
         switch (filter) {
             case 'none':
@@ -78,18 +93,40 @@ export default function Admin() {
         }
     }
 
-    function getBookings() {
-        return client.get('/admin')
-            .then((response) => {
-                console.log('Found Booking: ', response.data);
-                bookings.current = response.data;
-            })
-            .catch(error => console.error("Failed to fetch bookings:", error));
+    function sortBookings(sort) {
+        switch (sort) {
+            case 'date':
+                toggleDateSort.current = !toggleDateSort.current
+                toggleDateSort.current ?
+                    setFilteredBookings([...filteredBookings].sort((a, b) => moment(a.dateTime).toDate() - moment(b.dateTime).toDate()))
+                    :
+                    setFilteredBookings([...filteredBookings].sort((a, b) => moment(b.dateTime).toDate() - moment(a.dateTime).toDate()));
+                break;
+
+        }
     }
+
+    function ExpandedBooking({ booking, expandBooking }) {
+        return (
+            <div key={booking} className="bg-brownA w-[80vw] h-[60vh] rounded-md">
+                <div className="w-full h-[34px] bg-blackA text-white text-4xl flex items-center justify-center rounded-tl-md rounded-tr-md">
+                    <p className="mb-2" onClick={() => expandBooking(false)}>-</p>
+                </div>
+                <p key={booking}>{booking}</p>
+            </div>
+        )
+    }
+
+    function expandBooking(id) {
+        bookingGrid.current.disabled = true
+        bookingGrid.current.background = "#FCFCFC"
+        setExpanded(id)
+    }
+
 
     if (isAuthenticated) {
         return (
-            <main className="bg-white h-[100vh]">
+            <main className="bg-white h-[100vh] flex flex-col items-center">
                 <div className="w-full min-h-[92px] bg-blueA sticky top-0 flex justify-between items-center text-white font-[425] text-nowrap">
                     <div className="flex items-center  basis-1/3">
                         <Link className="mx-10" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
@@ -100,7 +137,7 @@ export default function Admin() {
                     </div>
                     <div className="basis-1/3"></div>
                 </div>
-                <div className='flex p-6'>
+                <div className='self-start flex p-6'>
                     <div className={`${viewAll === true ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
                         onClick={() => {
                             filterBookings('none')
@@ -112,8 +149,31 @@ export default function Admin() {
                             setViewAll(false)
                         }}>Current</div>
                 </div>
-                <div className={`${panel === "listView" ? 'visible' : 'invisible'}`}>
-                    <ListView bookings={filteredBookings} />
+                {/**** Page ****/}
+                <div id="test" className={`${panel === "listView" ? 'visible' : 'invisible'} w-full Tablet:w-[60vw]`}>
+                    <div className="bg-white rounded-md text-black flex flex-col items-center justify-center text-xl">
+                        {/**** List View ****/}
+                        <div ref={bookingGrid} className="grid grid-cols-listView auto-rows gap-y-1 py-8 place-items-center">
+                            <div className="text-xl row-start-1 col-start-1">Name</div>
+                            <div className="text-xl row-start-1 col-start-2 bg-red-200" onClick={() => sortBookings('date')}>Date</div>
+                            <div className="text-xl row-start-1 col-start-3">Time</div>
+                            <div className="text-xl row-start-1 col-start-4">Service</div>
+                            {filteredBookings.map(booking => {
+                                return (
+                                    <div key={booking._id} onClick={() => expandBooking(booking.dateTime)} className="col-span-4 grid grid-cols-listView gap-y-1 text-center hover:bg-blackA/50 rounded-md">
+                                        <p className="bg-blackA/10">{booking.info.contact.firstName + " " + booking.info.contact.lastName}</p>
+                                        <p className="bg-blackA/10">{moment(booking.dateTime).format('MM/DD')}</p>
+                                        <p className="bg-blackA/10">{moment(booking.dateTime).format('h:mm A')}</p>
+                                        <p className="bg-blackA/10">{booking.info.service.service}</p>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        {/**** Calendar View ****/}
+                        <div className={`${!expanded ? 'invisible' : 'visible'} absolute top-[50px]`}>
+                            <ExpandedBooking expanded={expanded} expandBooking={expandBooking} />
+                        </div>
+                    </div>
                 </div>
                 <div className={`${panel === "setAvailability" ? 'visible' : 'invisible'}`}>
                     <SetAvailability />

@@ -344,7 +344,7 @@ export default function Book() {
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Gem Count</p>
-                                            <input placeholder="2" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.count ? 'border-inputError' : 'border-inputBorder'}`}></input>
+                                            <input placeholder="2" type="number" value={count} onChange={(e) => setCount(e.target.value)} className={`${inputField} ${errors.count ? 'border-inputError' : 'border-inputBorder'}`}></input>
                                         </div>
                                         <div className="flex flex-col gap-2 items-start w-full">
                                             <p className={`${inputName}`}>Comments</p>
