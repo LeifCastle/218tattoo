@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import Link from "next/link"
-import { useEffect, useState, useRef, use } from "react"
+import { useEffect, useState, useRef } from "react"
 import setAuthToken from "../utils/setAuthToken";
 import SetAvailability from "../../components/setAvailability"
 import moment from 'moment';
@@ -24,6 +24,7 @@ export default function Admin() {
     const bookingGrid = useRef(null)
     const [viewPort, setViewport] = useState('list')
     const [expanded, setExpanded] = useState(false)
+    const [expandedBooking, setExpandedBooking] = useState(false)
 
     //Tailwind CSS Presets
     let inputName = "text-sm text-black"
@@ -106,24 +107,6 @@ export default function Admin() {
         }
     }
 
-    function ExpandedBooking({ booking, expandBooking }) {
-        return (
-            <div key={booking} className="bg-brownA w-[80vw] h-[60vh] rounded-md">
-                <div className="w-full h-[34px] bg-blackA text-white text-4xl flex items-center justify-center rounded-tl-md rounded-tr-md">
-                    <p className="mb-2" onClick={() => expandBooking(false)}>-</p>
-                </div>
-                <p key={booking}>{booking}</p>
-            </div>
-        )
-    }
-
-    function expandBooking(id) {
-        bookingGrid.current.disabled = true
-        bookingGrid.current.background = "#FCFCFC"
-        setExpanded(id)
-    }
-
-
     if (isAuthenticated) {
         return (
             <main className="bg-white h-[100vh] flex flex-col items-center">
@@ -137,46 +120,64 @@ export default function Admin() {
                     </div>
                     <div className="basis-1/3"></div>
                 </div>
-                <div className='self-start flex p-6'>
-                    <div className={`${viewAll === true ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
-                        onClick={() => {
-                            filterBookings('none')
-                            setViewAll(true)
-                        }}>All</div>
-                    <div className={`${viewAll === false ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} flex justify-center items-center w-[100px] h-[32px] rounded-tr-lg rounded-br-lg`}
-                        onClick={() => {
-                            filterBookings('current')
-                            setViewAll(false)
-                        }}>Current</div>
-                </div>
                 {/**** Page ****/}
-                <div id="test" className={`${panel === "listView" ? 'visible' : 'invisible'} w-full Tablet:w-[60vw]`}>
-                    <div className="bg-white rounded-md text-black flex flex-col items-center justify-center text-xl">
-                        {/**** List View ****/}
-                        <div ref={bookingGrid} className="grid grid-cols-listView auto-rows gap-y-1 py-8 place-items-center">
-                            <div className="text-xl row-start-1 col-start-1">Name</div>
-                            <div className="text-xl row-start-1 col-start-2 bg-red-200" onClick={() => sortBookings('date')}>Date</div>
-                            <div className="text-xl row-start-1 col-start-3">Time</div>
-                            <div className="text-xl row-start-1 col-start-4">Service</div>
-                            {filteredBookings.map(booking => {
-                                return (
-                                    <div key={booking._id} onClick={() => expandBooking(booking.dateTime)} className="col-span-4 grid grid-cols-listView gap-y-1 text-center hover:bg-blackA/50 rounded-md">
-                                        <p className="bg-blackA/10">{booking.info.contact.firstName + " " + booking.info.contact.lastName}</p>
-                                        <p className="bg-blackA/10">{moment(booking.dateTime).format('MM/DD')}</p>
-                                        <p className="bg-blackA/10">{moment(booking.dateTime).format('h:mm A')}</p>
-                                        <p className="bg-blackA/10">{booking.info.service.service}</p>
+                <div className='flex flex-col Tablet:flex-row w-full h-full'>
+                    <div className='flex justify-center w-full h-full pt-10 Tablet:w-[25vw] border-r-[1px] border-pageGrey'>
+                        <div className={`${viewAll === true ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
+                            onClick={() => {
+                                filterBookings('none')
+                                setViewAll(true)
+                            }}>All</div>
+                        <div className={`${viewAll === false ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tr-lg rounded-br-lg`}
+                            onClick={() => {
+                                filterBookings('current')
+                                setViewAll(false)
+                            }}>Current</div>
+                    </div>
+                    {/**** List Giew ****/}
+                    <div id="test" className={`${panel === "listView" ? 'visible' : 'invisible'} relative flex items-start justify-center w-full p-10`}>
+                        <div className="bg-white rounded-md text-black flex flex-col items-center justify-center text-xl">
+                            <div ref={bookingGrid} className="grid grid-cols-listView grid-rows-[50px] auto-rows-[40px] place-items-center border-pageGrey border-[1px] rounded">
+                                <div className="text-xl row-start-1 col-start-1 bg-pageGrey w-full h-full flex items-center justify-center">Service</div>
+                                <div className="text-xl row-start-1 col-start-2 bg-pageGrey w-full h-full flex items-center justify-center gap-2">Date
+                                    <div className='flex flex-col text-xs text-[#787878] hover:cursor-pointer p-1' onClick={() => sortBookings('date')}>
+                                        <p className='translate-y-[2px] hover:cursor-pointer'>&#x25B2;</p>
+                                        <p className='translate-y-[-2px] hover:cursor-pointer'>&#x25BC;</p>
                                     </div>
-                                )
-                            })}
+                                </div>
+                                <div className="text-xl row-start-1 col-start-3 bg-pageGrey w-full h-full flex items-center justify-center">Time</div>
+                                <div className="text-xl row-start-1 col-start-4 bg-pageGrey w-full h-full flex items-center justify-center">Name</div>
+                                {filteredBookings.map(booking => {
+                                    return (
+                                        <div key={booking._id}
+                                            onClick={() => {
+                                                setExpanded(true)
+                                                setExpandedBooking(booking)
+                                            }}
+                                            className="h-full w-full flex items-center col-span-4 grid grid-cols-listView gap-y-1 text-center hover:bg-blackA/10 border-[1px] border-pageGrey hover:cursor-pointer">
+                                            <p className="hover:cursor-pointer">{booking.info.service.service}</p>
+                                            <p className="hover:cursor-pointer">{moment(booking.dateTime).format('MM/DD')}</p>
+                                            <p className="hover:cursor-pointer">{moment(booking.dateTime).format('h:mm A')}</p>
+                                            <p className="hover:cursor-pointer">{booking.info.contact.firstName + " " + booking.info.contact.lastName}</p>
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </div>
-                        {/**** Calendar View ****/}
-                        <div className={`${!expanded ? 'invisible' : 'visible'} absolute top-[50px]`}>
-                            <ExpandedBooking expanded={expanded} expandBooking={expandBooking} />
+                        <div className={`${!expanded ? 'invisible' : 'visible'} absolute top-0 left-0 w-full h-full min-h-[50vh] rounded bg-pageGrey`}>
+                            <div className="bg-pageGrey text-white text-4xl flex items-center justify-center rounded-tl-md rounded-tr-md">
+                                <p className="mb-2" onClick={() => setExpanded(false)}>-</p>
+                            </div>
+                            <p className="hover:cursor-pointer">{expandedBooking?.info?.service?.service}</p>
+                            <p className="hover:cursor-pointer">{moment(expandedBooking?.dateTime).format('MM/DD')}</p>
+                            <p className="hover:cursor-pointer">{moment(expandedBooking?.dateTime).format('h:mm A')}</p>
+                            <p className="hover:cursor-pointer">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
                         </div>
                     </div>
-                </div>
-                <div className={`${panel === "setAvailability" ? 'visible' : 'invisible'}`}>
-                    <SetAvailability />
+                    {/**** Calendar View ****/}
+                    <div className={`${panel === "setAvailability" ? 'block' : 'hidden'}`}>
+                        <SetAvailability />
+                    </div>
                 </div>
             </main>
         )
