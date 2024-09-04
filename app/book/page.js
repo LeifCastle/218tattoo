@@ -174,13 +174,13 @@ export default function Book() {
         switch (formProgress) {
             case 2:
                 switch (service) {
-                    case 'tattoo':
+                    case 'Tattoo':
                         updateErrorStatus({ designType, placement, size, comments });
                         break;
-                    case 'piercing':
+                    case 'Piercing':
                         updateErrorStatus({ placement, count, comments });
                         break;
-                    case 'tooth':
+                    case 'Tooth':
                         updateErrorStatus({ size, count, comments });
                         break;
                 }
@@ -299,7 +299,7 @@ export default function Book() {
                         </div>
                         {/*----Service Details----*/}
                         <div className={`${formProgress === 2 ? 'block' : 'hidden'} pt-10 Tablet:pb-10 w-full`}>
-                            {service === 'tattoo' ? ( //Tattoo 
+                            {service === 'Tattoo' ? ( //Tattoo 
                                 <div className="flex flex-col Tablet:flex-row items-center Tablet:items-stretch Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">
@@ -335,7 +335,7 @@ export default function Book() {
                                     </div>
                                     <CustomUpload setReferencePhotos={setReferencePhotos} />
                                 </div>
-                            ) : service === 'tooth' ? ( //Tooth Gem
+                            ) : service === 'Tooth' ? ( //Tooth Gem
                                 <div className="flex flex-col items-center Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
                                     <div className="flex flex-col justify-center items-end gap-6 py-6 text-xl w-full max-w-[250px] Mobile-M:max-w-[300px] Mobile-L:max-w-[350px]">
                                         <div className="flex flex-col gap-2 items-start w-full">

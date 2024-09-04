@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react"
 import setAuthToken from "../utils/setAuthToken";
 import SetAvailability from "../../components/setAvailability"
 import moment from 'moment';
+import Image from 'next/image';
 
 export default function Admin() {
 
@@ -110,7 +111,7 @@ export default function Admin() {
     if (isAuthenticated) {
         return (
             <main className="bg-white h-[100vh] flex flex-col items-center">
-                <div className="w-full min-h-[92px] bg-blueA sticky top-0 flex justify-between items-center text-white font-[425] text-nowrap">
+                <div className="w-full min-h-[92px] bg-[#444444] sticky top-0 flex justify-between items-center text-white font-[425] text-nowrap">
                     <div className="flex items-center  basis-1/3">
                         <Link className="mx-10" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
                     </div>
@@ -134,7 +135,7 @@ export default function Admin() {
                                 setViewAll(false)
                             }}>Current</div>
                     </div>
-                    {/**** List Giew ****/}
+                    {/**** List View ****/}
                     <div id="test" className={`${panel === "listView" ? 'visible' : 'invisible'} relative flex items-start justify-center w-full p-10`}>
                         <div className="bg-white rounded-md text-black flex flex-col items-center justify-center text-xl">
                             <div ref={bookingGrid} className="grid grid-cols-listView grid-rows-[50px] auto-rows-[40px] place-items-center border-pageGrey border-[1px] rounded">
@@ -164,14 +165,30 @@ export default function Admin() {
                                 })}
                             </div>
                         </div>
-                        <div className={`${!expanded ? 'invisible' : 'visible'} absolute top-0 left-0 w-full h-full min-h-[50vh] rounded bg-pageGrey`}>
-                            <div className="bg-pageGrey text-white text-4xl flex items-center justify-center rounded-tl-md rounded-tr-md">
-                                <p className="mb-2" onClick={() => setExpanded(false)}>-</p>
+                        <div className={`${!expanded ? 'hidden' : 'block'} absolute top-0 left-0 w-full h-full min-h-[40vh] bg-pageGrey hover:pointer-default`}>
+                            <div className="bg-toggleSelected text-white text-4xl flex items-center justify-center">
+                                <Image className="hover:cursor-pointer"
+                                    src="/returnArrow.png"
+                                    width={50}
+                                    height={50}
+                                    alt="Return"
+                                    onClick={() => setExpanded(false)}
+                                />
                             </div>
-                            <p className="hover:cursor-pointer">{expandedBooking?.info?.service?.service}</p>
-                            <p className="hover:cursor-pointer">{moment(expandedBooking?.dateTime).format('MM/DD')}</p>
-                            <p className="hover:cursor-pointer">{moment(expandedBooking?.dateTime).format('h:mm A')}</p>
-                            <p className="hover:cursor-pointer">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
+                            <div className='w-full h-full bg-pageGrey text-black'>
+                                <div className='w-full flex justify-center py-6'>
+                                    <p className="text-5xl">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
+                                </div>
+                                <p className='pl-6 pb-3 text-2xl'>Service </p>
+                                <div className='flex'>
+                                    <div className='flex shrink w-auto bg-white rounded ml-10 p-4'>
+                                        <p className="text-xl">{expandedBooking?.info?.service?.service}</p>
+                                        <p className="text-xl mx-6">{moment(expandedBooking?.dateTime).format('MM/DD')}</p>
+                                        <p className="text-xl">{moment(expandedBooking?.dateTime).format('h:mm A')}</p>
+                                    </div>
+                                    <div></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {/**** Calendar View ****/}

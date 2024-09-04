@@ -21,7 +21,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
     return (
         <div className="relative text-black flex items-center justify-center gap-8 Tablet:gap-14 mt-5 Tablet:mt-10 flex flex-col Tablet:flex-row mx-5 Mobile-M:mx-10">
             <div
-                onClick={() => chooseService('piercing')}
+                onClick={() => chooseService('Piercing')}
                 className="group hover:cursor-pointer relative flex flex-row Tablet:flex-col rounded-lg text-center text-xl group ">
                     <Image className="basis-1/2 rounded-tl-lg rounded-bl-lg Tablet:rounded-bl-none Tablet:rounded-tr-lg Tablet:group-hover:opacity-[30%] Tablet:duration-500"
                         src="/EarPiercingCover.jpg"
@@ -37,7 +37,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
                 </div>
             </div>
             <div
-                onClick={() => chooseService('tattoo')}
+                onClick={() => chooseService('Tattoo')}
                 className="Tablet:scale-[1.1] group hover:cursor-pointer relative flex flex-row Tablet:flex-col rounded-lg text-center text-xl group ">
                     <Image className="basis-1/2 rounded-tl-lg rounded-bl-lg Tablet:rounded-bl-none Tablet:rounded-tr-lg Tablet:group-hover:opacity-[30%] Tablet:duration-500"
                         src="/TattooSessionCover.jpg"
@@ -53,7 +53,7 @@ export default function ServiceOptions({ setService, setFormProgress }) {
                 </div>
             </div>
             <div
-                onClick={() => chooseService('tooth')}
+                onClick={() => chooseService('Tooth')}
                 className="group hover:cursor-pointer relative flex flex-row Tablet:flex-col rounded-lg text-center text-xl group ">
                     <Image className="basis-1/2 rounded-tl-lg rounded-bl-lg Tablet:rounded-bl-none Tablet:rounded-tr-lg Tablet:group-hover:opacity-[30%] Tablet:duration-500"
                         src="/ToothGemCover.jpg"
