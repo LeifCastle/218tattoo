@@ -41,45 +41,45 @@ export default function Collage({ images }) {
 
     return (
         <div className="flex justify-evenly items-center p-4">
-            <div class="container mx-auto px-5 py-2 lg:px-32">
-                <div class="-m-1 flex flex-wrap md:-m-2">
-                    <div class="flex w-1/2 flex-wrap">
-                        <div class="w-1/2 p-1 md:p-2">
+            <div className="container mx-auto px-5 py-2 lg:px-32">
+                <div className="-m-1 flex flex-wrap md:-m-2">
+                    <div className="flex w-1/2 flex-wrap">
+                        <div className="w-1/2 p-1 md:p-2">
                             <img
                                 alt="gallery"
-                                class="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
+                                className="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
                                 src="/Tattoo1.png" />
                         </div>
-                        <div class="w-1/2 p-1 md:p-2">
+                        <div className="w-1/2 p-1 md:p-2">
                             <img
                                 alt="gallery"
-                                class="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
+                                className="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
                                 src="/Tattoo2.png" />
                         </div>
-                        <div class="w-full p-1 md:p-2">
+                        <div className="w-full p-1 md:p-2">
                             <img
                                 alt="gallery"
-                                class="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
+                                className="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
                                 src="/Tattoo3.png" />
                         </div>
                     </div>
-                    <div class="flex w-1/2 flex-wrap">
-                        <div class="w-full p-1 md:p-2">
+                    <div className="flex w-1/2 flex-wrap">
+                        <div className="w-full p-1 md:p-2">
                             <img
                                 alt="gallery"
-                                class="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
+                                className="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
                                 src="/Tattoo4.png" />
                         </div>
-                        <div class="w-1/2 p-1 md:p-2">
+                        <div className="w-1/2 p-1 md:p-2">
                             <img
                                 alt="gallery"
-                                class="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
+                                className="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
                                 src="/Tattoo5.png" />
                         </div>
-                        <div class="w-1/2 p-1 md:p-2">
+                        <div className="w-1/2 p-1 md:p-2">
                             <img
                                 alt="gallery"
-                                class="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
+                                className="block h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
                                 src="/Tattoo6.png" />
                         </div>
                     </div>
