@@ -71,8 +71,8 @@ export default function Admin() {
 
     const cancelBooking = async (booking) => {
         try {
-            console.log('Deleteing booking: ', {booking})
-            const response = await client.post('/admin/cancelBooking', { id : booking });
+            console.log('Deleteing booking: ', { booking })
+            const response = await client.post('/admin/cancelBooking', { id: booking });
             console.log('Response: ', response);
             setBookingActionMessage('cancelled')
             getBookings()
@@ -141,8 +141,8 @@ export default function Admin() {
                     <div className="basis-1/3"></div>
                 </div>
                 {/**** Page ****/}
-                <div className='flex flex-col Tablet:flex-row w-full h-full'>
-                    <div className='flex justify-center w-full h-full pt-10 Tablet:w-[25vw] border-r-[1px] border-pageGrey'>
+                <div className='flex flex-col Tablet:flex-row w-full h-auto Tablet:h-full'>
+                    <div className={`${!expanded ? 'block' : 'hidden Tablet:flex'} flex justify-center w-full h-full py-10 Tablet:w-[25vw] border-r-[1px] border-pageGrey`}>
                         <div className={`${viewAll === true ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
                             onClick={() => {
                                 filterBookings('none')
@@ -155,7 +155,7 @@ export default function Admin() {
                             }}>Current</div>
                     </div>
                     {/**** List View ****/}
-                    <div id="test" className={`${panel === "listView" ? 'block' : 'hidden'} relative flex items-start justify-center w-full p-10`}>
+                    <div id="test" className={`${panel === "listView" ? 'block' : 'hidden'} relative flex items-start justify-center w-full Tablet:p-10`}>
                         <div className="bg-white rounded-md text-black flex flex-col items-center justify-center text-xl">
                             <div ref={bookingGrid} className="grid grid-cols-listView grid-rows-[50px] auto-rows-[40px] place-items-center border-pageGrey border-[1px] rounded">
                                 <div className="text-xl row-start-1 col-start-1 bg-pageGrey w-full h-full flex items-center justify-center">Service</div>
@@ -174,7 +174,7 @@ export default function Admin() {
                                                 setExpanded(true)
                                                 setExpandedBooking(booking)
                                             }}
-                                            className="h-full w-full flex items-center col-span-4 grid grid-cols-listView gap-y-1 text-center hover:bg-blackA/10 border-[1px] border-pageGrey hover:cursor-pointer">
+                                            className="h-full w-full flex items-center col-span-4 grid grid-cols-listView gap-y-1 text-center Tablet:hover:bg-blackA/10 border-[1px] border-pageGrey hover:cursor-pointer">
                                             <p className="hover:cursor-pointer">{booking.info.service.service}</p>
                                             <p className="hover:cursor-pointer">{moment(booking.dateTime).format('MM/DD')}</p>
                                             <p className="hover:cursor-pointer">{moment(booking.dateTime).format('h:mm A')}</p>
@@ -185,7 +185,7 @@ export default function Admin() {
                             </div>
                         </div>
                         {/***********| Expanded Boooking View |***********/}
-                        <div className={`${!expanded ? 'hidden' : 'block'} absolute top-0 left-0 w-full h-full flex flex-col min-h-[40vh] bg-pageGrey text-black hover:pointer-default`}>
+                        <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white Tablet:bg-pageGrey text-black hover:pointer-default`}>
                             <div className="bg-toggleSelected text-white text-3xl flex items-center justify-center">
                                 <div className='flex items-center justify-center gap-3 px-3 hover:cursor-pointer' onClick={() => setExpanded(false)}>
                                     <Image className=""
@@ -248,12 +248,12 @@ export default function Admin() {
                             </div>
                             <div className='grow'></div>
                             {/*****| Cancel / Postpone |*****/}
-                            <div className='flex w-full text-center text-3xl font-medium text-[#444444]'>
+                            <div className='flex w-full text-center text-3xl font-medium text-[#444444] mt-10'> {/*Remove mt-10 poor solution to a bug*/}
                                 <div className='basis-1/2 bg-red-200 py-4 hover:cursor-pointer' onClick={() => cancelBooking(expandedBooking._id)}>Cancel</div>
                                 <div className='basis-1/2 bg-blue-200 py-4 hover:cursor-pointer'>Postpone</div>
                             </div>
                             {/*****| Booking Action Message |*****/}
-                            <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute w-full h-full flex justify-center items-center bg-pageGrey`}> 
+                            <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute w-full h-full flex justify-center items-center bg-pageGrey`}>
                                 <p className='text-4xl text-black'>Success! Booking Cancelled</p>
                             </div>
                         </div>
