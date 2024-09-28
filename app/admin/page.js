@@ -11,6 +11,7 @@ import StripeOneTimePayment from "../../components/stripeOneTimePayment"
 
 export default function Admin() {
 
+    const [nav, setNav] = useState('dashboard')
     const [panel, setPanel] = useState('listView')
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,6 +22,7 @@ export default function Admin() {
     const [filteredBookings, setFilteredBookings] = useState([])
 
     const toggleDateSort = useRef(false) //sorting booking by ascending/decending order
+    const [payment, setPayment] = useState(false)
 
 
     const bookingGrid = useRef(null)
@@ -130,143 +132,195 @@ export default function Admin() {
 
     if (isAuthenticated) {
         return (
-            <main className="bg-white h-[100vh] flex flex-col items-center">
-                <div className="w-full min-h-[92px] bg-[#444444] sticky top-0 flex justify-between items-center text-white font-[425] text-nowrap">
-                    <div className="flex items-center  basis-1/3">
-                        <Link className="mx-10" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
+            <main className="bg-white h-[100vh] flex items-center">
+                {/********** | Sidebar Nav | **********/}
+                <aside className='Tablet:w-[20vw] h-full text-black border-r-[1px] border-grey flex flex-col justify-between'>
+                    <p className='text-center py-6 text-2xl border-b-[1px] border-grey'>Admin</p>
+                    <div className='flex flex-col gap-3 px-10 text-xl pt-8 grow'>
+                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => setNav('Dashboard')}>Dashboard</p>
+                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => setNav('Bookings')}>Boookings</p>
+                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => setNav('Sales')}>Sales</p>
+                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => setNav('Settings')}>Settings</p>
                     </div>
-                    <div className="flex gap-10 justify-center  basis-1/3">
-                        <p onClick={() => { setPanel('listView') }} className={`${panel === 'listView' ? 'text-navLinkActiveSize text-navLinkActiveColor' : 'text-navLinkInactiveSize text-navLinkInactiveColor'} text-2xl ${panel != "listView" ? 'hover:text-navLinkHoverColor' : ''}`}>List View</p>
-                        <p onClick={() => { setPanel('setAvailability') }} className={`${panel === 'setAvailability' ? 'text-navLinkActiveSize text-navLinkActiveColor' : 'text-navLinkInactiveSize text-navLinkInactiveColor'} text-2xl ${panel != "setAvailability" ? 'hover:text-navLinkHoverColor' : ''}`}>Calendar View</p>
+                    <div className="flex justify-center items-center py-4 text-xl bg-adminNavHover">
+                        <Link className="" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
                     </div>
-                    <div className="basis-1/3"></div>
-                </div>
-                {/**** Page ****/}
-                <div className='flex flex-col Tablet:flex-row w-full h-auto Tablet:h-full'>
-                    <div className={`${!expanded ? 'block' : 'hidden Tablet:flex'} flex justify-center w-full h-full py-10 Tablet:w-[25vw] border-r-[1px] border-pageGrey`}>
-                        <div className={`${viewAll === true ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
-                            onClick={() => {
-                                filterBookings('none')
-                                setViewAll(true)
-                            }}>All</div>
-                        <div className={`${viewAll === false ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tr-lg rounded-br-lg`}
-                            onClick={() => {
-                                filterBookings('current')
-                                setViewAll(false)
-                            }}>Current</div>
+                </aside>
+                {/********** | Content | **********/}
+                <div className='w-full h-full flex flex-col'>
+                    {/**** Header ****/}
+                    <div className="w-full py-5 bg-adminNavHover sticky top-0 flex justify-center items-center text-black text-4xl">
+                        <p>{nav}</p>
                     </div>
-                    {/**** List View ****/}
-                    <div id="test" className={`${panel === "listView" ? 'block' : 'hidden'} relative flex items-start justify-center w-full Tablet:p-10`}>
-                        <div className="bg-white rounded-md text-black flex flex-col items-center justify-center text-xl">
-                            <div ref={bookingGrid} className="grid grid-cols-listView grid-rows-[50px] auto-rows-[40px] place-items-center border-pageGrey border-[1px] rounded">
-                                <div className="text-xl row-start-1 col-start-1 bg-pageGrey w-full h-full flex items-center justify-center">Service</div>
-                                <div className="text-xl row-start-1 col-start-2 bg-pageGrey w-full h-full flex items-center justify-center gap-2">Date
-                                    <div className='flex flex-col text-xs text-[#787878] hover:cursor-pointer p-1' onClick={() => sortBookings('date')}>
-                                        <p className='translate-y-[2px] hover:cursor-pointer'>&#x25B2;</p>
-                                        <p className='translate-y-[-2px] hover:cursor-pointer'>&#x25BC;</p>
-                                    </div>
+
+                    {/**** Dashboard ****/}
+                    <div className={`${nav === 'Dashboard' ? 'block' : 'hidden'} 'flex flex-col w-full h-full`}>
+                    </div>
+
+                    {/**** Bookings ****/}
+                    <div className={`${nav === 'Bookings' ? 'block' : 'hidden'} relative w-full h-full flex p-10`}>
+
+                        {/**** Booking Filters & View Settings ****/}
+                        <div className={`${!expanded ? 'block' : 'hidden Tablet:flex'} flex flex-col gap-12 items-center pr-10`}>
+                            {/* List/Calendar View */}
+                            <div className='flex'>
+                                <div className={`${panel === 'listView' ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
+                                    onClick={() => {
+                                        setPanel('listView')
+                                    }}>List
                                 </div>
-                                <div className="text-xl row-start-1 col-start-3 bg-pageGrey w-full h-full flex items-center justify-center">Time</div>
-                                <div className="text-xl row-start-1 col-start-4 bg-pageGrey w-full h-full flex items-center justify-center">Name</div>
-                                {filteredBookings.map(booking => {
-                                    return (
-                                        <div key={booking._id}
-                                            onClick={() => {
-                                                setExpanded(true)
-                                                setExpandedBooking(booking)
-                                            }}
-                                            className="h-full w-full flex items-center col-span-4 grid grid-cols-listView gap-y-1 text-center Tablet:hover:bg-blackA/10 border-[1px] border-pageGrey hover:cursor-pointer">
-                                            <p className="hover:cursor-pointer">{booking.info.service.service}</p>
-                                            <p className="hover:cursor-pointer">{moment(booking.dateTime).format('MM/DD')}</p>
-                                            <p className="hover:cursor-pointer">{moment(booking.dateTime).format('h:mm A')}</p>
-                                            <p className="hover:cursor-pointer">{booking.info.contact.firstName + " " + booking.info.contact.lastName}</p>
-                                        </div>
-                                    )
-                                })}
+                                <div className={`${panel === 'calendarView' ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tr-lg rounded-br-lg`}
+                                    onClick={() => {
+                                        setPanel('calendarView')
+                                    }}>Calendar
+                                </div>
+                            </div>
+                            {/* All / Current Bookings */}
+                            <div className='flex'>
+                                <div className={`${viewAll === true ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tl-lg rounded-bl-lg`}
+                                    onClick={() => {
+                                        filterBookings('none')
+                                        setViewAll(true)
+                                    }}>All
+                                </div>
+                                <div className={`${viewAll === false ? 'bg-toggleSelected text-white' : 'bg-toggleUnselected text-black'} hover:cursor-pointer flex justify-center items-center w-[100px] h-[32px] rounded-tr-lg rounded-br-lg`}
+                                    onClick={() => {
+                                        filterBookings('current')
+                                        setViewAll(false)
+                                    }}>Current
+                                </div>
                             </div>
                         </div>
-                        {/***********| Expanded Boooking View |***********/}
-                        <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white Tablet:bg-pageGrey text-black hover:pointer-default`}>
-                            <div className="bg-toggleSelected text-white text-3xl flex items-center justify-center">
-                                <div className='flex items-center justify-center gap-3 px-3 hover:cursor-pointer' onClick={() => setExpanded(false)}>
-                                    <Image className=""
-                                        src="/returnArrow.png"
-                                        width={50}
-                                        height={50}
-                                        alt="Return"
-                                    />
-                                    <p className='hover:cursor-pointer'>Return</p>
-                                </div>
-                            </div>
-                            <div className='flex flex-col'>
-                                <div className='w-full flex justify-center py-6'>
-                                    <p className="text-5xl">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
-                                </div>
-                                {/*****| Service |*****/}
-                                <p className="pl-6 pb-3 text-2xl">{expandedBooking?.info?.service?.service}</p>
-                                <div className='flex'>
-                                    <div className='flex flex-col gap-2 shrink w-auto bg-white ml-10 p-4 rounded'>
-                                        {/* Count */}
-                                        <div className={`${expandedBooking?.info?.service?.service === "Tooth" ? 'block' : 'hidden'} flex`}>
-                                            <p className="text-xl pr-2">Gem Count: </p>
-                                            <p className="text-xl">{expandedBooking?.info?.service?.count}</p>
-                                        </div>
-                                        {/* Comments */}
-                                        <div className='flex'>
-                                            <p className="text-xl pr-2">{expandedBooking?.info?.service?.service === 'Tattoo' ? 'Description: ' : 'Comments: '}</p>
-                                            <p className="text-xl">{expandedBooking?.info?.service?.comments}</p>
+
+                        {/**** List View ****/}
+                        <div id="test" className={`${panel === "listView" ? 'block' : 'hidden'} flex items-start justify-center w-full`}>
+                            <div className="bg-white rounded-md text-black flex flex-col items-center justify-center text-xl">
+                                <div ref={bookingGrid} className="grid grid-cols-listView grid-rows-[50px] auto-rows-[40px] place-items-center border-pageGrey border-[1px] rounded">
+                                    <div className="text-xl row-start-1 col-start-1 bg-pageGrey w-full h-full flex items-center justify-center">Service</div>
+                                    <div className="text-xl row-start-1 col-start-2 bg-pageGrey w-full h-full flex items-center justify-center gap-2">Date
+                                        <div className='flex flex-col text-xs text-[#787878] hover:cursor-pointer p-1' onClick={() => sortBookings('date')}>
+                                            <p className='translate-y-[2px] hover:cursor-pointer'>&#x25B2;</p>
+                                            <p className='translate-y-[-2px] hover:cursor-pointer'>&#x25BC;</p>
                                         </div>
                                     </div>
-                                    <div></div>
-                                </div>
-                                {/*****| Appointment |*****/}
-                                <p className='pl-6 pb-3 text-2xl mt-10'>Appointment </p>
-                                <div className='flex'>
-                                    {/* Date & Time */}
-                                    <div className='flex shrink w-auto bg-white rounded ml-10 p-4'>
-                                        <p className="text-xl mr-4">{moment(expandedBooking?.dateTime).format('MM/DD')}</p>
-                                        <p className="text-xl">{moment(expandedBooking?.dateTime).format('h:mm A')}</p>
-                                    </div>
-                                    <div></div>
-                                </div>
-                                {/*****| Contact |*****/}
-                                <p className='pl-6 pb-3 text-2xl mt-10'>Contact </p>
-                                <div className='flex'>
-                                    <div className='flex flex-col gap-2 shrink w-auto bg-white ml-10 p-4 rounded'>
-                                        {/* Phone */}
-                                        <div className={'flex'}>
-                                            <p className="text-xl pr-2">Phone: </p>
-                                            <p className="text-xl">{expandedBooking?.info?.contact?.phone}</p>
-                                        </div>
-                                        {/* Email */}
-                                        <div className='flex'>
-                                            <p className="text-xl pr-2">Email: </p>
-                                            <p className="text-xl">{expandedBooking?.info?.contact?.email}</p>
-                                        </div>
-                                    </div>
-                                    <div></div>
-                                </div>
-                                {/*****| Pay |*****/}
-                                <p className='pl-6 pb-3 text-2xl mt-10'>Pay </p>
-                                <div>
-                                    <StripeOneTimePayment />
+                                    <div className="text-xl row-start-1 col-start-3 bg-pageGrey w-full h-full flex items-center justify-center">Time</div>
+                                    <div className="text-xl row-start-1 col-start-4 bg-pageGrey w-full h-full flex items-center justify-center">Name</div>
+                                    {filteredBookings.map(booking => {
+                                        return (
+                                            <div key={booking._id}
+                                                onClick={() => {
+                                                    setExpanded(true)
+                                                    setExpandedBooking(booking)
+                                                }}
+                                                className="h-full w-full flex items-center col-span-4 grid grid-cols-listView gap-y-1 text-center Tablet:hover:bg-blackA/10 border-[1px] border-pageGrey hover:cursor-pointer">
+                                                <p className="hover:cursor-pointer">{booking.info.service.service}</p>
+                                                <p className="hover:cursor-pointer">{moment(booking.dateTime).format('MM/DD')}</p>
+                                                <p className="hover:cursor-pointer">{moment(booking.dateTime).format('h:mm A')}</p>
+                                                <p className="hover:cursor-pointer">{booking.info.contact.firstName + " " + booking.info.contact.lastName}</p>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </div>
-                            <div className='grow'></div>
-                            {/*****| Cancel / Postpone |*****/}
-                            <div className='flex w-full text-center text-3xl font-medium text-[#444444] mt-10'> {/*Remove mt-10 poor solution to a bug*/}
-                                <div className='basis-1/2 bg-red-200 py-4 hover:cursor-pointer' onClick={() => cancelBooking(expandedBooking._id)}>Cancel</div>
-                                <div className='basis-1/2 bg-blue-200 py-4 hover:cursor-pointer'>Postpone</div>
-                            </div>
-                            {/*****| Booking Action Message |*****/}
-                            <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute w-full h-full flex justify-center items-center bg-pageGrey`}>
-                                <p className='text-4xl text-black'>Success! Booking Cancelled</p>
+                            {/***********| Expanded Boooking View |***********/}
+                            <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white Tablet:bg-pageGrey text-black hover:pointer-default`}>
+                                <div className="bg-toggleSelected text-white text-3xl flex items-center justify-center">
+                                    <div className='flex items-center justify-center gap-3 px-3 hover:cursor-pointer' onClick={() => {
+                                        if (!payment) {
+                                            setExpanded(false)
+                                        } else {
+                                            setPayment(false)
+                                        }
+                                    }}>
+                                        <Image className=""
+                                            src="/returnArrow.png"
+                                            width={50}
+                                            height={50}
+                                            alt="Return"
+                                        />
+                                        <p className='hover:cursor-pointer'>Return</p>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col'>
+                                    <div className='w-full flex justify-center py-6'>
+                                        <p className="text-5xl">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
+                                    </div>
+                                    {/*****| Service |*****/}
+                                    <p className="pl-6 pb-3 text-2xl">{expandedBooking?.info?.service?.service}</p>
+                                    <div className='flex'>
+                                        <div className='flex flex-col gap-2 shrink w-auto bg-white ml-10 p-4 rounded'>
+                                            {/* Count */}
+                                            <div className={`${expandedBooking?.info?.service?.service === "Tooth" ? 'block' : 'hidden'} flex`}>
+                                                <p className="text-xl pr-2">Gem Count: </p>
+                                                <p className="text-xl">{expandedBooking?.info?.service?.count}</p>
+                                            </div>
+                                            {/* Comments */}
+                                            <div className='flex'>
+                                                <p className="text-xl pr-2">{expandedBooking?.info?.service?.service === 'Tattoo' ? 'Description: ' : 'Comments: '}</p>
+                                                <p className="text-xl">{expandedBooking?.info?.service?.comments}</p>
+                                            </div>
+                                        </div>
+                                        <div></div>
+                                    </div>
+                                    {/*****| Appointment |*****/}
+                                    <p className='pl-6 pb-3 text-2xl mt-10'>Appointment </p>
+                                    <div className='flex'>
+                                        {/* Date & Time */}
+                                        <div className='flex shrink w-auto bg-white rounded ml-10 p-4'>
+                                            <p className="text-xl mr-4">{moment(expandedBooking?.dateTime).format('MM/DD')}</p>
+                                            <p className="text-xl">{moment(expandedBooking?.dateTime).format('h:mm A')}</p>
+                                        </div>
+                                        <div></div>
+                                    </div>
+                                    {/*****| Contact |*****/}
+                                    <p className='pl-6 pb-3 text-2xl mt-10'>Contact </p>
+                                    <div className='flex'>
+                                        <div className='flex flex-col gap-2 shrink w-auto bg-white ml-10 p-4 rounded'>
+                                            {/* Phone */}
+                                            <div className={'flex'}>
+                                                <p className="text-xl pr-2">Phone: </p>
+                                                <p className="text-xl">{expandedBooking?.info?.contact?.phone}</p>
+                                            </div>
+                                            {/* Email */}
+                                            <div className='flex'>
+                                                <p className="text-xl pr-2">Email: </p>
+                                                <p className="text-xl">{expandedBooking?.info?.contact?.email}</p>
+                                            </div>
+                                        </div>
+                                        <div></div>
+                                    </div>
+                                    {/*****| Pay |*****/}
+                                    <p className='pl-6 pb-3 text-2xl mt-10'>Pay </p>
+                                    <button onClick={() => setPayment(100)}>Pay In Full</button> {/* change to booking.price new field or something similar*/}
+                                </div>
+                                <div className='grow'></div>
+                                {/*****| Cancel / Postpone |*****/}
+                                <div className='flex w-full text-center text-3xl font-medium text-[#444444] mt-10'> {/*Remove mt-10 poor solution to a bug*/}
+                                    <div className='basis-1/2 bg-red-200 py-4 hover:cursor-pointer' onClick={() => cancelBooking(expandedBooking._id)}>Cancel</div>
+                                    <div className='basis-1/2 bg-blue-200 py-4 hover:cursor-pointer'>Postpone</div>
+                                </div>
+                                {/*****| Booking Action Message |*****/}
+                                <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute w-full h-full flex justify-center items-center bg-pageGrey`}>
+                                    <p className='text-4xl text-black'>Success! Booking Cancelled</p>
+                                </div>
+                                {/*****| Pay Form |*****/}
+                                <div className={`${payment ? 'block' : 'hidden'} absolute mt-[50px] w-full h-[calc(100%-50px)] bg-white flex flex-col justify-center`}>
+                                    <StripeOneTimePayment payment={payment} />
+                                </div>
                             </div>
                         </div>
+                        {/**** Calendar View ****/}
+                        <div className={`${panel === "calendarView" ? 'block' : 'hidden'}`}>
+                            <SetAvailability />
+                        </div>
                     </div>
-                    {/**** Calendar View ****/}
-                    <div className={`${panel === "setAvailability" ? 'block' : 'hidden'}`}>
-                        <SetAvailability />
+
+                    {/**** Sales ****/}
+                    <div className={`${nav === 'Sales' ? 'block' : 'hidden'} 'flex flex-col w-full h-full`}>
+                    </div>
+
+                    {/**** Settings ****/}
+                    <div className={`${nav === 'Settings' ? 'block' : 'hidden'} 'flex flex-col w-full h-full`}>
                     </div>
                 </div>
             </main>

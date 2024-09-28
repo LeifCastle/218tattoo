@@ -1,8 +1,9 @@
 'use client';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-export default function StripeOneTimePayment(priceId, price, description) {
+export default function StripeOneTimePayment({payment}) {
 
     const client = axios.create({
         baseURL: process.env.NEXT_PUBLIC_SERVER_URL
@@ -16,8 +17,8 @@ export default function StripeOneTimePayment(priceId, price, description) {
             const fetchClientSecret = async () => {
                 try {
                     const response = await client.post("/payment/create-checkout-session", {});
-                    console.log('Client Secret:', response.data.clientSecret); 
-                    return response.data.clientSecret; 
+                    console.log('Client Secret:', response.data.clientSecret);
+                    return response.data.clientSecret;
                 } catch (error) {
                     console.error("Secret Error:", error);
                 }
@@ -31,11 +32,15 @@ export default function StripeOneTimePayment(priceId, price, description) {
             checkout.mount('#checkout');
         }
     }
+    useEffect(() => {
+        console.log('Payment: ',  payment)
+        if (payment) {
+            handlePayment(payment);
+        }
+    }, [payment])
 
     return (
         <div>
-            <p>What the fuck</p>
-            <button onClick={() => handlePayment(100)}>Pay In Full</button>
             <div id="checkout">
                 {/* Checkout will insert the payment form here */}
             </div>
