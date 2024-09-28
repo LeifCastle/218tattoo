@@ -7,6 +7,7 @@ import setAuthToken from "../utils/setAuthToken";
 import SetAvailability from "../../components/setAvailability"
 import moment from 'moment';
 import Image from 'next/image';
+import StripeOneTimePayment from "../../components/stripeOneTimePayment"
 
 export default function Admin() {
 
@@ -244,6 +245,11 @@ export default function Admin() {
                                         </div>
                                     </div>
                                     <div></div>
+                                </div>
+                                {/*****| Pay |*****/}
+                                <p className='pl-6 pb-3 text-2xl mt-10'>Pay </p>
+                                <div>
+                                    <StripeOneTimePayment />
                                 </div>
                             </div>
                             <div className='grow'></div>

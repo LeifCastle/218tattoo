@@ -3,12 +3,10 @@ import Navbar from "@/components/Navbar";
 import WebFooter from "@/components/webFooter";
 import { GlobalStateProvider } from './utils/context.js';
 
-
 export const metadata = {
   title: "218 Tattoo",
   description: "Tattoo Website",
 };
-
 
 export default function RootLayout({ children }) {
 
