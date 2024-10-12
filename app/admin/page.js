@@ -24,7 +24,7 @@ export default function Admin() {
 
     const toggleDateSort = useRef(false) //sorting booking by ascending/decending order
     const [payment, setPayment] = useState(false)
-
+    const [serviceCost, setServiceCost] = useState()
 
     const bookingGrid = useRef(null)
     const [viewPort, setViewport] = useState('list')
@@ -138,19 +138,19 @@ export default function Admin() {
                 <aside className={`${mobileNav ? 'items-center Tablet:items-start bg-mobileNavBg Tablet:bg-transparent' : 'transparent'} absolute Tablet:relative w-full Tablet:w-[20vw] h-full text-black border-r-[1px] border-grey flex flex-col justify-between transition-all duration-[400ms] ease-in-out`}>
                     <p className='hidden Tablet:block w-full text-center py-6 text-2xl border-b-[1px] border-grey'>Admin</p>
                     <div className={`${mobileNav ? 'flex z-[5] justify-center text-white text-[3rem] Tablet:text-black Tablet:justify-start Tablet:text-xl' : 'hidden Tablet:flex text-black text-xl'} flex flex-col gap-3 px-10 pt-8 grow`}>
-                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => {
+                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
                             setNav('Dashboard')
                             setMobileNav(false)
                         }}>Dashboard</p>
-                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => {
+                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
                             setNav('Bookings')
                             setMobileNav(false)
                         }}>Boookings</p>
-                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => {
+                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
                             setNav('Sales')
                             setMobileNav(false)
                         }}>Sales</p>
-                        <p className='hover:bg-adminNavHover rounded p-1 pl-2' onClick={() => {
+                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
                             setNav('Settings')
                             setMobileNav(false)
                         }}>Settings</p>
@@ -229,6 +229,7 @@ export default function Admin() {
                                                 onClick={() => {
                                                     setExpanded(true)
                                                     setExpandedBooking(booking)
+                                                    setServiceCost(0);
                                                 }}
                                                 className="h-full w-full flex items-center col-span-4 grid grid-cols-listView gap-y-1 text-center Tablet:hover:bg-blackA/10 border-[1px] border-pageGrey hover:cursor-pointer">
                                                 <p className="hover:cursor-pointer">{booking.info.service.service}</p>
@@ -245,7 +246,7 @@ export default function Admin() {
                                 <div className="bg-toggleSelected text-white text-3xl flex items-center justify-center">
                                     <div className='flex items-center justify-center gap-3 px-3 hover:cursor-pointer' onClick={() => {
                                         if (!payment) {
-                                            setExpanded(false)
+                                            setExpanded(false);
                                         } else {
                                             setPayment(false)
                                         }
@@ -318,17 +319,23 @@ export default function Admin() {
                                         {/*****| Process Payment |*****/}
                                         <p className='pb-3 text-2xl mt-10'>Process Payment </p>
                                         <div className='flex text-xl'>
-                                            <div className='flex flex-col bg-white rounded shrink ml-10'>
-                                                <div className='p-4 flex flex-col'>
-                                                    <p>Services</p>
-                                                    <div className='flex flex-col pl-3'>
-                                                        {expandedBooking?.info?.service?.service} - $50
+                                            <div className='relative flex flex-col items-center justify-center bg-white rounded shrink ml-10'>
+                                                <div className='p-6 flex flex-col items-center gap-2'>
+                                                    <div className='flex justify-center items-center gap-2'>
+                                                        <p className="mt-2 text-gray-600">Service Cost: </p>
+                                                        <input
+                                                            id="serviceCost"
+                                                            type="number"
+                                                            placeholder="Enter amount"
+                                                            className="mt-1 px-3 py-2 w-[40%] bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-toggleSelected focus:border-toggleSelected sm:text-sm"
+                                                            onChange={(e) => setServiceCost(e.target.value)}
+                                                        />
                                                     </div>
-                                                    <p>Deposit: $0</p>
-                                                    <p>Total: $50</p>
-                                                </div>
-                                                <div className='flex bg-adminNavHover p-4 rounded-b'>
-                                                    <button onClick={() => setPayment(100)}>Complete Payment</button>{/* change to booking.price new field or something similar*/}
+                                                    <p className="mt-2 text-gray-600">Deposit: $0</p>
+                                                    <p className="mt-1 font-semibold text-gray-800">{`Total Due: $${serviceCost ? serviceCost: "0.00"}`}</p>
+                                                    <button onClick={() => setPayment(serviceCost)} className="mt-4 w-full bg-toggleSelected text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                        Make Payment
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -359,6 +366,7 @@ export default function Admin() {
 
                     {/**** Sales ****/}
                     <div className={`${nav === 'Sales' ? 'block' : 'hidden'} 'flex flex-col w-full h-full`}>
+                        <p>Set default down payment</p>
                     </div>
 
                     {/**** Settings ****/}
