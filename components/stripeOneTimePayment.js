@@ -12,7 +12,6 @@ export default function StripeOneTimePayment({ payment }) {
     const sessionId = useRef(null)
 
     async function handlePayment(price) {
-        console.log('key: ', process.env.NEXT_PUBLIC_STRIPE_API_KEY)
         const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY.toString());
         initialize();
 
@@ -30,9 +29,7 @@ export default function StripeOneTimePayment({ payment }) {
         async function initialize() {
             const fetchClientSecret = async () => {
                 try {
-                    const response = await client.post("/payment/create-checkout-session", {amount: price*100});
-                    console.log('Client Secret:', response.data.clientSecret);
-                    console.log('Session Id:', response.data.sessionId);
+                    const response = await client.post("/payment/create-checkout-session", {amount: price*100}); //Stripe expects the amount in cents
                     sessionId.current = response.data.sessionId
                     return response.data.clientSecret;
                 } catch (error) {
@@ -61,7 +58,6 @@ export default function StripeOneTimePayment({ payment }) {
     }
 
     useEffect(() => {
-        console.log('Payment: ', payment);
         if (payment) {
             handlePayment(payment);
         }

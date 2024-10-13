@@ -5,7 +5,7 @@ import Image from 'next/image';
 import moment from 'moment';
 import { useEffect, useState, useRef, use } from 'react';
 
-export default function BookingDateTime({ booked, errors, hideBar, setDateTime }) {
+export default function BookingDateTime({ booked, errors, hideBar, setDateTime, theme }) {
     const client = axios.create({
         baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
@@ -25,6 +25,25 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
 
     let dynamicColumns = 5;
 
+    const dateThemes = {
+        arrow: {
+            small: 20,
+            large: 30,
+        },
+        month: {
+            small: "text-2xl mx-4",
+            large: "text-3xl mx-10",
+        },
+        dates: {
+            small: "text-2xl rounded-[6px] w-[50px] h-[50px]",
+            large: "text-4xl rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px]",
+        },
+        dategap: {
+            small: "gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3",
+            large: "gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6",
+        },
+    }
+    
     useEffect(() => {
         if (booked) {
             setSelectedDay('')
@@ -164,24 +183,24 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
             <div className="flex flex-col items-center justify-center">
                 <div ref={dateTimeBar} className="overflow-y-hidden transition-height ease-in-out duration-500">
                     <div className="flex flex-col items-center justify-center">
-                        <div className="flex items-center justify-center mt-8">
+                        <div className="flex items-center justify-center mt-4">
                             <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'start' ? 'invisible' : 'visible'}`}
                                 src="/leftArrow.png"
-                                width={30}
-                                height={30}
+                                width={dateThemes.arrow[theme]}
+                                height={dateThemes.arrow[theme]}
                                 alt="NextPic"
                                 onClick={() => prevMonth()}
                             />
-                            <p className="text-3xl text-black mx-10">{selectedMonth.format('MMMM')}</p>
+                            <p className={`${dateThemes.month[theme]} text-black`}>{selectedMonth.format('MMMM')}</p>
                             <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'end' ? 'invisible' : 'visible'}`}
                                 src="/rightArrow.png"
-                                width={30}
-                                height={30}
+                                width={dateThemes.arrow[theme]}
+                                height={dateThemes.arrow[theme]}
                                 alt="NextPic"
                                 onClick={() => nextMonth()}
                             />
                         </div>
-                        <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6 Tablet:text-xl px-4 Mobile-M:px-6 Tablet:px-10 py-8 place-items-center`}>
+                        <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 ${dateThemes.dategap[theme]} Mobile-M:px-6 Tablet:px-10 px-4 py-8 place-items-center`}>
                             <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-1 col-start-1 text-black">Saturday</div>
                             <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-2 col-start-1 text-black">Sunday</div>
                             {selectedWeekends.map((weekend) => {
@@ -197,8 +216,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime }
                                         className={`
                                             ${selectedDay.day === weekend.day ? 'bg-teal-600 text-white' : 'bg-black/30 text-black hover:bg-black/40'} 
                                             ${weekend.disabled ? 'bg-black/10 pointer-events-none text-black/40' : 'hover:scale-110 hover:cursor-pointer'}
-                                            text-4xl transition-all ease-in-out duration-250 row-start-${weekend.which} flex items-center justify-center 
-                                            rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px] 
+                                            transition-all ease-in-out duration-250 row-start-${weekend.which} flex items-center justify-center ${dateThemes.dates[theme]} 
                                         `}>{weekend.day}
                                     </div>
                                 )

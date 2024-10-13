@@ -8,6 +8,7 @@ import SetAvailability from "../../components/setAvailability"
 import moment from 'moment';
 import Image from 'next/image';
 import StripeOneTimePayment from "../../components/stripeOneTimePayment"
+import BookingDateTime from "../../components/bookingDateTime"
 
 export default function Admin() {
 
@@ -31,6 +32,8 @@ export default function Admin() {
     const [expanded, setExpanded] = useState(false)
     const [expandedBooking, setExpandedBooking] = useState(false)
     const [bookingActionMessage, setBookingActionMessage] = useState(null)
+    const [dateTime, setDateTime] = useState('')
+    const [sidebarCollapsed, setSidebarCollapse] = useState(false)
 
     //Tailwind CSS Presets
     let inputName = "text-sm text-black"
@@ -135,28 +138,91 @@ export default function Admin() {
         return (
             <main className="bg-white h-[100vh] flex items-center">
                 {/********** | Sidebar Nav | **********/}
-                <aside className={`${mobileNav ? 'items-center Tablet:items-start bg-mobileNavBg Tablet:bg-transparent' : 'transparent'} absolute Tablet:relative w-full Tablet:w-[20vw] h-full text-black border-r-[1px] border-grey flex flex-col justify-between transition-all duration-[400ms] ease-in-out`}>
-                    <p className='hidden Tablet:block w-full text-center py-6 text-2xl border-b-[1px] border-grey'>Admin</p>
-                    <div className={`${mobileNav ? 'flex z-[5] justify-center text-white text-[3rem] Tablet:text-black Tablet:justify-start Tablet:text-xl' : 'hidden Tablet:flex text-black text-xl'} flex flex-col gap-3 px-10 pt-8 grow`}>
-                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
-                            setNav('Dashboard')
-                            setMobileNav(false)
-                        }}>Dashboard</p>
-                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
-                            setNav('Bookings')
-                            setMobileNav(false)
-                        }}>Boookings</p>
-                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
-                            setNav('Sales')
-                            setMobileNav(false)
-                        }}>Sales</p>
-                        <p className='hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2' onClick={() => {
-                            setNav('Settings')
-                            setMobileNav(false)
-                        }}>Settings</p>
+                <aside className={`${mobileNav ? 'items-center Tablet:items-start bg-mobileNavBg Tablet:bg-transparent' : 'transparent'} absolute Tablet:relative w-full ${sidebarCollapsed ? 'Tablet:w-[70px]' : 'Tablet:w-[20vw]'} h-full text-black border-r-[1px] border-grey flex flex-col justify-between transition-all duration-[400ms] ease-in-out`}>
+                    <div className='flex items-center border-b-[1px] border-grey h-[80px]'>
+                        <p className={`${sidebarCollapsed ? 'text-white hidden' : 'hidden Tablet:block'} w-full text-center py-6 text-3xl`}>Admin Panel</p>
+                        <Image className={`rounded-lg Tablet:hover:scale-110 transition-transform ease-in-out duration-500 cursor-pointer mx-4 ${sidebarCollapsed ? 'rotate-180' : ''}`}
+                            src="/sidebarCollapse.png"
+                            width={40}
+                            height={40}
+                            alt="Collapse Sidebar"
+                            onClick={() => setSidebarCollapse(!sidebarCollapsed)}
+                        />
+                    </div>
+                    <div className={`${mobileNav ? 'flex z-[5] justify-center text-white text-[3rem] Tablet:text-black Tablet:justify-start Tablet:text-xl' : 'hidden Tablet:flex text-black text-xl'} flex flex-col gap-3 pt-8 grow`}>
+                        {/****Dashboard ****/}
+                        <div className={`${sidebarCollapsed ? 'justify-center px-2' : 'px-10'} w-full flex transition-all ease-in-out duration-500`}>
+                            <p className={`${sidebarCollapsed ? 'hidden' : 'block'} hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2`} onClick={() => {
+                                setNav('Dashboard')
+                                setMobileNav(false)
+                            }}>Dashboard</p>
+                            <Image className={`${sidebarCollapsed ? 'block' : 'hidden'} Tablet:hover:scale-110 transition-transform ease-in-out duration-500 cursor-pointer`}
+                                src={`${nav === 'Dashboard' ? '/dashboardIconSelected.png' : '/dashboardIcon.png'}`}
+                                width={40}
+                                height={40}
+                                alt="Dashboard"
+                                onClick={() => {
+                                    setNav('Dashboard')
+                                    setMobileNav(false)
+                                }}
+                            />
+                        </div>
+                        {/****Bookings ****/}
+                        <div className={`${sidebarCollapsed ? 'justify-center px-2' : 'px-10'} w-full flex transition-all ease-in-out duration-500`}>
+                            <p className={`${sidebarCollapsed ? 'hidden' : 'block'} hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2`} onClick={() => {
+                                setNav('Bookings')
+                                setMobileNav(false)
+                            }}>Boookings</p>
+                            <Image className={`${sidebarCollapsed ? 'block' : 'hidden'} Tablet:hover:scale-110 transition-transform ease-in-out duration-500 cursor-pointer`}
+                                src={`${nav === 'Bookings' ? '/bookingIconSelected.png' : '/bookingIcon.png'}`}
+                                width={40}
+                                height={40}
+                                alt="Bookings"
+                                onClick={() => {
+                                    setNav('Bookings')
+                                    setMobileNav(false)
+                                }}
+                            />
+                        </div>
+                        {/**** Sales ****/}
+                        <div className={`${sidebarCollapsed ? 'justify-center px-2' : 'px-10'} w-full flex transition-all ease-in-out duration-500`}>
+                            <p className={`${sidebarCollapsed ? 'hidden' : 'block'} hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2`} onClick={() => {
+                                setNav('Sales')
+                                setMobileNav(false)
+                            }}>Sales</p>
+                            <Image className={`${sidebarCollapsed ? 'block' : 'hidden'} Tablet:hover:scale-110 transition-transform ease-in-out duration-500 cursor-pointer`}
+                                src={`${nav === 'Sales' ? '/salesIconSelected.png' : '/salesIcon.png'}`}
+                                width={40}
+                                height={40}
+                                alt="Sales"
+                                onClick={() => {
+                                    setNav('Sales')
+                                    setMobileNav(false)
+                                }}
+                            />
+                        </div>
+                        {/**** Settings ****/}
+                        <div className={`${sidebarCollapsed ? 'justify-center px-2' : 'px-10'} w-full flex transition-all ease-in-out duration-500`}>
+                            <p className={`${sidebarCollapsed ? 'hidden' : 'block'} hover:bg-adminNavHover hover:cursor-pointer rounded p-1 pl-2`} onClick={() => {
+                                setNav('Settings')
+                                setMobileNav(false)
+                            }}>Settings</p>
+                            <Image className={`${sidebarCollapsed ? 'block' : 'hidden'} Tablet:hover:scale-110 transition-transform ease-in-out duration-500 cursor-pointer`}
+                                src={`${nav === 'Settings' ? '/settingsIconSelected.png' : '/settingsIcon.png'}`}
+                                width={40}
+                                height={40}
+                                alt="Settings"
+                                onClick={() => {
+                                    setNav('Settings')
+                                    setMobileNav(false)
+                                }}
+                            />
+                        </div>
                     </div>
                     <div className="flex w-full justify-center items-center py-4 text-xl bg-adminNavHover">
                         <Link className="" href="/" onClick={() => setTimeout(() => { setIsAuthenticated(false) }, 1000)}>Logout</Link>
+                    </div>
+                    <div>
                     </div>
                 </aside>
                 {/********** | Content | **********/}
@@ -242,7 +308,7 @@ export default function Admin() {
                                 </div>
                             </div>
                             {/***********| Expanded Boooking View |***********/}
-                            <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white Tablet:bg-pageGrey text-black hover:pointer-default`}>
+                            <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white text-black hover:pointer-default`}>
                                 <div className="bg-toggleSelected text-white text-3xl flex items-center justify-center">
                                     <div className='flex items-center justify-center gap-3 px-3 hover:cursor-pointer' onClick={() => {
                                         if (!payment) {
@@ -260,10 +326,10 @@ export default function Admin() {
                                         <p className='hover:cursor-pointer'>Return</p>
                                     </div>
                                 </div>
-                                <div className='flex flex-col Tablet:flex-row row w-full'>
+                                <div className='flex flex-col Tablet:flex-row row w-full mt-10'>
                                     {/*--------------------| Left Side |--------------------*/}
-                                    <div className='basis-1/2 flex flex-col'>
-                                        <div className='w-full flex justify-center py-6'>
+                                    <div className='basis-1/2 border-r-[2px] border-grey flex flex-col ml-10'>
+                                        <div className='w-full flex justify-center pb-6'>
                                             <p className="text-5xl">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
                                         </div>
                                         {/*****| Service |*****/}
@@ -315,11 +381,16 @@ export default function Admin() {
                                         <p>Link to media if there is any</p>
                                     </div>
                                     {/*--------------------| Right Side |--------------------*/}
-                                    <div className='basis-1/2 flex flex-col px-8'>
+                                    <div className='basis-1/2 flex flex-col mx-10'>
+                                        {/*****| Move Apppointment |*****/}
+                                        <p className='text-2xl'>Move Appointment </p>
+                                        <div className='flex flex-col items-center justify-center bg-[#FAF9F9] rounded shrink mt-4 ml-10 border-[1px] border-grey rounded shadow-md'>
+                                            <BookingDateTime setDateTime={setDateTime} theme="small" />
+                                        </div>
                                         {/*****| Process Payment |*****/}
-                                        <p className='pb-3 text-2xl mt-10'>Process Payment </p>
-                                        <div className='flex text-xl'>
-                                            <div className='relative flex flex-col items-center justify-center bg-white rounded shrink ml-10'>
+                                        <p className='text-2xl mt-10'>Process Payment </p>
+                                        <div className='flex text-xl mt-4'>
+                                            <div className='flex flex-col items-center justify-center bg-[#FAF9F9] rounded shrink ml-10 border-[1px] border-grey rounded shadow-md'>
                                                 <div className='p-6 flex flex-col items-center gap-2'>
                                                     <div className='flex justify-center items-center gap-2'>
                                                         <p className="mt-2 text-gray-600">Service Cost: </p>
@@ -332,15 +403,13 @@ export default function Admin() {
                                                         />
                                                     </div>
                                                     <p className="mt-2 text-gray-600">Deposit: $0</p>
-                                                    <p className="mt-1 font-semibold text-gray-800">{`Total Due: $${serviceCost ? serviceCost: "0.00"}`}</p>
+                                                    <p className="mt-1 font-semibold text-gray-800">{`Total Due: $${serviceCost ? serviceCost : "0.00"}`}</p>
                                                     <button onClick={() => setPayment(serviceCost)} className="mt-4 w-full bg-toggleSelected text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                                         Make Payment
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        {/*****| Postponse |*****/}
-                                        <p className='pl-6 pb-3 text-2xl mt-10'>Postpone </p>
                                         {/*****| Cancel |*****/}
                                         <p className='pl-6 pb-3 text-2xl mt-10'>Cancel </p>
                                         <div>
@@ -373,9 +442,10 @@ export default function Admin() {
                     <div className={`${nav === 'Settings' ? 'block' : 'hidden'} 'flex flex-col w-full h-full`}>
                     </div>
                 </div>
-            </main>
+            </main >
         )
     } else {
+        {/******** Login Form ********/ }
         return (
             <main className="flex items-center justify-center h-[100vh] bg-pageGrey">
                 <div className='translate-y[5vh] w-full h-[50vh] Tablet:w-[45vw] Laptop:w-[35vw] Monitor:w-[25vw] h-[60vh] bg-white rounded-md flex flex-col items-center px-3'>

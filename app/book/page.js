@@ -287,7 +287,7 @@ export default function Book() {
                                         </g> <defs> <clipPath id="clip0_901_963"> <rect width="32" height="32" fill="white"></rect> </clipPath> </defs> </g>
                                     </svg>
                                 </div>
-                                <div className={`${formProgress >= 4 ? 'text-progressBarComplete' : 'text-gray-500'} absolute top-0 ml-[-50%] text-center mt-16 text-[11px] Mobile-L:text-[13px] font-medium uppercase`}>Appointment</div>
+                                <div className={`${formProgress >= 4 ? 'text-progressBarComplete' : 'text-gray-500'} absolute top-0 ml-[-50%] text-center mt-16 text-[11px] Mobile-L:text-[13px] font-medium uppercase mb-4`}>Appointment</div>
                             </div>
                         </div>
                     </div>
@@ -403,7 +403,7 @@ export default function Book() {
                         </div>
                         {/*----Appointment----*/}
                         <div className={`${formProgress === 4 ? '' : 'hidden'} w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px]`}>
-                            <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} />
+                            <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} theme="large"/>
                         </div>
                         {/*----Booking Success----*/}
                         <div className={`${formProgress === 5 ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] flex flex-col justify-between items-center p-4`}>
