@@ -12,7 +12,8 @@ export default function StripeOneTimePayment({ payment }) {
     const sessionId = useRef(null)
 
     async function handlePayment(price) {
-        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_TEST_API_KEY.toString());
+        console.log('key: ', process.env.NEXT_PUBLIC_STRIPE_API_KEY)
+        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_API_KEY.toString());
         initialize();
 
         //Verify payment success/failure
