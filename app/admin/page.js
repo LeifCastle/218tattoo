@@ -138,7 +138,7 @@ export default function Admin() {
         return (
             <main className="bg-white h-[100vh] flex items-center">
                 {/********** | Sidebar Nav | **********/}
-                <aside className={`${mobileNav ? 'items-center Tablet:items-start bg-mobileNavBg Tablet:bg-transparent' : 'transparent'} absolute Tablet:relative w-full ${sidebarCollapsed ? 'Tablet:w-[70px]' : 'Tablet:w-[20vw]'} h-full text-black border-r-[1px] border-grey flex flex-col justify-between transition-all duration-[400ms] ease-in-out`}>
+                <aside className={`${mobileNav ? 'sticky left-0 items-center Tablet:items-start bg-mobileNavBg Tablet:bg-transparent' : 'transparent'} absolute Tablet:relative w-full ${sidebarCollapsed ? 'Tablet:w-[70px]' : 'Tablet:w-[20vw]'} h-full text-black border-r-[1px] border-grey flex flex-col justify-between transition-all duration-[400ms] ease-in-out`}>
                     <div className='flex items-center border-b-[1px] border-grey h-[80px]'>
                         <p className={`${sidebarCollapsed ? 'text-white hidden' : 'hidden Tablet:block'} w-full text-center py-6 text-3xl`}>Admin Panel</p>
                         <Image className={`rounded-lg Tablet:hover:scale-110 transition-transform ease-in-out duration-500 cursor-pointer mx-4 ${sidebarCollapsed ? 'rotate-180' : ''}`}
@@ -228,7 +228,7 @@ export default function Admin() {
                 {/********** | Content | **********/}
                 <div className='w-full h-full flex flex-col'>
                     {/**** Header ****/}
-                    <div className="w-full py-5 bg-[#888888] Tablet:bg-adminNavHover sticky top-0 flex justify-between px-10 items-center text-black text-4xl">
+                    <div className="sticky top-0 w-full py-5 bg-[#888888] Tablet:bg-adminNavHover sticky top-0 flex justify-between px-10 items-center text-black text-4xl">
                         <p className='text-white Tablet:text-black text-center w-full'>{nav}</p>
                         <div className="Tablet:hidden " onClick={() => setMobileNav(!mobileNav)}>
                             <div className={`${mobileNav ? "rotate-[-45deg] translate-y-[2.5px]" : ""} w-[30px] h-[5px] rounded-full ${mobileNav ? 'bg-blackA' : 'bg-white'} transition-all duration-[400ms] ease-in-out`}></div>
@@ -308,27 +308,22 @@ export default function Admin() {
                                 </div>
                             </div>
                             {/***********| Expanded Boooking View |***********/}
-                            <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white text-black hover:pointer-default`}>
-                                <div className="bg-toggleSelected text-white text-3xl flex items-center justify-center">
-                                    <div className='flex items-center justify-center gap-3 px-3 hover:cursor-pointer' onClick={() => {
-                                        if (!payment) {
-                                            setExpanded(false);
-                                        } else {
-                                            setPayment(false)
-                                        }
-                                    }}>
-                                        <Image className=""
-                                            src="/returnArrow.png"
-                                            width={50}
-                                            height={50}
-                                            alt="Return"
-                                        />
-                                        <p className='hover:cursor-pointer'>Return</p>
+                            <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white text-black`}>
+                                <div className="absolute flex items-center justify-center z-[4] bg-[#F1F1F1] left-0 top-0 rounded-md shadow-md w-[44px] h-[44px] group hover:cursor-pointer border-[1px] border-grey mt-[5px] ml-[5px]" onClick={() => {
+                                    if (!payment) {
+                                        setExpanded(false);
+                                    } else {
+                                        setPayment(false)
+                                    }
+                                }}>
+                                    <div className='group-hover:scale-[1.15] transition ease-in-out duration-500 hover:cursor-pointer'>
+                                        <div className="rotate-[-45deg] translate-y-[2.5px] w-[30px] h-[5px] rounded-full bg-blackA transition-all duration-[400ms] ease-in-out hover:cursor-pointer group-hover:bg-progressBarComplete"></div>
+                                        <div className="rotate-[45deg] translate-y-[-2.5px] w-[30px] h-[5px] rounded-full bg-blackA transition-all duration-[400ms] ease-in-out hover:cursor-pointer group-hover:bg-progressBarComplete"></div>
                                     </div>
                                 </div>
-                                <div className='flex flex-col Tablet:flex-row row w-full mt-10'>
+                                <div className='flex flex-col Laptop:flex-row row w-full mt-10 bg-white'>
                                     {/*--------------------| Left Side |--------------------*/}
-                                    <div className='basis-1/2 border-r-[2px] border-grey flex flex-col ml-10'>
+                                    <div className='basis-2/3 border-b-[2px] Laptop:border-b-[0px] Laptop:border-r-[2px] border-grey flex flex-col ml-10'>
                                         <div className='w-full flex justify-center pb-6'>
                                             <p className="text-5xl">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
                                         </div>
@@ -381,44 +376,39 @@ export default function Admin() {
                                         <p>Link to media if there is any</p>
                                     </div>
                                     {/*--------------------| Right Side |--------------------*/}
-                                    <div className='basis-1/2 flex flex-col mx-10'>
+                                    <div className='basis-1/3 flex flex-col mx-10 px-10 pb-10 items-center'>
                                         {/*****| Move Apppointment |*****/}
                                         <p className='text-2xl'>Move Appointment </p>
-                                        <div className='flex flex-col items-center justify-center bg-[#FAF9F9] rounded shrink mt-4 ml-10 border-[1px] border-grey rounded shadow-md'>
+                                        <div className='flex flex-col items-center justify-center w-full bg-[#FAF9F9] rounded shrink mt-4 border-[1px] border-grey rounded shadow-md'>
                                             <BookingDateTime setDateTime={setDateTime} theme="small" />
                                         </div>
                                         {/*****| Process Payment |*****/}
                                         <p className='text-2xl mt-10'>Process Payment </p>
-                                        <div className='flex text-xl mt-4'>
-                                            <div className='flex flex-col items-center justify-center bg-[#FAF9F9] rounded shrink ml-10 border-[1px] border-grey rounded shadow-md'>
-                                                <div className='p-6 flex flex-col items-center gap-2'>
-                                                    <div className='flex justify-center items-center gap-2'>
-                                                        <p className="mt-2 text-gray-600">Service Cost: </p>
-                                                        <input
-                                                            id="serviceCost"
-                                                            type="number"
-                                                            placeholder="Enter amount"
-                                                            className="mt-1 px-3 py-2 w-[40%] bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-toggleSelected focus:border-toggleSelected sm:text-sm"
-                                                            onChange={(e) => setServiceCost(e.target.value)}
-                                                        />
-                                                    </div>
-                                                    <p className="mt-2 text-gray-600">Deposit: $0</p>
-                                                    <p className="mt-1 font-semibold text-gray-800">{`Total Due: $${serviceCost ? serviceCost : "0.00"}`}</p>
-                                                    <button onClick={() => setPayment(serviceCost)} className="mt-4 w-full bg-toggleSelected text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                                        Make Payment
-                                                    </button>
+                                        <div className='flex flex-col items-center justify-center text-xl mt-4 w-full bg-[#FAF9F9] rounded shrink border-[1px] border-grey rounded shadow-md'>
+                                            <div className='p-6 flex flex-col items-center gap-2'>
+                                                <div className='flex justify-center items-center gap-2'>
+                                                    <p className="mt-2 text-gray-600">Service Cost: </p>
+                                                    <input
+                                                        id="serviceCost"
+                                                        type="number"
+                                                        placeholder="Enter amount"
+                                                        className="mt-1 px-3 py-2 w-[40%] bg-gray-100 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-toggleSelected focus:border-toggleSelected sm:text-sm"
+                                                        onChange={(e) => setServiceCost(e.target.value)}
+                                                    />
                                                 </div>
+                                                <p className="mt-2 text-gray-600">Deposit: $0</p>
+                                                <p className="mt-1 font-semibold text-gray-800">{`Total Due: $${serviceCost ? serviceCost : "0.00"}`}</p>
+                                                <button onClick={() => setPayment(serviceCost)} className="mt-4 w-full bg-toggleSelected text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                    Make Payment
+                                                </button>
                                             </div>
                                         </div>
                                         {/*****| Cancel |*****/}
-                                        <p className='pl-6 pb-3 text-2xl mt-10'>Cancel </p>
-                                        <div>
-                                            <div className='basis-1/2 bg-red-200 py-4 hover:cursor-pointer' onClick={() => cancelBooking(expandedBooking._id)}>Cancel Appointment</div>
-                                        </div>
+                                            <div className='mt-10 shadow-md w-full text-2xl text-center rounded bg-red-200 p-3 hover:cursor-pointer' onClick={() => cancelBooking(expandedBooking._id)}>Cancel Appointment</div>
                                     </div>
                                 </div>
                                 {/*****| Pay Form |*****/}
-                                <div className={`${payment ? 'block' : 'hidden'} absolute mt-[50px] w-full h-[calc(100%-50px)] bg-white flex flex-col justify-center`}>
+                                <div className={`${payment ? 'block' : 'hidden'} absolute w-full h-full bg-white flex flex-col justify-center`}>
                                     <StripeOneTimePayment payment={payment} />
                                 </div>
                                 {/*****| Booking Action Message |*****/}
