@@ -31,6 +31,7 @@ export default function Book() {
 
     //Appointment
     const [dateTime, setDateTime] = useState('')
+    const [selectedDay, setSelectedDay] = useState('')
 
     const [referencePhotos, setReferencePhotos] = useState([])
     const { service, setService } = useContext(GlobalStateContext); //Global context is used so it can be preset from the home page
@@ -403,7 +404,7 @@ export default function Book() {
                         </div>
                         {/*----Appointment----*/}
                         <div className={`${formProgress === 4 ? '' : 'hidden'} w-[250px] Mobile-M:w-[300px]  Mobile-L:w-[350px]`}>
-                            <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} theme="large"/>
+                            <BookingDateTime booked={booked} errors={errors} setDateTime={setDateTime} selectedDay={selectedDay} setSelectedDay={setSelectedDay} theme="large"/>
                         </div>
                         {/*----Booking Success----*/}
                         <div className={`${formProgress === 5 ? '' : 'hidden'} rounded-lg w-[90vw] Mobile-L:w-[80vw] Tablet:w-[50vw] flex flex-col justify-between items-center p-4`}>

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import moment from 'moment';
 import { useEffect, useState, useRef, use } from 'react';
 
-export default function BookingDateTime({ booked, errors, hideBar, setDateTime, theme }) {
+export default function BookingDateTime({ booked, setBooked, errors, hideBar, setDateTime, selectedDay, setSelectedDay, theme }) {
     const client = axios.create({
         baseURL: process.env.NEXT_PUBLIC_SERVER_URL
     });
@@ -13,9 +13,8 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
     const [bookedDateTimes, setBookedDateTimes] = useState({})
     const [selectedMonth, setSelectedMonth] = useState(moment())
     const [selectedWeekends, setSelectedWeekends] = useState([])
-    const [timeOptions, setTimeOptions] = useState()
-    const [selectedDay, setSelectedDay] = useState('') //Auto populate: { day: moment().format('M-D'), which: moment().day() }
-    const [selectedTime, setSelectedTime] = useState('') //Auto populate: "12:00 PM"
+    const [timeOptions, setTimeOptions] = useState() 
+    const [selectedTime, setSelectedTime] = useState('')
     const [boundary, setBoundary] = useState('start') //Hides the next/prev month arrow as needed
 
     const dateTimeBar = useRef(null)
@@ -39,8 +38,16 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
             large: "text-4xl rounded-[12px] w-[50px] h-[50px] Tablet:w-[80px] Tablet:h-[80px]",
         },
         dategap: {
-            small: "gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3",
-            large: "gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6",
+            small: "gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3 pb-8 pt-4",
+            large: "gap-x-2 gap-y-2 Mobile-M:gap-x-3 Mobile-M:gap-y-3 Tablet:gap-x-6 Tablet:gap-y-6 py-8",
+        },
+        time: {
+            small: "gap-4 text-xl",
+            large: "gap-6 Tablet:gap-10 py-6",
+        },
+        timeOptions: {
+            small: "text-md rounded-[6px] p-1",
+            large: "text-xl rounded-[12px] p-2",
         },
     }
     
@@ -49,6 +56,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
             setSelectedDay('')
             setSelectedTime('')
             setDateTime('')
+            setBooked(false)
         }
     })
 
@@ -89,8 +97,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
                     }}
                     className={`
                         ${bookedDateTimes[bookedDate]?.includes(time) ? 'bg-black/10 pointer-events-none text-black/40' : selectedTime === time ? 'bg-teal-600 text-white' : 'bg-black/30 hover:bg-black/40'} 
-                        ${disabled ? 'bg-black/10 pointer-events-none text-black/40' : 'hover:cursor-pointer text-black'}
-                        text-xl rounded-[12px] p-2
+                        ${disabled ? 'bg-black/10 pointer-events-none text-black/40' : 'hover:cursor-pointer text-black'} ${dateThemes.timeOptions[theme]}
                     `}>{time}
                 </div>
             )
@@ -183,7 +190,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
             <div className="flex flex-col items-center justify-center">
                 <div ref={dateTimeBar} className="overflow-y-hidden transition-height ease-in-out duration-500">
                     <div className="flex flex-col items-center justify-center">
-                        <div className="flex items-center justify-center mt-4">
+                        <div className="flex items-center justify-center mt-4 z-[1]">
                             <Image className={`rounded-lg Tablet:hover:scale-125 transition-transform ease-in-out duration-500 cursor-pointer ${boundary === 'start' ? 'invisible' : 'visible'}`}
                                 src="/leftArrow.png"
                                 width={dateThemes.arrow[theme]}
@@ -200,7 +207,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
                                 onClick={() => nextMonth()}
                             />
                         </div>
-                        <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 ${dateThemes.dategap[theme]} Mobile-M:px-6 Tablet:px-10 px-4 py-8 place-items-center`}>
+                        <div className={`grid grid-cols-[80px_repeat(${dynamicColumns}, minmax(10px, 100px))] grid-rows-2 ${dateThemes.dategap[theme]} px-2 place-items-center`}>
                             <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-1 col-start-1 text-black">Saturday</div>
                             <div className="hidden Mobile-L:block Mobile-L:text-md Tablet:text-xl row-start-2 col-start-1 text-black">Sunday</div>
                             {selectedWeekends.map((weekend) => {
@@ -211,6 +218,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
                                             setDateTime('')
                                         } else {
                                             setSelectedDay(weekend)
+                                            setSelectedTime('')
                                         }
                                     }}
                                         className={`
@@ -223,7 +231,7 @@ export default function BookingDateTime({ booked, errors, hideBar, setDateTime, 
                             })}
                         </div>
                     </div>
-                    <div className={`${selectedDay === '' ? 'hidden' : 'block'} flex flex-wrap justify-center gap-6 Tablet:gap-12 py-6 overflow-hidden`}>
+                    <div className={`${selectedDay === '' ? 'hidden' : 'block'} ${dateThemes.time[theme]} flex flex-wrap justify-center overflow-hidden pb-6 px-3`}>
                         {timeOptions}
                     </div>
                 </div>

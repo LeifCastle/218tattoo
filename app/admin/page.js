@@ -33,6 +33,8 @@ export default function Admin() {
     const [expandedBooking, setExpandedBooking] = useState(false)
     const [bookingActionMessage, setBookingActionMessage] = useState(null)
     const [dateTime, setDateTime] = useState('')
+    const [selectedDay, setSelectedDay] = useState('')
+    const [booked, setBooked] = useState(false)
     const [sidebarCollapsed, setSidebarCollapse] = useState(false)
 
     //Tailwind CSS Presets
@@ -94,7 +96,7 @@ export default function Admin() {
         }
     }
 
-    function getBookings() {
+    async function getBookings() {
         return client.get('/admin')
             .then((response) => {
                 console.log('Found Bookings: ', response.data);
@@ -132,6 +134,27 @@ export default function Admin() {
                 break;
 
         }
+    }
+
+    //--Move booking (update the date/time)
+    function moveBooking(booking) {
+        client.put('/book/move', {
+            id: booking,
+            dateTime: dateTime,
+        })
+            .then(response => {
+                setBooked(true);
+                getBookings().then(() => {
+                    filterBookings('current')
+                    setExpandedBooking(bookings.current.find((booking) => {
+                        return booking.info._id === expandedBooking.info._id
+                    }))
+                })
+
+            })
+            .catch(error => {
+                console.log('Error: ', error)
+            })
     }
 
     if (isAuthenticated) {
@@ -379,8 +402,16 @@ export default function Admin() {
                                     <div className='basis-1/3 flex flex-col mx-10 px-10 pb-10 items-center'>
                                         {/*****| Move Apppointment |*****/}
                                         <p className='text-2xl'>Move Appointment </p>
-                                        <div className='flex flex-col items-center justify-center w-full bg-[#FAF9F9] rounded shrink mt-4 border-[1px] border-grey rounded shadow-md'>
-                                            <BookingDateTime setDateTime={setDateTime} theme="small" />
+                                        <div className='relative flex flex-col items-center justify-center w-full bg-[#FAF9F9] rounded shrink mt-4 border-[1px] border-grey rounded shadow-md'>
+                                            <BookingDateTime booked={booked} setBooked={setBooked} setDateTime={setDateTime} selectedDay={selectedDay} setSelectedDay={setSelectedDay} theme="small" />
+                                            <div className='absolute top-0 flex w-full justify-between px-4 pt-2 text-lg'>
+                                                <button className={`${selectedDay ? 'visible' : 'invisible'} font-semibold text-red-500`}
+                                                    onClick={() => {
+                                                        setDateTime('')
+                                                        setSelectedDay('')
+                                                    }}>Clear</button>
+                                                <button className={`${dateTime ? 'visible' : 'invisible'} font-semibold text-progressBarComplete`} onClick={() => moveBooking(expandedBooking._id)}>Confirm</button>
+                                            </div>
                                         </div>
                                         {/*****| Process Payment |*****/}
                                         <p className='text-2xl mt-10'>Process Payment </p>
@@ -404,7 +435,7 @@ export default function Admin() {
                                             </div>
                                         </div>
                                         {/*****| Cancel |*****/}
-                                            <div className='mt-10 shadow-md w-full text-2xl text-center rounded bg-red-200 p-3 hover:cursor-pointer' onClick={() => cancelBooking(expandedBooking._id)}>Cancel Appointment</div>
+                                        <div className='mt-10 shadow-md w-full text-2xl text-center rounded bg-red-200 p-3 hover:cursor-pointer' onClick={() => cancelBooking(expandedBooking._id)}>Cancel Appointment</div>
                                     </div>
                                 </div>
                                 {/*****| Pay Form |*****/}
