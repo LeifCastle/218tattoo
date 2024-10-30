@@ -31,6 +31,7 @@ export default function Admin() {
     const [viewPort, setViewport] = useState('list')
     const [expanded, setExpanded] = useState(false)
     const [expandedBooking, setExpandedBooking] = useState(false)
+    const [expandedImage, setExpandedImage] = useState(false);
     const [bookingActionMessage, setBookingActionMessage] = useState(null)
     const [dateTime, setDateTime] = useState('')
     const [selectedDay, setSelectedDay] = useState('')
@@ -261,7 +262,22 @@ export default function Admin() {
                     </div>
 
                     {/**** Dashboard ****/}
-                    <div className={`${nav === 'Dashboard' ? 'block' : 'hidden'} 'flex flex-col w-full h-full`}>
+                    <div className={`${nav === 'Dashboard' ? 'block' : 'hidden'} 'flex flex-col w-full h-full p-8`}>
+                        {/* Block/Unblock booking dates */}
+                        <div className='w-full Tablet:w-[30%] flex flex-col items-center'>
+                            <p className='text-2xl text-black'>Set Booking Availability </p>
+                            <div className='relative flex flex-col items-center justify-center w-full bg-[#FAF9F9] rounded shrink mt-4 border-[1px] border-grey rounded shadow-md'>
+                                <BookingDateTime booked={booked} setBooked={setBooked} setDateTime={setDateTime} selectedDay={selectedDay} setSelectedDay={setSelectedDay} theme="small" />
+                                <div className='absolute top-0 flex w-full justify-between px-4 pt-2 text-lg'>
+                                    <button className={`${selectedDay ? 'visible' : 'invisible'} font-semibold text-red-500`}
+                                        onClick={() => {
+                                            setDateTime('')
+                                            setSelectedDay('')
+                                        }}>Clear</button>
+                                    <button className={`${dateTime ? 'visible' : 'invisible'} font-semibold text-progressBarComplete`} onClick={() => moveBooking(expandedBooking._id)}>Confirm</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/**** Bookings ****/}
@@ -332,13 +348,11 @@ export default function Admin() {
                             </div>
                             {/***********| Expanded Boooking View |***********/}
                             <div className={`${!expanded ? 'hidden' : 'flex'} absolute top-0 left-0 w-full h-full flex-col min-h-[40vh] bg-white text-black`}>
-                                <div className="absolute flex items-center justify-center z-[4] bg-[#F1F1F1] left-0 top-0 rounded-md shadow-md w-[44px] h-[44px] group hover:cursor-pointer border-[1px] border-grey mt-[5px] ml-[5px]" onClick={() => {
-                                    if (!payment) {
-                                        setExpanded(false);
-                                    } else {
-                                        setPayment(false)
-                                    }
-                                }}>
+                                <div
+                                    className="absolute flex items-center justify-center z-[4] bg-[#F1F1F1] left-0 top-0 rounded-md shadow-md w-[44px] h-[44px] group hover:cursor-pointer border-[1px] border-grey mt-[5px] ml-[5px]"
+                                    onClick={() => {
+                                        expandedImage ? setExpandedImage(false) : !payment ? setExpanded(false) : setPayment(false)
+                                    }}>
                                     <div className='group-hover:scale-[1.15] transition ease-in-out duration-500 hover:cursor-pointer'>
                                         <div className="rotate-[-45deg] translate-y-[2.5px] w-[30px] h-[5px] rounded-full bg-blackA transition-all duration-[400ms] ease-in-out hover:cursor-pointer group-hover:bg-progressBarComplete"></div>
                                         <div className="rotate-[45deg] translate-y-[-2.5px] w-[30px] h-[5px] rounded-full bg-blackA transition-all duration-[400ms] ease-in-out hover:cursor-pointer group-hover:bg-progressBarComplete"></div>
@@ -350,53 +364,49 @@ export default function Admin() {
                                         <div className='w-full flex justify-center pb-6'>
                                             <p className="text-5xl">{expandedBooking?.info?.contact?.firstName + " " + expandedBooking?.info?.contact?.lastName}</p>
                                         </div>
-                                        {/*****| Service |*****/}
-                                        <p className="pl-6 pb-3 text-2xl">{expandedBooking?.info?.service?.service}</p>
-                                        <div className='flex'>
-                                            <div className='flex flex-col gap-2 shrink w-auto bg-white ml-10 p-4 rounded'>
-                                                {/* Count */}
-                                                <div className={`${expandedBooking?.info?.service?.service === "Tooth" ? 'block' : 'hidden'} flex`}>
-                                                    <p className="text-xl pr-2">Gem Count: </p>
-                                                    <p className="text-xl">{expandedBooking?.info?.service?.count}</p>
-                                                </div>
-                                                {/* Comments */}
-                                                <div className='flex'>
-                                                    <p className="text-xl pr-2">{expandedBooking?.info?.service?.service === 'Tattoo' ? 'Description: ' : 'Comments: '}</p>
-                                                    <p className="text-xl">{expandedBooking?.info?.service?.comments}</p>
-                                                </div>
-                                            </div>
-                                            <div></div>
-                                        </div>
                                         {/*****| Appointment |*****/}
-                                        <p className='pl-6 pb-3 text-2xl mt-10'>Appointment </p>
-                                        <div className='flex'>
-                                            {/* Date & Time */}
-                                            <div className='flex shrink w-auto bg-white rounded ml-10 p-4'>
-                                                <p className="text-xl mr-4">{moment(expandedBooking?.dateTime).format('MM/DD')}</p>
-                                                <p className="text-xl">{moment(expandedBooking?.dateTime).format('h:mm A')}</p>
+                                        <p className='pl-6 text-2xl'>Appointment </p>
+                                        {/* Date & Time */}
+                                        <div className='flex ml-10 p-4'>
+                                            <p className="text-xl mr-4">{moment(expandedBooking?.dateTime).format('MM/DD')}</p>
+                                            <p className="text-xl">{moment(expandedBooking?.dateTime).format('h:mm A')}</p>
+                                        </div>
+                                        {/*****| Service |*****/}
+                                        <p className="pl-6 text-2xl mt-6">{expandedBooking?.info?.service?.service}</p>
+                                        <div className='flex flex-col gap-2 ml-10 p-4'>
+                                            {/* Count */}
+                                            <div className={`${expandedBooking?.info?.service?.service === "Tooth" ? 'block' : 'hidden'} flex`}>
+                                                <p className="text-xl pr-2">Gem Count: </p>
+                                                <p className="text-xl">{expandedBooking?.info?.service?.count}</p>
                                             </div>
-                                            <div></div>
+                                            {/* Comments */}
+                                            <div className='flex'>
+                                                <p className="text-xl pr-2">{expandedBooking?.info?.service?.service === 'Tattoo' ? 'Description: ' : 'Comments: '}</p> {/* Bug: doesn't work as expected becuase exapanded booking isn't loaded at first so it always goes to comments */}
+                                                <p className="text-xl">{expandedBooking?.info?.service?.comments}</p>
+                                            </div>
                                         </div>
                                         {/*****| Contact |*****/}
-                                        <p className='pl-6 pb-3 text-2xl mt-10'>Contact </p>
-                                        <div className='flex'>
-                                            <div className='flex flex-col gap-2 shrink w-auto bg-white ml-10 p-4 rounded'>
-                                                {/* Phone */}
-                                                <div className={'flex'}>
-                                                    <p className="text-xl pr-2">Phone: </p>
-                                                    <p className="text-xl">{expandedBooking?.info?.contact?.phone}</p>
-                                                </div>
-                                                {/* Email */}
-                                                <div className='flex'>
-                                                    <p className="text-xl pr-2">Email: </p>
-                                                    <p className="text-xl">{expandedBooking?.info?.contact?.email}</p>
-                                                </div>
+                                        <p className='pl-6 text-2xl mt-6'>Contact </p>
+                                        <div className='flex flex-col gap-2 ml-10 p-4'>
+                                            {/* Phone */}
+                                            <div className={'flex'}>
+                                                <p className="text-xl pr-2">Phone: </p>
+                                                <p className="text-xl">{expandedBooking?.info?.contact?.phone}</p>
                                             </div>
-                                            <div></div>
+                                            {/* Email */}
+                                            <div className='flex'>
+                                                <p className="text-xl pr-2">Email: </p>
+                                                <p className="text-xl">{expandedBooking?.info?.contact?.email}</p>
+                                            </div>
                                         </div>
                                         {/*****| Reference Photos |*****/}
-                                        <p className='pl-6 pb-3 text-2xl mt-10'>Reference Photos </p>
-                                        <p>Link to media if there is any</p>
+                                        <p className='pl-6 pb-3 text-2xl mt-6'>Reference Photos </p>
+                                        <div className='flex gap-4 ml-10 p-4'>
+                                            {expandedBooking?.info?.service?.referencePhotos.map((photo, index) => {
+                                                return (<Image onClick={() => setExpandedImage(photo)} key={index} className='rounded' src={photo} width={200} height={200} />)
+                                            }
+                                            )}
+                                        </div>
                                     </div>
                                     {/*--------------------| Right Side |--------------------*/}
                                     <div className='basis-1/3 flex flex-col mx-10 px-10 pb-10 items-center'>
@@ -441,6 +451,10 @@ export default function Admin() {
                                 {/*****| Pay Form |*****/}
                                 <div className={`${payment ? 'block' : 'hidden'} absolute w-full h-full bg-white flex flex-col justify-center`}>
                                     <StripeOneTimePayment payment={payment} />
+                                </div>
+                                {/*****| Expanded Image |*****/}
+                                <div className={`${expandedImage ? 'block' : 'hidden'} absolute w-full h-full bg-white flex flex-col justify-center p-[5%] z-[2]`}>
+                                    <Image className='w-full h-full rounded-md object-contain' src={expandedImage} width={200} height={200}></Image>  {/* Bug: (style) image is not rounded due to object-contain class */}
                                 </div>
                                 {/*****| Booking Action Message |*****/}
                                 <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute w-full h-full flex justify-center items-center bg-pageGrey`}>

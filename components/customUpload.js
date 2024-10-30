@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
-const CustomUpload = ({ setReferencePhotos }) => {
+const CustomUpload = ({ setReferencePhotos, referencePhotos }) => {
   const [file, setFile] = useState(null);
   const [previews, setPreviews] = useState([]);
 
@@ -19,23 +19,23 @@ const CustomUpload = ({ setReferencePhotos }) => {
         setPreviews((prevPreviews) => [...prevPreviews, { file: file, url: event.target.result, id: name }]);
       };
     }
-    //handleUpload()  Run when a user actually books an appointment
+    console.log('uploading to Cloudinary...')
+    handleUpload(file);
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (file) => {
     try {
       //Request signature and timestamp from backend server
       const signResponse = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`, {
         method: 'POST',
       });
       const signData = await signResponse.json();
-      const { timestamp, signature } = signData;
 
       //Prepare FormData with file and Cloudinary parameters
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('timestamp', timestamp);
-      formData.append('signature', signature);
+      formData.append('timestamp', signData.timestamp);
+      formData.append('signature', signData.signature);
       formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY);
 
       //Upload file to Cloudinary 
@@ -47,9 +47,10 @@ const CustomUpload = ({ setReferencePhotos }) => {
         }
       );
       const cloudinaryData = await cloudinaryResponse.json();
+      console.log('cloudinaryData:', cloudinaryData);
 
-      // Update booking with the image id and url
-      setReferencePhotos(cloudinaryData.public_id, cloudinaryData.secure_url);
+      // Update booking with the image url
+      setReferencePhotos([...referencePhotos, cloudinaryData.url]);
     } catch (error) {
       console.error('Error uploading the file:', error);
     }

@@ -334,7 +334,7 @@ export default function Book() {
                                             <textarea placeholder="A fierce eagle..." value={comments} onChange={(e) => setComments(e.target.value)} className={`h-[15vh] ${inputField} ${errors.comments ? 'border-inputError' : 'border-inputBorder'}`}></textarea>
                                         </div>
                                     </div>
-                                    <CustomUpload setReferencePhotos={setReferencePhotos} />
+                                    <CustomUpload referencePhotos={referencePhotos} setReferencePhotos={setReferencePhotos} />
                                 </div>
                             ) : service === 'Tooth' ? ( //Tooth Gem
                                 <div className="flex flex-col items-center Tablet:gap-12 justify-between Mobile-L:[px-10] w-[100vw] Mobile-L:w-[95vw] Tablet:w-[80vw] Monitor:w-[50vw]">
