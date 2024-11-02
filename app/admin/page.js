@@ -454,7 +454,7 @@ export default function Admin() {
                                 </div>
                                 {/*****| Expanded Image |*****/}
                                 <div className={`${expandedImage ? 'block' : 'hidden'} absolute w-full h-full bg-white flex flex-col justify-center p-[5%] z-[2]`}>
-                                    <Image className='w-full h-full rounded-md object-contain' src={expandedImage} width={200} height={200}></Image>  {/* Bug: (style) image is not rounded due to object-contain class */}
+                                    <Image className='w-full h-full rounded-md object-contain' src={expandedImage} width={200} height={200} alt="expanded image"></Image>  {/* Bug: (style) image is not rounded due to object-contain class */}
                                 </div>
                                 {/*****| Booking Action Message |*****/}
                                 <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute w-full h-full flex justify-center items-center bg-pageGrey`}>
