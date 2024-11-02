@@ -26,7 +26,7 @@ const CustomUpload = ({ setReferencePhotos, referencePhotos }) => {
   const handleUpload = async (file) => {
     try {
       //Request signature and timestamp from backend server
-      const signResponse = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/book/signImage`, {
+      const signResponse = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}book/signImage`, {
         method: 'POST',
       });
       const signData = await signResponse.json();
