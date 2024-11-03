@@ -17,6 +17,7 @@
     "dotenv": "^16.4.5",
     "gh": "^2.8.9",
     "git": "^0.1.5",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "moment": "^2.30.1",

@@ -33,7 +33,7 @@ export default function Navbar() {
             setScrolled(false)
             window.addEventListener('scroll', handleScroll);
         }
-        else if (pathname !== '/admin') {
+        else if (pathname.startsWith('/admin')) {
             window.removeEventListener('scroll', handleScroll);
             setScrolled(true)
         }
@@ -50,7 +50,7 @@ export default function Navbar() {
         }
     }, [mobileNav])
 
-    if (pathname !== '/admin') {
+    if (!pathname.startsWith('/admin')) {
         return (<>
             <nav id='Navbar' className={`${scrolled || pathname !== '/' || mobileNav ? "bg-NavbarBackground" : "transparent"} z-[3] w-full min-h-[92px] sticky top-0 flex justify-center items-center text-black font-[425] transition-all duration-[400ms] ease-in-out`}>
                 <div className="flex justify-center items-center Tablet:grow-0 Tablet:justify-start pl-10 min-h-[92px]">

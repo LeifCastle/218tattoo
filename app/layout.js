@@ -1,6 +1,6 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import WebFooter from "@/components/webFooter";
+import Navbar from "../components/Navbar";
+import WebFooter from "../components/webFooter";
 import { GlobalStateProvider } from './utils/context.js';
 
 export const metadata = {

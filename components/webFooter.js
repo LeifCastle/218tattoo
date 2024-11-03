@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 export default function WebFooter() {
     const pathname = usePathname()
 
-    if (pathname != "/admin") {
+    if (!pathname.startsWith("/admin")) {
         return (
             <div className="bg-blackA flex flex-col items-center justify-center py-10 px-7 gap-10 text-white">
                 <div className="flex gap-7 Tablet:gap-20 text-center">
