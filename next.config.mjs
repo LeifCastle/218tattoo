@@ -23,6 +23,15 @@ export default {
   images: {
     domains: ['res.cloudinary.com'], // Add Cloudinary domain here
   },
+  async redirects() {
+    return [
+      {
+        source: '/_error', // Match any route that doesn't exist
+        destination: '/', // Redirect to the home page
+        permanent: false // Use a temporary redirect (307)
+      },
+    ];
+  },
 };
 
 //   /** @type {import('next').NextConfig} */
