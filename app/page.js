@@ -14,7 +14,6 @@ export default function Home() {
   const { formProgress, setFormProgress } = useContext(GlobalStateContext);
 
   const scrollRef = useRef(null)
-  let favoriteImages = ['/Tattoo1.png', '/Tattoo2.png', '/Tattoo3.png', '/Tattoo4.png', '/Tattoo5.png', '/Tattoo6.png',]
 
   function handlePageScroll() {
     window.scrollTo({
@@ -53,7 +52,7 @@ export default function Home() {
         <div className='w-full flex justify-center mt-4'><div className='w-[70vw] Tablet:w-[50vw] Monitor:w-[45vw] h-[3px] bg-black my-10 Tablet:my-20'></div></div>
         <div className="flex flex-col items-center justify-center text-black pb-10">
           <div className="">
-            <Collage images={favoriteImages} />
+            <Collage />
           </div>
         </div>
       </div>

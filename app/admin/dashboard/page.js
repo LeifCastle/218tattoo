@@ -44,7 +44,7 @@ export default function Dashboard() {
             filterBookings('current') //Sets the user's view to only current bookings rather than all
         }
         fetchData()
-    }, [])
+    })
 
     const cancelBooking = async (booking) => {
         try {
@@ -372,7 +372,7 @@ export default function Dashboard() {
                                     <p className={`${expandedBooking?.info?.service?.referencePhotos.length > 0 ? 'block' : 'hidden'} pl-6 pb-3 text-2xl mt-6`}>Reference Photos </p>
                                     <div className='flex gap-4 ml-10 p-4'>
                                         {expandedBooking?.info?.service?.referencePhotos.map((photo, index) => {
-                                            return (<Image onClick={() => setExpandedImage(photo)} key={index} className='rounded' src={photo} width={200} height={200} />)
+                                            return (<Image onClick={() => setExpandedImage(photo)} key={index} alt="reference photo" className='rounded' src={photo} width={200} height={200} />)
                                         }
                                         )}
                                     </div>
@@ -426,7 +426,7 @@ export default function Dashboard() {
                                 <Image className='w-full h-full rounded-md object-contain' src={expandedImage} width={200} height={200} alt="expanded image"></Image>  {/* Bug: (style) image is not rounded due to object-contain class */}
                             </div>
                             {/*****| Booking Action Message |*****/}
-                            <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute w-full h-full flex justify-center items-center bg-pageGrey`}>
+                            <div className={`${!bookingActionMessage ? 'hidden' : 'block'} absolute z-[4] w-full h-full flex justify-center items-center bg-pageGrey`}>
                                 <p className='text-4xl text-black'>Success! Booking Cancelled</p>
                             </div>
                         </div>

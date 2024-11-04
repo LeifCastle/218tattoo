@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { usePathname } from 'next/navigation'
 
 export default function Navbar() {
@@ -20,7 +20,7 @@ export default function Navbar() {
     let activeNavLinkContrast = `underline text-navLinkActiveSize text-navLinkActiveColorContrast hover:text-navLinkHoverColorContrast pb-[3px]`
     let inactiveNavLinkContrast = `text-navLinkInactiveSize text-navLinkInactiveColorContrast hover:text-navLinkHoverColorContrast`
 
-    let DOMloaded = false;
+    const DOMloaded = useRef(false);
     let pathname = usePathname()
 
     const handleScroll = useCallback(() => {
@@ -28,17 +28,17 @@ export default function Navbar() {
     }, [])
 
     useEffect(() => {
-        DOMloaded = true;
+        DOMloaded.current = true;
         if (pathname === '/') {
             setScrolled(false)
             window.addEventListener('scroll', handleScroll);
         }
-        else if (pathname.startsWith('/admin')) {
+        else if (pathname !== '/admin') {
             window.removeEventListener('scroll', handleScroll);
             setScrolled(true)
         }
         setMobileNav(false);
-    }, [pathname]);
+    }, [pathname, handleScroll]);
 
     useEffect(() => {
         if (mobileNav) {
