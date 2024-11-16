@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 export default function Collage() {
@@ -18,71 +17,65 @@ export default function Collage() {
     "/Tattoo10.png",
   ];
 
-  const [imageReel, setImageReel] = useState([
-    photoList[0],
-    photoList[1],
-    photoList[2],
-    photoList[3],
-    photoList[4],
-    photoList[5],
-  ]);
+  const [imageReel, setImageReel] = useState([photoList[0], photoList[1], photoList[2], photoList[3], photoList[4], photoList[5]]);
+  const imageRefs = useRef([]);
 
   const [randomImage, setRandomImage] = useState(null);
-  const lastRandomIndex = useRef(null); //prevents the same image slot from being changed twice in a row even if randomly selected
-  const weights = useRef(new Array(imageReel.length).fill(1)); // Initialize weights
+  const lastRandomIndex = useRef(null);
+  const weights = useRef(new Array(imageReel.length).fill(1));
 
-  // Weighted random selection function
   const pickWeightedRandomIndex = () => {
     const totalWeight = weights.current.reduce((acc, weight) => acc + weight, 0);
     const threshold = Math.random() * totalWeight;
-
     let runningSum = 0;
+
     for (let i = 0; i < weights.current.length; i++) {
       runningSum += weights.current[i];
       if (threshold <= runningSum) {
-        // Reduce weight to avoid immediate reselection
-        weights.current[i] = Math.max(0.5, weights.current[i] - 0.5); 
+        weights.current[i] = Math.max(0.5, weights.current[i] - 0.5);
         return i;
       }
     }
-    return 0; // Fallback
+    return 0;
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
       let randomIndex;
-      // Ensure the new index is not the same as the last one
       do {
         randomIndex = pickWeightedRandomIndex();
       } while (randomIndex === lastRandomIndex.current);
+      
       setRandomImage(randomIndex);
       lastRandomIndex.current = randomIndex;
 
+      // Update the image reel after 750ms (animation duration)
       setTimeout(() => {
         setImageReel((prevReel) => {
           const newReel = [...prevReel];
-          // Filter the photoList to exclude already visible images
-          const availableImages = photoList.filter(
-            (photo) => !prevReel.includes(photo)
-          );
-
-          // Pick a random image from the filtered list
+          const availableImages = photoList.filter(photo => !prevReel.includes(photo));
           if (availableImages.length > 0) {
-            newReel[randomIndex] =
-              availableImages[
-                Math.floor(Math.random() * availableImages.length)
-              ];
-          } 
+            newReel[randomIndex] = availableImages[Math.floor(Math.random() * availableImages.length)];
+          }
           return newReel;
         });
-
-        // Reset fadingImage after fade-in
-        setTimeout(() => setRandomImage(null), 750);
-      }, 750);
-    }, 3000);
+      }, 1000);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, []);
+
+  // Apply animation when the `randomImage` changes
+  useEffect(() => {
+    if (randomImage !== null) {
+      const currentImage = imageRefs.current[randomImage];
+      currentImage.classList.add("animate-imageReel");
+
+      setTimeout(() => {
+        currentImage.classList.remove("animate-imageReel");
+      }, 2000);
+    }
+  }, [randomImage]);
 
   return (
     <div className="flex justify-evenly items-center p-4">
@@ -91,76 +84,64 @@ export default function Collage() {
           <div className="flex w-1/2 flex-wrap">
             <div className="w-1/2 p-1 md:p-2">
               <Image
+                ref={(el) => (imageRefs.current[0] = el)}
                 alt="gallery"
                 src={imageReel[0]}
                 width={150}
                 height={200}
-                loading="eager"
-                className={`${
-                  randomImage === 0 ? "animate-imageReel" : ""
-                } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
+                className="h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
               />
             </div>
             <div className="w-1/2 p-1 md:p-2">
               <Image
+                ref={(el) => (imageRefs.current[1] = el)}
                 alt="gallery"
                 src={imageReel[1]}
                 width={150}
                 height={200}
-                loading="eager"
-                className={`${
-                  randomImage === 1 ? "animate-imageReel" : ""
-                } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
+                className="h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
               />
             </div>
             <div className="w-full p-1 md:p-2">
               <Image
+                ref={(el) => (imageRefs.current[2] = el)}
                 alt="gallery"
                 src={imageReel[2]}
                 width={400}
                 height={600}
-                loading="eager"
-                className={`${
-                  randomImage === 2 ? "animate-imageReel" : ""
-                } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
+                className="h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
               />
             </div>
           </div>
           <div className="flex w-1/2 flex-wrap">
             <div className="w-full p-1 md:p-2">
               <Image
+                ref={(el) => (imageRefs.current[3] = el)}
                 alt="gallery"
                 src={imageReel[3]}
                 width={150}
                 height={200}
-                loading="eager"
-                className={`${
-                  randomImage === 3 ? "animate-imageReel" : ""
-                } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
+                className="h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
               />
             </div>
             <div className="w-1/2 p-1 md:p-2">
               <Image
+                ref={(el) => (imageRefs.current[4] = el)}
                 alt="gallery"
                 src={imageReel[4]}
                 width={150}
                 height={120}
-                loading="eager"
-                className={`${
-                  randomImage === 4 ? "animate-imageReel" : ""
-                } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
+                className="h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
               />
             </div>
             <div className="w-1/2 p-1 md:p-2">
               <Image
+                ref={(el) => (imageRefs.current[5] = el)}
                 alt="gallery"
                 src={imageReel[5]}
                 width={400}
                 height={600}
-                loading="eager"
-                className={`${
-                  randomImage === 5 ? "animate-imageReel" : ""
-                } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
+                className="h-full w-full rounded-lg object-cover object-center max-h-[50vh]"
               />
             </div>
           </div>

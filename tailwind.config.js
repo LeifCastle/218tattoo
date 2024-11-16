@@ -26,7 +26,9 @@ module.exports = {
         },
         imageFade: {
           "0%": { opacity: "1" },   
+          "5%": { opacity: "1" },
           "50%": { opacity: "0" },
+          "95%": { opacity: "1" },
           "100%": { opacity: "1" }, 
         },
       },
@@ -35,7 +37,7 @@ module.exports = {
         barAnimate: "barAnimate 1.25s ease-in-out infinite",
         progressForward: "progressForward ease-in-out forwards",
         progressBackward: "progressBackward ease-in-out forwards",
-        imageReel: "imageFade 1.5s cubic-bezier(0.25, 0.25, 0.75, 0.75)",
+        imageReel: "imageFade 2s cubic-bezier(0.4, 0, 0.2, 1)",
       },
       screens: {
         "Mobile-S": "320px",
