@@ -77,7 +77,7 @@ export default function Collage() {
         });
 
         // Reset fadingImage after fade-in
-        setTimeout(() => setRandomImage(null), 600);
+        setTimeout(() => setRandomImage(null), 750);
       }, 750);
     }, 3000);
 
