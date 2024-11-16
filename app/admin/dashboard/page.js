@@ -44,7 +44,7 @@ export default function Dashboard() {
             filterBookings('current') //Sets the user's view to only current bookings rather than all
         }
         fetchData()
-    })
+    }, [])
 
     const cancelBooking = async (booking) => {
         try {
