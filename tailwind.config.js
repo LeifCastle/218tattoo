@@ -26,9 +26,9 @@ module.exports = {
         },
         imageFade: {
           "0%": { opacity: "1" },   
-          "40%": { opacity: ".25" },  
+          "30%": { opacity: ".25" },  
           "50%": { opacity: "0" },
-          "60%": { opacity: ".75" },  
+          "70%": { opacity: ".75" },  
           "100%": { opacity: "1" }, 
         },
       },

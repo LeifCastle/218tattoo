@@ -95,6 +95,7 @@ export default function Collage() {
                 src={imageReel[0]}
                 width={150}
                 height={200}
+                loading="eager"
                 className={`${
                   randomImage === 0 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
@@ -106,6 +107,7 @@ export default function Collage() {
                 src={imageReel[1]}
                 width={150}
                 height={200}
+                loading="eager"
                 className={`${
                   randomImage === 1 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
@@ -117,6 +119,7 @@ export default function Collage() {
                 src={imageReel[2]}
                 width={400}
                 height={600}
+                loading="eager"
                 className={`${
                   randomImage === 2 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
@@ -130,6 +133,7 @@ export default function Collage() {
                 src={imageReel[3]}
                 width={150}
                 height={200}
+                loading="eager"
                 className={`${
                   randomImage === 3 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
@@ -141,6 +145,7 @@ export default function Collage() {
                 src={imageReel[4]}
                 width={150}
                 height={120}
+                loading="eager"
                 className={`${
                   randomImage === 4 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
@@ -152,6 +157,7 @@ export default function Collage() {
                 src={imageReel[5]}
                 width={400}
                 height={600}
+                loading="eager"
                 className={`${
                   randomImage === 5 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
