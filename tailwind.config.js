@@ -37,7 +37,7 @@ module.exports = {
         barAnimate: "barAnimate 1.25s ease-in-out infinite",
         progressForward: "progressForward ease-in-out forwards",
         progressBackward: "progressBackward ease-in-out forwards",
-        imageReel: "imageFade 1.5s linear",
+        imageReel: "imageFade 1.5s cubic-bezier(0.25, 0.25, 0.75, 0.75)",
       },
       screens: {
         "Mobile-S": "320px",
