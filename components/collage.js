@@ -5,15 +5,6 @@ import { useState, useEffect, useRef, use } from "react";
 import Image from "next/image";
 
 export default function Collage() {
-  const [Image1, setImage1] = useState();
-  const [Image2, setImage2] = useState();
-  const [Image3, setImage3] = useState();
-  const [Image4, setImage4] = useState();
-  const [Image5, setImage5] = useState();
-  const [Image6, setImage6] = useState();
-
-  const galleryStarted = useRef(false);
-
   const photoList = [
     "/Tattoo1.png",
     "/Tattoo2.png",
@@ -27,26 +18,70 @@ export default function Collage() {
     "/Tattoo10.png",
   ];
 
-  function fadeImage(imageSlot, interval) {
-    imageSlot(photoList[Math.floor(Math.random() * photoList.length)]);
-    setTimeout(() => {
-      imageSlot(photoList[Math.floor(Math.random() * photoList.length)]);
-      setInterval(() => {
-        imageSlot(photoList[Math.floor(Math.random() * photoList.length)]);
-      }, interval);
-    }, interval / 2);
-  }
+  const [imageReel, setImageReel] = useState([
+    photoList[0],
+    photoList[1],
+    photoList[2],
+    photoList[3],
+    photoList[4],
+    photoList[5],
+  ]);
+
+  const [randomImage, setRandomImage] = useState(null);
+  const lastRandomIndex = useRef(null); //prevents the same image slot from being changed twice in a row even if randomly selected
+  const weights = useRef(new Array(imageReel.length).fill(1)); // Initialize weights
+
+  // Weighted random selection function
+  const pickWeightedRandomIndex = () => {
+    const totalWeight = weights.current.reduce((acc, weight) => acc + weight, 0);
+    const threshold = Math.random() * totalWeight;
+
+    let runningSum = 0;
+    for (let i = 0; i < weights.current.length; i++) {
+      runningSum += weights.current[i];
+      if (threshold <= runningSum) {
+        // Reduce weight to avoid immediate reselection
+        weights.current[i] = Math.max(0.5, weights.current[i] - 0.5); 
+        return i;
+      }
+    }
+    return 0; // Fallback
+  };
 
   useEffect(() => {
-    if (!galleryStarted.current) {
-      galleryStarted.current = true;
-      fadeImage(setImage1, 10000);
-      fadeImage(setImage2, 30000);
-      fadeImage(setImage3, 20000);
-      fadeImage(setImage4, 40000);
-      fadeImage(setImage5, 60000);
-      fadeImage(setImage6, 50000);
-    }
+    const interval = setInterval(() => {
+      let randomIndex;
+      // Ensure the new index is not the same as the last one
+      do {
+        randomIndex = pickWeightedRandomIndex();
+      } while (randomIndex === lastRandomIndex.current);
+      setRandomImage(randomIndex);
+      lastRandomIndex.current = randomIndex;
+
+      setTimeout(() => {
+        setImageReel((prevReel) => {
+          const newReel = [...prevReel];
+          // Filter the photoList to exclude already visible images
+          const availableImages = photoList.filter(
+            (photo) => !prevReel.includes(photo)
+          );
+
+          // Pick a random image from the filtered list
+          if (availableImages.length > 0) {
+            newReel[randomIndex] =
+              availableImages[
+                Math.floor(Math.random() * availableImages.length)
+              ];
+          } 
+          return newReel;
+        });
+
+        // Reset fadingImage after fade-in
+        setTimeout(() => setRandomImage(null), 750);
+      }, 750);
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -57,33 +92,33 @@ export default function Collage() {
             <div className="w-1/2 p-1 md:p-2">
               <Image
                 alt="gallery"
-                src={Image1}
-                width={100}
-                height={100}
+                src={imageReel[0]}
+                width={150}
+                height={200}
                 className={`${
-                  galleryStarted.current ? "animate-image1" : "hidden"
+                  randomImage === 0 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
               />
             </div>
             <div className="w-1/2 p-1 md:p-2">
               <Image
                 alt="gallery"
-                src={Image2}
-                width={100}
-                height={100}
+                src={imageReel[1]}
+                width={150}
+                height={200}
                 className={`${
-                  galleryStarted.current ? "animate-image2" : "hidden"
+                  randomImage === 1 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
               />
             </div>
             <div className="w-full p-1 md:p-2">
               <Image
                 alt="gallery"
-                src={Image3}
-                width={100}
-                height={100}
+                src={imageReel[2]}
+                width={400}
+                height={600}
                 className={`${
-                  galleryStarted.current ? "animate-image3" : "hidden"
+                  randomImage === 2 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
               />
             </div>
@@ -92,33 +127,33 @@ export default function Collage() {
             <div className="w-full p-1 md:p-2">
               <Image
                 alt="gallery"
-                src={Image4}
-                width={100}
-                height={100}
+                src={imageReel[3]}
+                width={150}
+                height={200}
                 className={`${
-                  galleryStarted.current ? "animate-image4" : "hidden"
+                  randomImage === 3 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
               />
             </div>
             <div className="w-1/2 p-1 md:p-2">
               <Image
                 alt="gallery"
-                src={Image5}
-                width={100}
-                height={100}
+                src={imageReel[4]}
+                width={150}
+                height={120}
                 className={`${
-                  galleryStarted.current ? "animate-image5" : "hidden"
+                  randomImage === 4 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
               />
             </div>
             <div className="w-1/2 p-1 md:p-2">
               <Image
                 alt="gallery"
-                src={Image6}
-                width={100}
-                height={100}
+                src={imageReel[5]}
+                width={400}
+                height={600}
                 className={`${
-                  galleryStarted.current ? "animate-image6" : "hidden"
+                  randomImage === 5 ? "animate-imageReel" : ""
                 } h-full w-full rounded-lg object-cover object-center max-h-[50vh]`}
               />
             </div>

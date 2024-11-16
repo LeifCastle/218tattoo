@@ -24,12 +24,12 @@ module.exports = {
           "0%": { width: "100%" },
           "100%": { width: "0%" },
         },
-        fadeOutIn: {
-          "0%": { opacity: "1" },   // Start fully visible
-          "30%": { opacity: "1" },  // Stay fully visible for a while
-          "50%": { opacity: "0" },  // Start fading out immediately
-          "70%": { opacity: "1" },  // Stay fully transparent until just before the end
-          "100%": { opacity: "1" }, // Fade back in immediately
+        imageFade: {
+          "0%": { opacity: "1" },   
+          "40%": { opacity: ".25" },  
+          "50%": { opacity: "0" },
+          "60%": { opacity: ".75" },  
+          "100%": { opacity: "1" }, 
         },
       },
       animation: {
@@ -37,12 +37,7 @@ module.exports = {
         barAnimate: "barAnimate 1.25s ease-in-out infinite",
         progressForward: "progressForward ease-in-out forwards",
         progressBackward: "progressBackward ease-in-out forwards",
-        image1: "fadeOutIn 10s ease-in-out infinite",
-        image2: "fadeOutIn 30s ease-in-out infinite",
-        image3: "fadeOutIn 20s ease-in-out infinite",
-        image4: "fadeOutIn 40s ease-in-out infinite",
-        image5: "fadeOutIn 60s ease-in-out infinite",
-        image6: "fadeOutIn 51s ease-in-out infinite",
+        imageReel: "imageFade 1.5s linear",
       },
       screens: {
         "Mobile-S": "320px",
